@@ -1,17 +1,22 @@
-const initialState = {
-  studentTab: 0,
-}
+// @flow
+import { Action } from 'redux';
 
-const theStudent = (state = initialState, action) => {
+const initialState: State = {
+  studentTab: true
+};
+
+type State = {
+  studentTab: boolean
+};
+
+const theStudent = (state: State = initialState, action: Action) => {
   switch (action.type) {
     case 'TOGGLE_STUDENT_TAB':
       return Object.assign({}, state, {
-          studentTab: !action.studentTab ? 0 : 1
-      })
+        studentTab: !action.studentTab ? false : true
+      });
     default:
-          
-      return state
+      return state;
   }
-}
- 
-export default theStudent
+};
+export default theStudent;
