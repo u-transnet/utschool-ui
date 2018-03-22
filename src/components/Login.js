@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { setUsername } from '../actions';
@@ -6,133 +8,130 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
-import TextField from 'material-ui/TextField';
-import { FormControlLabel } from 'material-ui/Form';
+import Input, { InputLabel } from 'material-ui/Input';
+import {
+  FormControlLabel,
+  FormControl,
+  FormHelperText
+} from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
 
 const styles = theme => ({
-
   Login__base: {
-    maxWidth: '320px',
+    maxWidth: 242,
     margin: '0 auto',
     marginTop: '15%'
   },
   Login__header: {
-    marginBottom: '35px',
-    marginTop: '25px'
+    marginBottom: 35,
+    marginTop: 25,
+    textAlign: 'center'
   },
   Login__avatar: {
-    width: '78px',
-    height: '78px',
-    backgroundColor: '#ddd'
+    width: 78,
+    height: 78,
+    backgroundColor: '#ddd',
+    margin: '0 auto'
+  },
+  Login__field: {
+    width: '100%'
   },
   button: {
-    marginTop: '10px',
-    width: '169px'
+    margin: '10px auto 0 auto',
+    width: 168,
+    display: 'block',
+    textAlign: 'center'
   },
   check: {
-    marginLeft: '60px',
-    marginBottom: '35px'
-  },
-  wrap: {
-    width: '100%',
-    overflowX: 'hidden',
-    paddingBottom: 10
+    marginBottom: 32
   }
-
 });
 
-const Login = (props) => {
-
-    return(
-      <div className={props.classes.Login__base}>
-        <form>
-
-          <Grid container className={props.classes.wrap}>
-
-            <Grid item xs={12} md={12} lg={12}>
-              <Grid container justify="center">
-                <Avatar alt="Logo" src="" className={props.classes.Login__avatar} />
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={12}>
-              <Grid container justify="center">
-                <Typography variant="headline" component="h1" className={props.classes.Login__header}>UT-SCHOOL</Typography>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={12}>
-              <Grid container justify="center">
-                <TextField
-                  onKeyUp={props.onSetUsername}
-                  id="name"
-                  defaultValue={props.userName}
-                  label="Номер учётки"
-                  className="Login__field"
-                  margin="normal"
-                  autoFocus
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={12}>
-              <Grid container className={props.classes.check}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      onChange=""
-                      color="primary"
-                    />
-                  }
-                  label="Запомнить меня"
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={12}>
-              <Grid container justify="center">
-                <Button
-                  variant="raised"
-                  size="medium"
-                  color="primary"
-                  className={props.classes.button}
-                  component={Link}
-                  to={props.userStatus ? '/dashboard-teacher' : '/dashboard-student'}
-                >
-                  Логин
-                </Button>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} md={12} lg={12}>
-              <Grid container justify="center">
-                <Button variant="raised" size="medium" color="primary" className={props.classes.button} component={Link} to="/signup">
-                  Создать акаунт
-                </Button>
-              </Grid>
-            </Grid>
-
+const Login = props => {
+  return (
+    <div className={props.classes.Login__base}>
+      <form>
+        <Grid container spacing={0}>
+          <Grid item xs={12}>
+            <Avatar alt="Logo" src="" className={props.classes.Login__avatar} />
           </Grid>
-        </form>
 
-      </div>
-    )
+          <Grid item xs={12}>
+            <Typography
+              variant="headline"
+              component="h1"
+              className={props.classes.Login__header}
+            >
+              UT-SCHOOL
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl className={props.classes.Login__field} error>
+              <InputLabel htmlFor="name">Номер учётки</InputLabel>
+              <Input
+                onKeyUp={props.onSetUsername}
+                id="name"
+                defaultValue={props.userName}
+                autoFocus
+              />
+              <FormHelperText id="name-error-text">error</FormHelperText>
+            </FormControl>
+          </Grid>
 
-}
+          <Grid item xs={12}>
+            <FormControlLabel
+              className={props.classes.check}
+              control={<Checkbox onChange="" color="primary" />}
+              label="Запомнить меня"
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              variant="raised"
+              size="medium"
+              color="primary"
+              className={props.classes.button}
+              component={Link}
+              to={
+                props.userStatus ? '/dashboard-teacher' : '/dashboard-student'
+              }
+            >
+              Логин
+            </Button>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              variant="raised"
+              size="medium"
+              color="primary"
+              className={props.classes.button}
+              component={Link}
+              to="/signup"
+            >
+              Создать акаунт
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </div>
+  );
+};
 
 function mapStateToProps(state) {
   return {
-    userName: state.app.userName,
+    userName: state.app.userName
   };
 }
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   onSetUsername(event) {
-    dispatch(setUsername(event.target.value))
+    dispatch(setUsername(event.target.value));
   }
+});
 
-})
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Login))
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(Login)
+);
