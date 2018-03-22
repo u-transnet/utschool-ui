@@ -1,15 +1,19 @@
 {
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "node": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
+      "modules": true,
       "jsx": true
-    },
-    "sourceType": "module"
+    }
   },
   "plugins": ["react"],
   "rules": {
