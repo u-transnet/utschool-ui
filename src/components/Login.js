@@ -2,20 +2,16 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { setUsername } from '../actions';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import Input, { InputLabel } from 'material-ui/Input';
-import {
-  FormControlLabel,
-  FormControl,
-  FormHelperText
-} from 'material-ui/Form';
+import { FormControlLabel, FormControl } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
+import { setUsername } from '../actions';
 
 const styles = theme => ({
   Login__base: {
@@ -67,7 +63,10 @@ const Login = props => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <FormControl className={props.classes.Login__field} error>
+            <FormControl
+              className={props.classes.Login__field}
+              error={props.userLogin}
+            >
               <InputLabel htmlFor="name">Номер учётки</InputLabel>
               <Input
                 onKeyUp={props.onSetUsername}
@@ -75,7 +74,6 @@ const Login = props => {
                 defaultValue={props.userName}
                 autoFocus
               />
-              <FormHelperText id="name-error-text">error</FormHelperText>
             </FormControl>
           </Grid>
 
@@ -122,7 +120,8 @@ const Login = props => {
 
 function mapStateToProps(state) {
   return {
-    userName: state.app.userName
+    userName: state.user.userName,
+    userLogin: state.user.userLogin
   };
 }
 

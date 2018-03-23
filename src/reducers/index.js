@@ -1,11 +1,15 @@
 // @flow
 
 import { combineReducers } from 'redux';
+
 import app from './app';
 import student from './student';
+import user from './user';
 
-const theIndex = combineReducers({
+const theReducers = combineReducers({
   app,
-  student
+  student,
+  user
 });
-export default theIndex;
+
+export default theReducers;

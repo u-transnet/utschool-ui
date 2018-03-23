@@ -2,31 +2,33 @@
 import { Action } from 'redux';
 
 type State = {
-  title: string,
-  drawer: boolean
+  userName: string,
+  userStatus: string,
+  userLogin: boolean
 };
 
 const initialState: State = {
-  title: 'UT-SCHOOL',
-  drawer: false
+  userName: 'Гость',
+  userStatus: 'off',
+  userLogin: false
 };
 
-export default function theApp(
+export default function theUser(
   state: State = initialState,
   action: Action
 ): State {
   switch (action.type) {
-    case 'OPEN_DRAWER':
+    case 'TOGGLE_STATUS':
       return Object.assign({}, state, {
-        drawer: action.drawer
+        userStatus: action.status === 'on' ? 'off' : 'on'
       });
-    case 'CLOSE_DRAWER':
+    case 'SET_USERNAME':
       return Object.assign({}, state, {
-        drawer: action.drawer
+        userName: action.name
       });
-    case 'SET_TITLE':
+    case 'SET_LOGIN':
       return Object.assign({}, state, {
-        title: action.title
+        userLogin: action.login
       });
     default:
       return state;

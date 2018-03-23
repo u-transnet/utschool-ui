@@ -14,6 +14,14 @@ export function closeDrawer() {
   };
 }
 
+export function toggleStudentTab(val: boolean) {
+  return {
+    type: 'TOGGLE_STUDENT_TAB',
+    studentTab: val
+  };
+}
+
+//user actions
 export function toggleStatus(val: string) {
   return {
     type: 'TOGGLE_STATUS',
@@ -28,9 +36,9 @@ export function setUsername(val: string) {
   };
 }
 
-export function toggleStudentTab(val: boolean) {
+export function setLogin(val: boolean) {
   return {
-    type: 'TOGGLE_STUDENT_TAB',
-    studentTab: val
+    type: 'SET_LOGIN',
+    login: val
   };
 }
