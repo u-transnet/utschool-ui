@@ -36,16 +36,16 @@ export function setUsername(val: string) {
   };
 }
 
-export function setLogin(val: boolean) {
+export function setNameFieldError(val: boolean) {
   return {
     type: 'SET_LOGIN',
-    login: val
+    nameFieldError: val
   };
 }
 
-export function setLoginErrorText(val: string) {
+export function setNameFieldErrorText(val: string) {
   return {
     type: 'SET_LOGIN_ERROR_TEXT',
-    loginErrorText: val
+    nameFieldErrorText: val
   };
 }

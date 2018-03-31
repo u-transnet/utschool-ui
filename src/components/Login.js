@@ -68,7 +68,7 @@ const Login = props => {
           <Grid item xs={12}>
             <FormControl
               className={props.classes.Login__field}
-              error={props.userLogin}
+              error={props.nameFieldError}
             >
               <InputLabel htmlFor="name">Номер учётки</InputLabel>
               <Input
@@ -77,7 +77,7 @@ const Login = props => {
                 defaultValue={props.userName}
                 autoFocus
               />
-              <FormHelperText>{props.userLoginErrorText}</FormHelperText>
+              <FormHelperText>{props.nameFieldErrorText}</FormHelperText>
             </FormControl>
           </Grid>
           <Grid item xs={12}>
@@ -118,8 +118,8 @@ const Login = props => {
 function mapStateToProps(state) {
   return {
     userName: state.user.userName,
-    userLogin: state.user.userLogin,
-    userLoginErrorText: state.user.userLoginErrorText
+    nameFieldError: state.user.nameFieldError,
+    nameFieldErrorText: state.user.nameFieldErrorText
   };
 }
 

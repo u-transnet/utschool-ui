@@ -4,15 +4,15 @@ import { Action } from 'redux';
 type State = {
   userName: string,
   userStatus: string,
-  userLogin: boolean,
-  userLoginErrorText: string
+  nameFieldError: boolean,
+  nameFieldErrorText: string
 };
 
 const initialState: State = {
   userName: 'Гость',
   userStatus: 'off',
-  userLogin: false,
-  userLoginErrorText: ''
+  nameFieldError: false,
+  nameFieldErrorText: ''
 };
 
 export default function theUser(
@@ -30,11 +30,11 @@ export default function theUser(
       });
     case 'SET_LOGIN':
       return Object.assign({}, state, {
-        userLogin: action.login
+        nameFieldError: action.nameFieldError
       });
     case 'SET_LOGIN_ERROR_TEXT':
       return Object.assign({}, state, {
-        userLoginErrorText: action.loginErrorText
+        nameFieldErrorText: action.nameFieldErrorText
       });
 
     default:
