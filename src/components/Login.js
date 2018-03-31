@@ -15,7 +15,7 @@ import {
 } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
-import { setUsername } from '../actions';
+import { setUserName } from '../actions/actionsUser';
 
 const styles = theme => ({
   Login__base: {
@@ -51,7 +51,7 @@ const styles = theme => ({
 const Login = props => {
   return (
     <div className={props.classes.Login__base}>
-      <form>
+      <form onSubmit={props.onSetUserName}>
         <Grid container spacing={0}>
           <Grid item xs={12}>
             <Avatar alt="Logo" src="" className={props.classes.Login__avatar} />
@@ -71,12 +71,7 @@ const Login = props => {
               error={props.nameFieldError}
             >
               <InputLabel htmlFor="name">Номер учётки</InputLabel>
-              <Input
-                onKeyUp={props.onSetUsername}
-                id="name"
-                defaultValue={props.userName}
-                autoFocus
-              />
+              <Input id="name" defaultValue={props.userName} autoFocus />
               <FormHelperText>{props.nameFieldErrorText}</FormHelperText>
             </FormControl>
           </Grid>
@@ -124,8 +119,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onSetUsername(event) {
-    dispatch(setUsername(event.target.value));
+  onSetUserName(event) {
+    dispatch(setUserName(event.target.value));
   }
 });
 

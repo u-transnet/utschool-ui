@@ -12,7 +12,7 @@ import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
 import Input, { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
-import { setUsername } from '../actions';
+import { setUserName } from '../actions/actionsUser';
 
 const styles = theme => ({
   Login__base: {
@@ -71,7 +71,7 @@ const Login = props => {
             >
               <InputLabel htmlFor="name">Номер учётки</InputLabel>
               <Input
-                onKeyUp={props.onSetUsername}
+                onKeyUp={props.onSetUserName}
                 id="name"
                 defaultValue={props.userName}
                 autoFocus
@@ -130,8 +130,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onSetUsername(event) {
-    dispatch(setUsername(event.target.value));
+  onSetUserName(event) {
+    dispatch(setUserName(event.target.value));
   }
 });
 

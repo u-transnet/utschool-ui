@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { openDrawer, closeDrawer, toggleStatus } from '../actions';
+import { openDrawer, closeDrawer } from '../actions';
+import { toggleStatus } from '../actions/actionsUser';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 
