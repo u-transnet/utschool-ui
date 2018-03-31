@@ -42,3 +42,10 @@ export function setLogin(val: boolean) {
     login: val
   };
 }
+
+export function setLoginErrorText(val: string) {
+  return {
+    type: 'SET_LOGIN_ERROR_TEXT',
+    loginErrorText: val
+  };
+}

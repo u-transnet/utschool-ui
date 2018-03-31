@@ -8,7 +8,11 @@ import Grid from 'material-ui/Grid';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import Input, { InputLabel } from 'material-ui/Input';
-import { FormControlLabel, FormControl } from 'material-ui/Form';
+import {
+  FormControlLabel,
+  FormControl,
+  FormHelperText
+} from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
 import { setUsername } from '../actions';
@@ -52,7 +56,6 @@ const Login = props => {
           <Grid item xs={12}>
             <Avatar alt="Logo" src="" className={props.classes.Login__avatar} />
           </Grid>
-
           <Grid item xs={12}>
             <Typography
               variant="headline"
@@ -74,9 +77,9 @@ const Login = props => {
                 defaultValue={props.userName}
                 autoFocus
               />
+              <FormHelperText>{props.userLoginErrorText}</FormHelperText>
             </FormControl>
           </Grid>
-
           <Grid item xs={12}>
             <FormControlLabel
               className={props.classes.check}
@@ -84,22 +87,16 @@ const Login = props => {
               label="Запомнить меня"
             />
           </Grid>
-
           <Grid item xs={12}>
             <Button
               variant="raised"
               size="medium"
               color="primary"
               className={props.classes.button}
-              component={Link}
-              to={
-                props.userStatus ? '/dashboard-teacher' : '/dashboard-student'
-              }
             >
               Логин
             </Button>
           </Grid>
-
           <Grid item xs={12}>
             <Button
               variant="raised"
@@ -121,7 +118,8 @@ const Login = props => {
 function mapStateToProps(state) {
   return {
     userName: state.user.userName,
-    userLogin: state.user.userLogin
+    userLogin: state.user.userLogin,
+    userLoginErrorText: state.user.userLoginErrorText
   };
 }
 
