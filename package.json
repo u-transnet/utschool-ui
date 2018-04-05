@@ -1,7 +1,13 @@
 {
-  "name": "utschool",
-  "version": "0.1.0",
-  "private": true,
+  "name": "schoolui",
+  "version": "1.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/u-transnet/utschool-ui/"
+  },
+  "author": "Tom Molotko",
+  "license": "ISC",
   "dependencies": {
     "ajv": "^6.4.0",
     "material-ui": "^1.0.0-beta.40",
