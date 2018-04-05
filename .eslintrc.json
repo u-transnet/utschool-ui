@@ -12,7 +12,8 @@
     "ecmaFeatures": {
       "experimentalObjectRestSpread": true,
       "modules": true,
-      "jsx": true
+      "jsx": true,
+      "impliedStrict": true
     }
   },
   "plugins": ["react"],
