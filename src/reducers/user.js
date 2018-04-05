@@ -1,16 +1,10 @@
 // @flow
-import { Action } from 'redux';
-import {
-  TOGGLE_STATUS,
-  SET_USER_NAME,
-  SET_FIELD_ERROR,
-  SET_LOGIN_ERROR_TEXT
-} from '../actions/actionsUser';
+import { Action, Props } from 'redux';
+import { TOGGLE_STATUS, SET_USER_NAME } from '../actions/actionsUser';
 
 type State = {
   userName: string,
   userStatus: string,
-  nameFieldError: boolean,
   nameFieldErrorText: string
 };
 
@@ -23,7 +17,8 @@ const initialState: State = {
 
 export default function theUser(
   state: State = initialState,
-  action: Action
+  action: Action,
+  props: Props
 ): State {
   switch (action.type) {
     case TOGGLE_STATUS:
@@ -34,15 +29,6 @@ export default function theUser(
       return Object.assign({}, state, {
         userName: action.name
       });
-    case SET_FIELD_ERROR:
-      return Object.assign({}, state, {
-        nameFieldError: action.nameFieldError
-      });
-    case SET_LOGIN_ERROR_TEXT:
-      return Object.assign({}, state, {
-        nameFieldErrorText: action.nameFieldErrorText
-      });
-
     default:
       return state;
   }

@@ -1,13 +1,23 @@
-import React from 'react';
+import * as React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
+import { reducer as reduxFormReducer } from 'redux-form';
+
 import Root from './components/Root';
 import theReducers from './reducers';
 import registerServiceWorker from './registerServiceWorker';
 
 import './assets/index.css';
 
-let store = createStore(theReducers, window.STATE_FROM_SERVER);
+const reducer = combineReducers({
+  form: reduxFormReducer // mounted under "form"
+});
+
+//let store = createStore(theReducers, window.STATE_FROM_SERVER);
+let store = (theReducers,
+window.devToolsExtension
+  ? window.devToolsExtension()(createStore)
+  : createStore)(reducer);
 
 render(<Root store={store} />, document.getElementById('root'));
 
