@@ -1,17 +1,20 @@
 // @flow
 
 import * as React from 'react';
+import { connect } from 'react-redux';
 //
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 //
 import LoginForm from './loginForm';
+import SignUpForm from './signUpForm';
 //
 import './Login.css';
 
 type Props = {};
+type State = {};
 
-export default class Login extends React.Component<Props> {
+class Login extends React.Component<Props, State> {
   render() {
     return (
       <div className="login-box">
@@ -28,9 +31,19 @@ export default class Login extends React.Component<Props> {
               UT-SCHOOL
             </Typography>
           </Grid>
-          <LoginForm />
+          {!this.props.formFlag ? <LoginForm /> : <SignUpForm />}
         </Grid>
       </div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    formFlag: state.login.formFlag
+  };
+}
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

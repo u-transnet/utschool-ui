@@ -15,10 +15,8 @@ import renderRememberCheckbox from './rememberCheckbox';
 import './Login.css';
 
 type Props = {
-  handleSubmit: Function,
-  errors: any
+  handleSubmit: Function
 };
-
 class SignUpForm extends React.Component<Props> {
   render() {
     const { handleSubmit } = this.props; // No fields prop
@@ -61,5 +59,7 @@ class SignUpForm extends React.Component<Props> {
 
 export default reduxForm({
   form: 'LoginForm', // a unique identifier for this form
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true,
   validate
 })(SignUpForm);

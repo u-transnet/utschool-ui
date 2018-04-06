@@ -1,12 +1,13 @@
 // @flow
 
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 //
-import { Link } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 //
+import { toggleForm } from '../../actions/loginAction';
 import validate from './validate';
 import loginSubmit from './loginSubmit';
 import renderAccountField from './accountField';
@@ -15,13 +16,14 @@ import renderRememberCheckbox from './rememberCheckbox';
 import './Login.css';
 
 type Props = {
+  onToggleForm: Function,
   handleSubmit: Function,
-  errors: any
+  formFlag: boolean
 };
 
 class LoginForm extends React.Component<Props> {
   render() {
-    const { handleSubmit } = this.props; // No fields prop
+    const { handleSubmit, onToggleForm } = this.props; // No fields prop
     return (
       <form onSubmit={handleSubmit(loginSubmit)}>
         <Grid item xs={12}>
@@ -53,8 +55,7 @@ class LoginForm extends React.Component<Props> {
             size="medium"
             color="primary"
             className="login-button"
-            component={Link}
-            to="/signup"
+            onClick={() => onToggleForm(this.props.formFlag)}
           >
             Создать акаунт
           </Button>
@@ -64,7 +65,25 @@ class LoginForm extends React.Component<Props> {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    formFlag: state.login.formFlag
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  onToggleForm(val) {
+    dispatch(toggleForm(val));
+  }
+});
+
+const LoginFormConnect = connect(mapStateToProps, mapDispatchToProps)(
+  LoginForm
+);
+
 export default reduxForm({
   form: 'LoginForm', // a unique identifier for this form
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true,
   validate
-})(LoginForm);
+})(LoginFormConnect);

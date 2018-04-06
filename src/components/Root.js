@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './login/Login';
-import SignUp from './login/SignUp';
 import DashboardStudent from './DashboardStudent';
 import DashboardTeacher from './DashboardTeacher';
 import TeacherClassApplicants from './TeacherClassApplicants';
@@ -19,7 +18,6 @@ const Root = ({ store }) => (
       <Router>
         <Switch>
           <Route exact path="/" component={Login} />
-          <Route exact path="/signup" component={SignUp} />
           <Route exact path="/dashboard-student" component={DashboardStudent} />
           <Route exact path="/dashboard-teacher" component={DashboardTeacher} />
           <Route
