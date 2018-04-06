@@ -4,7 +4,7 @@ import userStore from '../../stores/studentsTempData';
 
 const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-export default function cheсkUser(values: any) {
+export default function loginSubmit(values: any) {
   let accounts: any[] = [];
   for (let i of userStore) {
     accounts.push(i.account);

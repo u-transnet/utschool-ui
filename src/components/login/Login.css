@@ -21,7 +21,7 @@
 
 .login-box .login-field {
   width: 100%;
-  min-height: 69px;
+  margin-bottom: 24px;
 }
 
 .login-box .login-button {

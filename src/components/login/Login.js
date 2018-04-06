@@ -6,7 +6,6 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 //
 import LoginForm from './loginForm';
-import LoginResults from './loginResults';
 //
 import './Login.css';
 
@@ -29,7 +28,7 @@ export default class Login extends React.Component<Props> {
               UT-SCHOOL
             </Typography>
           </Grid>
-          <LoginForm onSubmit={LoginResults} />
+          <LoginForm />
         </Grid>
       </div>
     );

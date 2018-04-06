@@ -2,10 +2,10 @@
 
 export default function(values: any) {
   const errors = {};
-  const requiredFields = ['account'];
+  const requiredFields = ['account', 'newaccount', 'password'];
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = 'Введите номер учетной записи';
+      errors[field] = 'Поле должно быть заполнено';
     }
   });
   return errors;

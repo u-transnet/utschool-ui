@@ -14,7 +14,7 @@ const renderRememberCheckbox = ({ input }: FieldProps) => (
         color="primary"
       />
     }
-    label="Remember Me"
+    label="Запомнить меня"
   />
 );
 

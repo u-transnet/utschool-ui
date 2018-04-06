@@ -3,13 +3,13 @@
 import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
 //
-import { Link } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 //
 import validate from './validate';
-import loginSubmit from './loginSubmit';
+import signupSubmit from './signupSubmit';
 import renderAccountField from './accountField';
+import renderPasswordField from './passwordField';
 import renderRememberCheckbox from './rememberCheckbox';
 //
 import './Login.css';
@@ -19,16 +19,23 @@ type Props = {
   errors: any
 };
 
-class LoginForm extends React.Component<Props> {
+class SignUpForm extends React.Component<Props> {
   render() {
     const { handleSubmit } = this.props; // No fields prop
     return (
-      <form onSubmit={handleSubmit(loginSubmit)}>
+      <form onSubmit={handleSubmit(signupSubmit)}>
         <Grid item xs={12}>
           <Field
-            name="account"
+            name="newaccount"
             className="login-field"
             component={renderAccountField}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Field
+            name="password"
+            className="login-field"
+            component={renderPasswordField}
           />
         </Grid>
         <Grid item xs={12}>
@@ -44,18 +51,6 @@ class LoginForm extends React.Component<Props> {
             color="primary"
             className="login-button"
           >
-            Логин
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            variant="raised"
-            size="medium"
-            color="primary"
-            className="login-button"
-            component={Link}
-            to="/signup"
-          >
             Создать акаунт
           </Button>
         </Grid>
@@ -67,4 +62,4 @@ class LoginForm extends React.Component<Props> {
 export default reduxForm({
   form: 'LoginForm', // a unique identifier for this form
   validate
-})(LoginForm);
+})(SignUpForm);
