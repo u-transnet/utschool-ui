@@ -1,6 +1,6 @@
 // @flow
 import { SubmissionError } from 'redux-form';
-import userStore from '../../stores/studentsTempData';
+import userStore from '../../stores/usersTempData';
 
 const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
 

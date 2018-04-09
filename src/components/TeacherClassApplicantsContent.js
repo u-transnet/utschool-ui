@@ -5,79 +5,73 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import { toggleStudentTab } from '../actions';
 import StudentNew from './StudentNew';
 import StudentAccepted from './StudentAccepted';
-import studentsList from '../stores/studentsTempData';	
-
+import studentsList from '../stores/usersTempData';
 
 const styles = theme => ({
-    tab: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.primary.main,
-        opacity: 1,
-        color: '#fff'
-    },
-    tab__container: {
-        padding: 10,
-        listStyle: 'none'
-    }
+  tab: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.primary.main,
+    opacity: 1,
+    color: '#fff'
+  },
+  tab__container: {
+    padding: 10,
+    listStyle: 'none'
+  }
 });
 
 const tab__container_ = {
-    padding: 10,
-    listStyle: 'none'
-}
+  padding: 10,
+  listStyle: 'none'
+};
 
+const TabContainer = props => {
+  return <div style={tab__container_}>{[props.children]}</div>;
+};
 
-const TabContainer = (props) => {
-    return (
-        <div style={tab__container_}>
-            {[props.children]}
-        </div>
-    );
-}
-
-let studentsNew = studentsList.filter(function (student) {
-    return student['accepted'] === "false";
+let studentsNew = studentsList.filter(function(student) {
+  return student['accepted'] === 'false';
 });
 
-let studentsAcceptedList = studentsList.filter(function (student) {
-    return student['accepted'] === "true";
+let studentsAcceptedList = studentsList.filter(function(student) {
+  return student['accepted'] === 'true';
 });
 
 const students = studentsNew.map((student, index) => {
-    return <StudentNew {...student} key={index} />
+  return <StudentNew {...student} key={index} />;
 });
 
 const studentsAccepted = studentsAcceptedList.map((studentAcc, index) => {
-    return <StudentAccepted {...studentAcc} key={index} />
-}); 
+  return <StudentAccepted {...studentAcc} key={index} />;
+});
 
-
-const TeacherClassApplicants = (props) => {
-    
-    return(
-        <div>
-            <Tabs value={props.studentTab} onChange={props.onToggleTab}>
-                <Tab label="Новые" className={props.classes.tab } />
-                <Tab label="Принятые" className={props.classes.tab} />
-            </Tabs>
-            {props.studentTab === 0 && <TabContainer>{students}</TabContainer>}
-            { props.studentTab === 1 && <TabContainer>{studentsAccepted}</TabContainer>}
-        </div>
-    );
-}
+const TeacherClassApplicants = props => {
+  return (
+    <div>
+      <Tabs value={props.studentTab} onChange={props.onToggleTab}>
+        <Tab label="Новые" className={props.classes.tab} />
+        <Tab label="Принятые" className={props.classes.tab} />
+      </Tabs>
+      {props.studentTab === 0 && <TabContainer>{students}</TabContainer>}
+      {props.studentTab === 1 && (
+        <TabContainer>{studentsAccepted}</TabContainer>
+      )}
+    </div>
+  );
+};
 
 function mapStateToProps(state) {
-    return {
-        studentTab: state.student.studentTab
-    };
+  return {
+    studentTab: state.student.studentTab
+  };
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    onToggleTab(event, value) {
-        dispatch(toggleStudentTab(value))
-    },
-})
+const mapDispatchToProps = dispatch => ({
+  onToggleTab(event, value) {
+    dispatch(toggleStudentTab(value));
+  }
+});
 
-
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(TeacherClassApplicants))
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(TeacherClassApplicants)
+);
