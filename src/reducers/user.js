@@ -1,15 +1,15 @@
 // @flow
 import { Action, Props } from 'redux';
-import { TOGGLE_STATUS, SET_USER_NAME } from '../actions/actionsUser';
+import { TOGGLE_STATUS, SET_USER_ACCOUNT } from '../actions/actionsUser';
 
 type State = {
-  userName: string,
+  account: string,
   userStatus: string,
   nameFieldErrorText: string
 };
 
 const initialState: State = {
-  userName: 'Гость',
+  account: 'Гость',
   userStatus: 'off',
   nameFieldError: false,
   nameFieldErrorText: ''
@@ -25,9 +25,9 @@ export default function theUser(
       return Object.assign({}, state, {
         userStatus: action.status === 'on' ? 'off' : 'on'
       });
-    case SET_USER_NAME:
+    case SET_USER_ACCOUNT:
       return Object.assign({}, state, {
-        userName: action.name
+        account: action.account
       });
     default:
       return state;

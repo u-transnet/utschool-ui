@@ -1,25 +1,59 @@
 // @flow
 
 import * as React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
 //
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 //
-import validate from './validate';
-import signupSubmit from './signupSubmit';
 import renderAccountField from './accountField';
 import renderPasswordField from './passwordField';
 import renderRememberCheckbox from './rememberCheckbox';
 //
+import { setAccountName } from '../../actions/actionsUser';
+import validate from './validate';
+import userStore from '../../stores/usersTempData';
+import history from '../../history';
+//
 import './Login.css';
 
 type Props = {
-  handleSubmit: Function
+  handleSubmit: Function,
+  setAccount: Function
 };
 class SignUpForm extends React.Component<Props> {
   render() {
-    const { handleSubmit } = this.props; // No fields prop
+    const { handleSubmit, setAccount } = this.props; // No fields prop
+    const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    let signupSubmit = (values: any) => {
+      let accounts: any[] = [];
+      for (let i of userStore) {
+        accounts.push(i.account);
+      }
+      return sleep(100).then(() => {
+        let passValid = values.password
+          ? values.password.match(
+              /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g
+            )
+          : false;
+        if (accounts.includes(values.newaccount)) {
+          throw new SubmissionError({
+            newaccount: 'Такая запись уже существует.',
+            _error: 'SignUp failed!'
+          });
+        } else if (!passValid) {
+          throw new SubmissionError({
+            password:
+              '8 символов минимум (цыфры, большие и маленькие буквы, символы).',
+            _error: 'SignUp failed!'
+          });
+        } else {
+          setAccount(values.newaccount);
+        }
+      });
+    };
     return (
       <form onSubmit={handleSubmit(signupSubmit)}>
         <Grid item xs={12}>
@@ -57,9 +91,24 @@ class SignUpForm extends React.Component<Props> {
   }
 }
 
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => ({
+  setAccount(val) {
+    dispatch(setAccountName(val));
+    history.push('/dashboard');
+  }
+});
+
+const SignUpFormConnect = connect(mapStateToProps, mapDispatchToProps)(
+  SignUpForm
+);
+
 export default reduxForm({
-  form: 'LoginForm', // a unique identifier for this form
+  form: 'SignUpForm', // a unique identifier for this form
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   validate
-})(SignUpForm);
+})(SignUpFormConnect);

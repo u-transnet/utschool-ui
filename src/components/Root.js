@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
+import history from '../history';
 import Login from './login/Login';
-import DashboardStudent from './DashboardStudent';
-import DashboardTeacher from './DashboardTeacher';
+import Dashboard from './Dashboard/Dashboard';
 import TeacherClassApplicants from './TeacherClassApplicants';
 import Profile from './Profile';
 import Settings from './Settings';
@@ -15,11 +15,10 @@ import theme from '../stores/theme';
 const Root = ({ store }) => (
   <Provider store={store}>
     <MuiThemeProvider theme={theme}>
-      <Router>
+      <Router history={history}>
         <Switch>
           <Route exact path="/" component={Login} />
-          <Route exact path="/dashboard-student" component={DashboardStudent} />
-          <Route exact path="/dashboard-teacher" component={DashboardTeacher} />
+          <Route exact path="/dashboard" component={Dashboard} />
           <Route
             exact
             path="/teacher-class-applicants/:id/:accepted"

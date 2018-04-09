@@ -1,7 +1,7 @@
 // @flow
 
 export const TOGGLE_STATUS = 'TOGGLE_STATUS';
-export const SET_USER_NAME = 'SET_USER_NAME';
+export const SET_USER_ACCOUNT = 'SET_USER_ACCOUNT';
 
 //student or teacher
 export function toggleStatus(val: string) {
@@ -11,10 +11,10 @@ export function toggleStatus(val: string) {
   };
 }
 
-//set user name
-export function setUserName(val: string) {
+//set user account
+export function setAccountName(val: string) {
   return {
-    type: SET_USER_NAME,
-    name: val
+    type: SET_USER_ACCOUNT,
+    account: val
   };
 }
