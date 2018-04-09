@@ -1,5 +1,8 @@
-import React from 'react';
+// @flow
+
+import * as React from 'react';
 import { connect } from 'react-redux';
+
 import { openDrawer, closeDrawer } from '../actions';
 import { toggleStatus } from '../actions/actionsUser';
 import { Link } from 'react-router-dom';
@@ -111,7 +114,7 @@ const Header = props => {
                 className={props.classes.card__avatar}
               />
               <Typography variant="title" className={props.classes.card__user}>
-                {props.userName ? props.userName : 'Гость'}
+                {props.account ? props.account : 'Гость'}
               </Typography>
             </CardContent>
           </Card>
@@ -234,7 +237,7 @@ function mapStateToProps(state) {
   return {
     title: state.app.title,
     drawer: state.app.drawer,
-    userName: state.user.userName,
+    account: state.user.account,
     userStatus: state.user.userStatus
   };
 }
