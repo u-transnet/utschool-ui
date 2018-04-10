@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 import LoginForm from './loginForm';
 import SignUpForm from './signUpForm';
 //
-import './Login.css';
+import './login.css';
 
 type Props = {};
 type State = {};

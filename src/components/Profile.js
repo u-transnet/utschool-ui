@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../stores/theme';
-import Header from './Header';
+import Header from './header';
 
 const Profile = ({ match: { params } }) => {
   return (
     <MuiThemeProvider theme={theme}>
-      <Header/>
+      <Header />
       <p>Профиль</p>
     </MuiThemeProvider>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

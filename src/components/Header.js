@@ -2,243 +2,231 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-
-import { openDrawer, closeDrawer } from '../actions';
-import { toggleStatus } from '../actions/actionsUser';
 import { Link } from 'react-router-dom';
-import { withStyles } from 'material-ui/styles';
-
+//
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
+import MoreVert from 'material-ui-icons/MoreVert';
+import Menu, { MenuItem } from 'material-ui/Menu';
+
 import Card, { CardContent } from 'material-ui/Card';
-import Search from 'material-ui-icons/Search';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import ExpansionPanel, {
-  ExpansionPanelDetails,
-  ExpansionPanelSummary
-} from 'material-ui/ExpansionPanel';
-import { FormControlLabel } from 'material-ui/Form';
-import FormSwitch from 'material-ui/Switch';
 import Avatar from 'material-ui/Avatar';
-
-import avatarIco from '../assets/avatar.png';
 import MenuIcon from 'material-ui-icons/Menu';
-import MoreVert from 'material-ui-icons/MoreVert';
 import ExitToAppIcon from 'material-ui-icons/ExitToApp';
 import HelpIcon from 'material-ui-icons/Help';
 import SettingsIcon from 'material-ui-icons/Settings';
 import AccountCircleIcon from 'material-ui-icons/AccountCircle';
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import ChromeReaderModeIcon from 'material-ui-icons/ChromeReaderMode';
 import DescriptionIcon from 'material-ui-icons/Description';
+//
+import { openDrawer, closeDrawer } from '../actions';
+import userStore from '../stores/usersTempData';
+import userInfo from './getUserData';
+//
+import './header.css';
 
-const styles = theme => ({
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  },
-  flex: {
-    flex: 1
-  },
-  rotate: {
-    transform: 'rotate(180deg)'
-  },
-  drawer__list: {
-    minWidth: 300
-  },
-  card: {
-    backgroundColor: theme.palette.primary.main,
-    height: 145,
-    boxShadow: 'none'
-  },
-  card__avatar: {
-    width: 62,
-    height: 62
-  },
-  card__user: {
-    color: '#fff',
-    marginTop: 30
-  },
-  card__userType: {
-    color: '#eee'
-  },
-  panel: {
-    marginTop: 0,
-    backgroundColor: theme.palette.primary.main
-  },
-  white: {
-    color: '#fff'
+//types
+type Props = {
+  onOpenDrawer: Function,
+  onCloseDrawer: Function,
+  title: string,
+  account: string,
+  drawer: boolean
+};
+type State = {
+  anchorEl: any,
+  userData: any
+};
+
+//CONSTS
+const TOOLBAR_MENU_OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
+const ITEM_HEIGHT = 48;
+
+class Header extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      anchorEl: null,
+      userData: userInfo(userStore, this.props.account)
+    };
   }
-});
 
-const Header = props => {
-  const toggleStatus = event => {
-    props.onToggleStatus(props.userStatus);
+  // toolbar menu functions
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
   };
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+  // end off toolbar menu functions
 
-  return (
-    <div>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            className={props.classes.menuButton}
-            color="inherit"
-            aria-label="Menu"
-            onClick={props.onOpenDrawer}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="title"
-            color="inherit"
-            className={props.classes.flex}
-          >
-            {props.title}
-          </Typography>
-          <Search />
-          <MoreVert />
-        </Toolbar>
-      </AppBar>
-
-      <Drawer open={props.drawer} onClose={props.onCloseDrawer}>
-        <div tabIndex={0} role="button" onKeyDown={props.onCloseDrawer}>
-          <Card className={props.classes.card}>
-            <CardContent>
-              <Avatar
-                alt="Logo"
-                src={avatarIco}
-                className={props.classes.card__avatar}
-              />
-              <Typography variant="title" className={props.classes.card__user}>
-                {props.account ? props.account : 'Гость'}
-              </Typography>
-            </CardContent>
-          </Card>
-
-          <ExpansionPanel className={props.classes.panel}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon className={props.classes.white} />}
+  render() {
+    const { anchorEl } = this.state;
+    return (
+      <div className="header">
+        {/* top bar */}
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              className="menu-button"
+              color="inherit"
+              aria-label="Menu"
+              onClick={this.props.onOpenDrawer}
             >
-              <Typography
-                variant="caption"
-                className={props.classes.card__userType}
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="title" color="inherit" className="flex">
+              {this.props.title}
+            </Typography>
+            <div className="toolbar-dd">
+              <IconButton
+                color="inherit"
+                aria-label="More"
+                aria-owns={anchorEl ? 'long-menu' : null}
+                aria-haspopup="true"
+                onClick={this.handleClick}
               >
-                {props.userStatus === 'on' ? 'Преподаватель' : 'Студент'}
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <div />
-              <div>
-                <FormControlLabel
-                  control={
-                    <FormSwitch
-                      onChange={toggleStatus}
-                      color="primary"
-                      value={props.userStatus}
-                    />
+                <MoreVert />
+              </IconButton>
+              <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={this.handleClose}
+                PaperProps={{
+                  style: {
+                    maxHeight: ITEM_HEIGHT * 4.5,
+                    width: 200
                   }
-                  label="Тип пользователя"
+                }}
+              >
+                {TOOLBAR_MENU_OPTIONS.map(option => (
+                  <MenuItem key={option} onClick={this.handleClose}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
+          </Toolbar>
+        </AppBar>
+        {/* sidebar */}
+        <Drawer
+          className="sidebar"
+          open={this.props.drawer}
+          onClose={this.props.onCloseDrawer}
+        >
+          <div
+            className="sidebar-inner"
+            tabIndex={0}
+            role="button"
+            onKeyDown={this.props.onCloseDrawer}
+          >
+            <Card className="card">
+              <CardContent>
+                <Avatar
+                  alt="Logo"
+                  src={this.state.userData.avatar}
+                  className="card-avatar"
                 />
-              </div>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-
-          <List className={props.classes.drawer__list}>
-            <ListItem
-              button
-              component={Link}
-              to="/dashboard-student"
-              onClick={props.onCloseDrawer}
-            >
-              <ListItemIcon>
-                <DescriptionIcon />
-              </ListItemIcon>
-              <ListItemText primary="Мои лекции" />
-            </ListItem>
-
-            {props.userStatus === 'on' ? (
+                <div className="user-title">
+                  <span>{this.state.userData.name}</span>
+                  <em>{this.state.userData.role}</em>
+                </div>
+              </CardContent>
+            </Card>
+            <List className="drawer-list">
               <ListItem
                 button
                 component={Link}
-                to="/dashboard-teacher"
-                onClick={props.onCloseDrawer}
+                to="/dashboard-student"
+                onClick={this.props.onCloseDrawer}
               >
                 <ListItemIcon>
-                  <ChromeReaderModeIcon />
+                  <DescriptionIcon />
                 </ListItemIcon>
-                <ListItemText primary="Лекции" />
+                <ListItemText primary="Мои лекции" />
               </ListItem>
-            ) : (
-              false
-            )}
 
-            <Divider />
-
-            <ListItem
-              button
-              component={Link}
-              to="/profile"
-              onClick={props.onCloseDrawer}
-            >
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Мой профиль" />
-            </ListItem>
-
-            <Divider />
-
-            <ListItem
-              button
-              component={Link}
-              to="/settings"
-              onClick={props.onCloseDrawer}
-            >
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Настройки" />
-            </ListItem>
-            <ListItem
-              button
-              component={Link}
-              to="/help"
-              onClick={props.onCloseDrawer}
-            >
-              <ListItemIcon>
-                <HelpIcon />
-              </ListItemIcon>
-              <ListItemText primary="Помощь" />
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              component={Link}
-              to="/"
-              onClick={props.onCloseDrawer}
-            >
-              <ListItemIcon>
-                <ExitToAppIcon className={props.classes.rotate} />
-              </ListItemIcon>
-              <ListItemText primary="Выйти" />
-            </ListItem>
-          </List>
-        </div>
-      </Drawer>
-    </div>
-  );
-};
+              {this.state.userData.role === 'Студент' ? (
+                <ListItem
+                  button
+                  component={Link}
+                  to="/dashboard-teacher"
+                  onClick={this.props.onCloseDrawer}
+                >
+                  <ListItemIcon>
+                    <ChromeReaderModeIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Лекции" />
+                </ListItem>
+              ) : (
+                false
+              )}
+              <ListItem
+                button
+                component={Link}
+                to="/profile"
+                onClick={this.props.onCloseDrawer}
+              >
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Мой профиль" />
+              </ListItem>
+              <Divider />
+              <ListItem
+                button
+                component={Link}
+                to="/settings"
+                onClick={this.props.onCloseDrawer}
+              >
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Настройки" />
+              </ListItem>
+              <ListItem
+                button
+                component={Link}
+                to="/help"
+                onClick={this.props.onCloseDrawer}
+              >
+                <ListItemIcon>
+                  <HelpIcon />
+                </ListItemIcon>
+                <ListItemText primary="Помощь" />
+              </ListItem>
+              <Divider />
+              <ListItem
+                button
+                component={Link}
+                to="/"
+                onClick={this.props.onCloseDrawer}
+              >
+                <ListItemIcon>
+                  <ExitToAppIcon className="rotate" />
+                </ListItemIcon>
+                <ListItemText primary="Выйти" />
+              </ListItem>
+            </List>
+          </div>
+        </Drawer>
+      </div>
+    );
+  }
+}
 
 function mapStateToProps(state) {
   return {
     title: state.app.title,
     drawer: state.app.drawer,
-    account: state.user.account,
-    userStatus: state.user.userStatus
+    account: state.user.account
   };
 }
 
@@ -248,12 +236,7 @@ const mapDispatchToProps = dispatch => ({
   },
   onCloseDrawer() {
     dispatch(closeDrawer());
-  },
-  onToggleStatus(val) {
-    dispatch(toggleStatus(val));
   }
 });
 
-export default withStyles(styles)(
-  connect(mapStateToProps, mapDispatchToProps)(Header)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

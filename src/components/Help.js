@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../stores/theme';
-import Header from './Header';
+import Header from './header';
 
 const Help = ({ match: { params } }) => {
   return (
     <MuiThemeProvider theme={theme}>
-      <Header/>
+      <Header />
       <p>Помощь</p>
     </MuiThemeProvider>
-  )
-}
+  );
+};
 
-export default Help
+export default Help;

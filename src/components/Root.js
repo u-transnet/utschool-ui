@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import history from '../history';
-import Login from './login/Login';
-import Dashboard from './Dashboard/Dashboard';
+import Login from './login/login';
+import Dashboard from './dashboard/dashboard';
+
 import TeacherClassApplicants from './TeacherClassApplicants';
 import Profile from './Profile';
 import Settings from './Settings';

@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,400i,500&subset=cyrillic");
 @font-face {
   font-family: 'tn-school';
   src: url("./fonts/tn-school.ttf?xff5ii") format("truetype"), url("./fonts/tn-school.woff?xff5ii") format("woff"), url("./fonts/tn-school.svg?xff5ii#tn-school") format("svg");
@@ -26,5 +27,7 @@ i.icon {
 body {
   margin: 0;
   padding: 0;
+  font: 14px/24px 'Roboto', sans-serif;
+  letter-spacing: 0.02em;
 }
 /*# sourceMappingURL=index.css.map */

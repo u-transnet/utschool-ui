@@ -16,13 +16,24 @@ import validate from './validate';
 import userStore from '../../stores/usersTempData';
 import history from '../../history';
 //
-import './Login.css';
+import './login.css';
 
 type Props = {
   handleSubmit: Function,
   setAccount: Function
 };
+
 class SignUpForm extends React.Component<Props> {
+  pushNewUser = (newAccount: string) => {
+    userStore.push({
+      account: newAccount,
+      name: newAccount,
+      faculty: '',
+      accepted: 'false',
+      avatar: '/avatars/guest.png',
+      role: 'Новый пользователь'
+    });
+  };
   render() {
     const { handleSubmit, setAccount } = this.props; // No fields prop
     const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -50,6 +61,7 @@ class SignUpForm extends React.Component<Props> {
             _error: 'SignUp failed!'
           });
         } else {
+          this.pushNewUser(values.newaccount);
           setAccount(values.newaccount);
         }
       });

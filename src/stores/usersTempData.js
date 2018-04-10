@@ -2,102 +2,91 @@
 
 export default [
   {
-    id: '0',
     account: 'Гость',
     name: 'Гость',
-    faculty: 'NaN',
+    faculty: '',
     accepted: 'false',
-    avatar: '',
-    role: 'student'
+    avatar: '/avatars/guest.png',
+    role: 'Гость'
   },
   {
-    id: '1',
     account: 'Stas',
     name: 'Стас Фёдоров',
     faculty: 'Филологии',
     accepted: 'false',
-    avatar: '',
-    role: 'student'
+    avatar: '/avatars/avatar.png',
+    role: 'Студент'
   },
   {
-    id: '2',
     account: 'Sergey',
     name: 'Сергей Петров',
     faculty: 'Филологии',
     accepted: 'false',
-    avatar: '',
-    role: 'student'
+    avatar: '/avatars/avatar.png',
+    role: 'Студент'
   },
   {
-    id: '3',
     account: 'Dima',
     name: 'Дмитрий Козлов',
     faculty: 'Филологии',
     accepted: 'false',
-    avatar: '',
-    role: 'student'
+    avatar: '/avatars/avatar.png',
+    role: 'Студент'
   },
   {
-    id: '5',
     account: 'Anna',
     name: 'Анна Мирошниченко',
     faculty: 'Филологии',
     accepted: 'true',
-    avatar: '',
+    avatar: '/avatars/avatar.png',
     role: 'teacher'
   },
   {
-    id: '6',
     account: 'Petya',
     name: 'Пётр Манов',
     faculty: 'Филологии',
     accepted: 'false',
-    avatar: '',
-    role: 'teacher'
+    avatar: '/avatars/avatar.png',
+    role: 'Преподаватель'
   },
   {
-    id: '7',
     account: 'Dasha',
     name: 'Дарья Семенченко',
     faculty: 'Филологии',
     accepted: 'true',
-    avatar: '',
-    role: 'teacher'
+    avatar: '/avatars/avatar.png',
+    role: 'Преподаватель'
   },
   {
-    id: '8',
     account: 'Kuzya',
     name: 'Сигизмунд Кузькин',
     faculty: 'Филологии',
     accepted: 'false',
-    avatar: '',
-    role: 'teacher'
+    avatar: '/avatars/avatar.png',
+    role: 'Преподаватель'
   },
   {
-    id: '9',
     account: 'Efpian',
     name: 'Епифан Обормотов',
     faculty: 'Филологии',
     accepted: 'false',
-    avatar: '',
-    role: 'student'
+    avatar: '/avatars/avatar.png',
+    role: 'Студент'
   },
   {
-    id: '10',
     account: 'Vladlen',
     name: 'Владлен Коровин',
     faculty: 'Филологии',
     accepted: 'true',
-    avatar: '',
-    role: 'student'
+    avatar: '/avatars/avatar.png',
+    role: 'Студент'
   },
   {
-    id: '11',
     account: 'Ivan',
     name: 'Иван Ганин',
     faculty: 'Филологии',
     accepted: 'false',
-    avatar: '',
-    role: 'student'
+    avatar: '/avatars/avatar.png',
+    role: 'Студент'
   }
 ];

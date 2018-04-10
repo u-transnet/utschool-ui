@@ -1,19 +1,18 @@
 import React from 'react';
-import Header from './Header';
+import Header from './header';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../stores/theme';
 
 import TeacherClassApplicantsContent from './TeacherClassApplicantsContent';
 
-
 const DashboardTeacher = ({ match: { params } }) => {
-    return (
-        <MuiThemeProvider theme={theme}>
-            <Header />
-            <TeacherClassApplicantsContent />
-        </MuiThemeProvider>
-    )
-}
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Header />
+      <TeacherClassApplicantsContent />
+    </MuiThemeProvider>
+  );
+};
 
-export default DashboardTeacher
+export default DashboardTeacher;

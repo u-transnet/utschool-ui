@@ -16,7 +16,7 @@ import validate from './validate';
 import userStore from '../../stores/usersTempData';
 import history from '../../history';
 //
-import './Login.css';
+import './login.css';
 
 type Props = {
   onToggleForm: Function,
