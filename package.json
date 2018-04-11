@@ -11,16 +11,17 @@
   "dependencies": {
     "ajv": "^6.4.0",
     "history": "^4.7.2",
-    "material-ui": "^1.0.0-beta.40",
+    "material-ui": "^1.0.0-beta.41",
     "material-ui-icons": "^1.0.0-beta.36",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
     "react-redux": "^5.0.7",
     "react-refetch": "^1.0.4",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
     "redux": "^3.7.2",
-    "redux-form": "^7.3.0"
+    "redux-form": "^7.3.0",
+    "schoolapi": "git+https://github.com/u-transnet/utschool-js.git"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,7 +32,7 @@
     "flow": "flow"
   },
   "devDependencies": {
-    "babel-eslint": "^8.1.1",
+    "babel-eslint": "^8.2.2",
     "eslint": "^4.19.1",
     "eslint-config-react-app": "^2.1.0",
     "eslint-plugin-flowtype": "^2.46.1",
