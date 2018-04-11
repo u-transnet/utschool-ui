@@ -88,5 +88,13 @@ export default [
     accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
+  },
+  {
+    account: 'markup-ua',
+    name: 'Tom Molotko',
+    faculty: '',
+    accepted: 'false',
+    avatar: '/avatars/avatar.png',
+    role: 'Студент'
   }
 ];

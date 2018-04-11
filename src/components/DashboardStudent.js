@@ -1,7 +1,7 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../stores/theme';
-import Header from './header';
+import Header from './header/header';
 import DashboardStudentContent from './DashboardStudentContent';
 
 const DashboardStudent = ({ match: { params } }) => {

@@ -2,11 +2,13 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Header from '../header';
+import Header from '../header/header';
 //
+//import getData from '../../services/getData';
 
 type Props = {
-  account: string
+  account: string,
+  getData: Function
 };
 type State = {};
 

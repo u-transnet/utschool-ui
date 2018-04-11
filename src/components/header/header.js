@@ -24,9 +24,9 @@ import AccountCircleIcon from 'material-ui-icons/AccountCircle';
 import ChromeReaderModeIcon from 'material-ui-icons/ChromeReaderMode';
 import DescriptionIcon from 'material-ui-icons/Description';
 //
-import { openDrawer, closeDrawer } from '../actions';
-import userStore from '../stores/usersTempData';
-import userInfo from './getUserData';
+import { openDrawer, closeDrawer } from '../../actions';
+import userStore from '../../stores/usersTempData';
+import userInfo from '../getUserData';
 //
 import './header.css';
 

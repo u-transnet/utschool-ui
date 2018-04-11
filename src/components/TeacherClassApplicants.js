@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './header';
+import Header from './header/header';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../stores/theme';
