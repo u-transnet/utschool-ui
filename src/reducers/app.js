@@ -2,13 +2,11 @@
 import { Action } from 'redux';
 
 type State = {
-  title: string,
-  drawer: boolean
+  title: string
 };
 
 const initialState: State = {
-  title: 'UT-SCHOOL',
-  drawer: false
+  title: 'UT-SCHOOL'
 };
 
 export default function theApp(
@@ -16,14 +14,6 @@ export default function theApp(
   action: Action
 ): State {
   switch (action.type) {
-    case 'OPEN_DRAWER':
-      return Object.assign({}, state, {
-        drawer: action.drawer
-      });
-    case 'CLOSE_DRAWER':
-      return Object.assign({}, state, {
-        drawer: action.drawer
-      });
     case 'SET_TITLE':
       return Object.assign({}, state, {
         title: action.title

@@ -10,7 +10,6 @@
   }
 }
 .sidebar {
-  outline: none !important;
   .rotate {
     transform: rotate(180deg);
   }
@@ -45,4 +44,7 @@
   .card-user-type {
     color: #eee;
   }
+}
+.sidebar-inner {
+  outline: none !important;
 }

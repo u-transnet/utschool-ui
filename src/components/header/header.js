@@ -24,7 +24,6 @@ import AccountCircleIcon from 'material-ui-icons/AccountCircle';
 import ChromeReaderModeIcon from 'material-ui-icons/ChromeReaderMode';
 import DescriptionIcon from 'material-ui-icons/Description';
 //
-import { openDrawer, closeDrawer } from '../../actions';
 import userStore from '../../stores/usersTempData';
 import userInfo from '../getUserData';
 //
@@ -32,15 +31,13 @@ import './header.css';
 
 //types
 type Props = {
-  onOpenDrawer: Function,
-  onCloseDrawer: Function,
   title: string,
-  account: string,
-  drawer: boolean
+  account: string
 };
 type State = {
   anchorEl: any,
-  userData: any
+  userData: any,
+  openMenu: boolean
 };
 
 //CONSTS
@@ -52,22 +49,22 @@ class Header extends React.Component<Props, State> {
     super(props);
 
     this.state = {
+      openMenu: false,
       anchorEl: null,
       userData: userInfo(userStore, this.props.account)
     };
   }
 
   // toolbar menu functions
-  handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+  handleClick = event => this.setState({ anchorEl: event.currentTarget });
+
+  handleClose = () => this.setState({ anchorEl: null });
+
   // end off toolbar menu functions
+  menuOpener = () => this.setState({ openMenu: !this.state.openMenu });
 
   render() {
-    const { anchorEl } = this.state;
+    const { anchorEl, userData } = this.state;
     return (
       <div className="header">
         {/* top bar */}
@@ -77,7 +74,7 @@ class Header extends React.Component<Props, State> {
               className="menu-button"
               color="inherit"
               aria-label="Menu"
-              onClick={this.props.onOpenDrawer}
+              onClick={this.menuOpener}
             >
               <MenuIcon />
             </IconButton>
@@ -118,25 +115,25 @@ class Header extends React.Component<Props, State> {
         {/* sidebar */}
         <Drawer
           className="sidebar"
-          open={this.props.drawer}
-          onClose={this.props.onCloseDrawer}
+          open={this.state.openMenu}
+          onClose={this.menuOpener}
         >
           <div
             className="sidebar-inner"
             tabIndex={0}
             role="button"
-            onKeyDown={this.props.onCloseDrawer}
+            onKeyDown={this.menuOpener}
           >
             <Card className="card">
               <CardContent>
                 <Avatar
                   alt="Logo"
-                  src={this.state.userData.avatar}
+                  src={userData.avatar}
                   className="card-avatar"
                 />
                 <div className="user-title">
-                  <span>{this.state.userData.name}</span>
-                  <em>{this.state.userData.role}</em>
+                  <span>{userData.name}</span>
+                  <em>{userData.role}</em>
                 </div>
               </CardContent>
             </Card>
@@ -145,7 +142,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/dashboard-student"
-                onClick={this.props.onCloseDrawer}
+                onClick={this.menuOpener}
               >
                 <ListItemIcon>
                   <DescriptionIcon />
@@ -153,12 +150,12 @@ class Header extends React.Component<Props, State> {
                 <ListItemText primary="Мои лекции" />
               </ListItem>
 
-              {this.state.userData.role === 'Студент' ? (
+              {userData.role === 'Студент' ? (
                 <ListItem
                   button
                   component={Link}
                   to="/dashboard-teacher"
-                  onClick={this.props.onCloseDrawer}
+                  onClick={this.menuOpener}
                 >
                   <ListItemIcon>
                     <ChromeReaderModeIcon />
@@ -172,7 +169,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/profile"
-                onClick={this.props.onCloseDrawer}
+                onClick={this.menuOpener}
               >
                 <ListItemIcon>
                   <AccountCircleIcon />
@@ -184,7 +181,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/settings"
-                onClick={this.props.onCloseDrawer}
+                onClick={this.menuOpener}
               >
                 <ListItemIcon>
                   <SettingsIcon />
@@ -195,7 +192,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/help"
-                onClick={this.props.onCloseDrawer}
+                onClick={this.menuOpener}
               >
                 <ListItemIcon>
                   <HelpIcon />
@@ -207,7 +204,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/"
-                onClick={this.props.onCloseDrawer}
+                onClick={this.menuOpener}
               >
                 <ListItemIcon>
                   <ExitToAppIcon className="rotate" />
@@ -225,18 +222,10 @@ class Header extends React.Component<Props, State> {
 function mapStateToProps(state) {
   return {
     title: state.app.title,
-    drawer: state.app.drawer,
     account: state.user.account
   };
 }
 
-const mapDispatchToProps = dispatch => ({
-  onOpenDrawer() {
-    dispatch(openDrawer());
-  },
-  onCloseDrawer() {
-    dispatch(closeDrawer());
-  }
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

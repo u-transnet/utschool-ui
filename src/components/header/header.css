@@ -51,4 +51,8 @@
 .sidebar .card-user-type {
   color: #eee;
 }
+
+.sidebar-inner {
+  outline: none !important;
+}
 /*# sourceMappingURL=header.css.map */
