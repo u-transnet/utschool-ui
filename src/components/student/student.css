@@ -1,0 +1,14 @@
+.tabs-wrap .tab {
+  flex-grow: 1;
+  background-color: #2196f3;
+  opacity: 1;
+  color: #fff;
+  max-width: 50%;
+  width: 50%;
+}
+
+.tabs-wrap .tab-container {
+  padding: 24px;
+  list-style: none;
+}
+/*# sourceMappingURL=student.css.map */

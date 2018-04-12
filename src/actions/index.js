@@ -8,10 +8,3 @@ export function setTitle(val: string) {
     title: val
   };
 }
-
-export function toggleStudentTab(val: boolean) {
-  return {
-    type: 'TOGGLE_STUDENT_TAB',
-    studentTab: val
-  };
-}

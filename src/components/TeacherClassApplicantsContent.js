@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Tabs, { Tab } from 'material-ui/Tabs';
-import { toggleStudentTab } from '../actions';
 import StudentNew from './StudentNew';
 import StudentAccepted from './StudentAccepted';
 import studentsList from '../stores/usersTempData';
@@ -67,9 +66,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onToggleTab(event, value) {
-    dispatch(toggleStudentTab(value));
-  }
+  onToggleTab(event, value) {}
 });
 
 export default withStyles(styles)(
