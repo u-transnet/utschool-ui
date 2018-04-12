@@ -12,11 +12,12 @@ import renderRememberCheckbox from './rememberCheckbox';
 //
 import { toggleForm } from '../../actions/loginAction';
 import { setAccountName } from '../../actions/actionsUser';
+import { setTitle } from '../../actions';
 import validate from './validate';
 import userStore from '../../stores/usersTempData';
 import history from '../../history';
 //
-import getData from '../../services/getData';
+//import getData from '../../services/getData';
 //
 import './login.css';
 
@@ -24,13 +25,14 @@ type Props = {
   onToggleForm: Function,
   handleSubmit: Function,
   setAccount: Function,
+  onSetTitle: Function,
   formFlag: boolean,
   account: string
 };
 
 class LoginForm extends React.Component<Props> {
   render() {
-    const { handleSubmit, onToggleForm, setAccount } = this.props; // No fields prop
+    const { handleSubmit, onToggleForm, setAccount, onSetTitle } = this.props; // No fields prop
     const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     let loginSubmit = (values: any) => {
@@ -45,9 +47,10 @@ class LoginForm extends React.Component<Props> {
             _error: 'Login failed!'
           });
         } else {
-          if (values.account === 'markup-ua') {
-            getData(values.account);
-          }
+          // if (values.account === 'markup-ua') {
+          //   getData(values.account);
+          // }
+          onSetTitle('Лекции');
           setAccount(values.account);
         }
       });
@@ -106,6 +109,9 @@ const mapDispatchToProps = dispatch => ({
   setAccount(val) {
     dispatch(setAccountName(val));
     history.push('/dashboard');
+  },
+  onSetTitle(val) {
+    dispatch(setTitle(val));
   }
 });
 

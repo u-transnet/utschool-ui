@@ -1,5 +1,6 @@
 // @flow
 import { Action } from 'redux';
+import { SET_TITLE } from '../actions/index';
 
 type State = {
   title: string
@@ -14,7 +15,7 @@ export default function theApp(
   action: Action
 ): State {
   switch (action.type) {
-    case 'SET_TITLE':
+    case SET_TITLE:
       return Object.assign({}, state, {
         title: action.title
       });
