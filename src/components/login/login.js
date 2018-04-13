@@ -11,7 +11,9 @@ import SignUpForm from './signUpForm';
 //
 import './login.css';
 
-type Props = {};
+type Props = {
+  title: string
+};
 type State = {};
 
 class Login extends React.Component<Props, State> {
@@ -28,7 +30,7 @@ class Login extends React.Component<Props, State> {
               component="h1"
               className="login-title"
             >
-              UT-SCHOOL
+              {this.props.title}
             </Typography>
           </Grid>
           {!this.props.formFlag ? <LoginForm /> : <SignUpForm />}
@@ -40,7 +42,8 @@ class Login extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    formFlag: state.login.formFlag
+    formFlag: state.login.formFlag,
+    title: state.app.title
   };
 }
 
