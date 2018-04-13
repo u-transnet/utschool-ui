@@ -1,6 +1,6 @@
 .login-box {
   max-width: 242px;
-  margin: 64px auto 0;
+  margin: 0 auto;
 }
 
 .login-box .login-avatar {
@@ -39,5 +39,18 @@
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+.login-wrap {
+  width: 100%;
+  position: relative;
+  padding-top: 64px;
+}
+
+.login-wrap .back-button {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  color: rgba(0, 0, 0, 0.54);
 }
 /*# sourceMappingURL=login.css.map */
