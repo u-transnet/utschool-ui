@@ -21,7 +21,7 @@
     "react-scripts": "1.1.1",
     "redux": "^3.7.2",
     "redux-form": "^7.3.0",
-    "schoolapi": "git+https://github.com/u-transnet/utschool-js.git"
+    "utschool-js": "git+https://github.com/u-transnet/utschool-js.git"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,11 +36,10 @@
     "eslint": "^4.19.1",
     "eslint-config-react-app": "^2.1.0",
     "eslint-plugin-flowtype": "^2.46.1",
-    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.7.0",
     "flow-bin": "^0.68.0",
-    "flow-typed": "^2.4.0",
-    "redux-devtools": "^3.4.1"
+    "flow-typed": "^2.4.0"
   }
 }
