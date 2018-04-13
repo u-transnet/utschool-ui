@@ -24,7 +24,8 @@ import AccountCircleIcon from 'material-ui-icons/AccountCircle';
 import ChromeReaderModeIcon from 'material-ui-icons/ChromeReaderMode';
 import DescriptionIcon from 'material-ui-icons/Description';
 //
-import currentUser from '../../stores/userTempData';
+import userStore from '../../stores/usersTempData';
+import userInfo from '../getUserData';
 //
 import './header.css';
 
@@ -49,7 +50,7 @@ class Header extends React.Component<Props, State> {
     this.state = {
       openMenu: false,
       anchorEl: null,
-      userData: currentUser
+      userData: userInfo(userStore, this.props.account)
     };
   }
 

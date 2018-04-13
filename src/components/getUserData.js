@@ -1,7 +1,7 @@
 // @flow
-import userStore from '../stores/usersTempData';
-export default function(account: string) {
-  for (let i of userStore) {
+
+export default function(store: any, account: string) {
+  for (let i of store) {
     if (i.account === account) {
       return i;
     }
