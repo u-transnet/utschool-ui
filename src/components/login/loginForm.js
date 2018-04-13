@@ -17,8 +17,6 @@ import validate from './validate';
 import userStore from '../../stores/usersTempData';
 import history from '../../history';
 //
-//import getData from '../../services/getData';
-//
 import './login.css';
 
 type Props = {
@@ -47,9 +45,6 @@ class LoginForm extends React.Component<Props> {
             _error: 'Login failed!'
           });
         } else {
-          // if (values.account === 'markup-ua') {
-          //   getData(values.account);
-          // }
           onSetTitle('Лекции');
           setAccount(values.account);
         }
