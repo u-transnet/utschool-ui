@@ -7,7 +7,12 @@ export default [
     faculty: '',
     accepted: 'false',
     avatar: '/avatars/guest.png',
-    role: 'Гость'
+    role: 'Студент',
+    lectures: {
+      id: [1, 2],
+      done: [1],
+      visited: [1, 2]
+    }
   },
   {
     account: 'Stas',
@@ -15,7 +20,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Sergey',
@@ -23,7 +33,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Dima',
@@ -31,7 +46,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Anna',
@@ -39,7 +59,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'true',
     avatar: '/avatars/avatar.png',
-    role: 'teacher'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Petya',
@@ -47,7 +72,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Преподаватель'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Dasha',
@@ -55,7 +85,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'true',
     avatar: '/avatars/avatar.png',
-    role: 'Преподаватель'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Kuzya',
@@ -63,7 +98,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Преподаватель'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Efpian',
@@ -71,7 +111,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Vladlen',
@@ -79,7 +124,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'true',
     avatar: '/avatars/avatar.png',
-    role: 'Студент'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'Ivan',
@@ -87,7 +137,12 @@ export default [
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   },
   {
     account: 'markup-ua',
@@ -95,6 +150,11 @@ export default [
     faculty: '',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент'
+    role: 'Студент',
+    lectures: {
+      id: [1, 3],
+      done: [3],
+      visited: [1, 3]
+    }
   }
 ];

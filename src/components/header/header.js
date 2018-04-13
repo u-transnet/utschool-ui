@@ -24,8 +24,7 @@ import AccountCircleIcon from 'material-ui-icons/AccountCircle';
 import ChromeReaderModeIcon from 'material-ui-icons/ChromeReaderMode';
 import DescriptionIcon from 'material-ui-icons/Description';
 //
-import userStore from '../../stores/usersTempData';
-import userInfo from '../getUserData';
+import currentUser from '../../stores/userTempData';
 //
 import './header.css';
 
@@ -47,11 +46,10 @@ const ITEM_HEIGHT = 48;
 class Header extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-
     this.state = {
       openMenu: false,
       anchorEl: null,
-      userData: userInfo(userStore, this.props.account)
+      userData: currentUser
     };
   }
 
@@ -141,7 +139,7 @@ class Header extends React.Component<Props, State> {
               <ListItem
                 button
                 component={Link}
-                to="/dashboard-student"
+                to="/dashboard"
                 onClick={this.menuOpener}
               >
                 <ListItemIcon>
@@ -154,7 +152,7 @@ class Header extends React.Component<Props, State> {
                 <ListItem
                   button
                   component={Link}
-                  to="/dashboard-teacher"
+                  to="/dashboard"
                   onClick={this.menuOpener}
                 >
                   <ListItemIcon>

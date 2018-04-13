@@ -5,36 +5,15 @@ import { connect } from 'react-redux';
 //
 import Tabs, { Tab } from 'material-ui/Tabs';
 //
+import StudentCard from './studentCard';
 import './student.css';
-
-import StudentClassCard from '../StudentClassCard';
-import allClasses from '../../stores/classesTempData';
+//
+import allLectures from '../../stores/lecturesTempData';
 
 type Props = {};
 type State = {
   value: number
 };
-// TODO need clean
-const TabContainer = props => {
-  return <div>{[props.children]}</div>;
-};
-
-let classesNew = allClasses.filter(function(theClass) {
-  return theClass['accepted'] === 'false';
-});
-
-const classesList = classesNew.map((classes, index) => {
-  return <StudentClassCard {...classes} key={index} />;
-});
-
-let classesAccepted = allClasses.filter(function(theClass) {
-  return theClass['accepted'] === 'true';
-});
-
-const acceptedClassesList = classesAccepted.map((classes, index) => {
-  return <StudentClassCard {...classes} key={index} />;
-});
-// end of TODO
 
 class DashboardStudentContent extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -50,6 +29,17 @@ class DashboardStudentContent extends React.Component<Props, State> {
 
   render() {
     const { value } = this.state;
+
+    const TabContainer = props => {
+      return <div>{[props.children]}</div>;
+    };
+    let lecturesNew = allLectures.filter(function(theLecture) {
+      //return theLecture['accepted'] === 'false';
+    });
+    let lecturesAccepted = allLectures.filter(function(theLecture) {
+      //return theLecture['accepted'] === 'true';
+    });
+
     return (
       <div className="tabs-wrap">
         <Tabs value={value} onChange={this.handleTabChange}>
@@ -57,20 +47,34 @@ class DashboardStudentContent extends React.Component<Props, State> {
           <Tab label="Мои" className="tab" />
         </Tabs>
         <div className="tab-container">
-          {value === 0 && <TabContainer>{classesList}</TabContainer>}
-          {value === 1 && <TabContainer>{acceptedClassesList}</TabContainer>}
+          {value === 0 && (
+            <TabContainer>
+              {lecturesNew.map((lectures, index) => (
+                <StudentCard {...lectures} key={index} />
+              ))}
+            </TabContainer>
+          )}
+          {value === 1 && (
+            <TabContainer>
+              {lecturesAccepted.map((lectures, index) => (
+                <StudentCard {...lectures} key={index} />
+              ))}
+            </TabContainer>
+          )}
         </div>
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {}
+function mapStateToProps(state) {
+  return {
+    account: state.user.account
+  };
+}
 
 const mapDispatchToProps = dispatch => ({});
 
-// export default connect(mapStateToProps, mapDispatchToProps)(
-//   DashboardStudentContent
-// );
-
-export default DashboardStudentContent;
+export default connect(mapStateToProps, mapDispatchToProps)(
+  DashboardStudentContent
+);

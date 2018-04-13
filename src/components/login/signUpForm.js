@@ -25,14 +25,19 @@ type Props = {
 
 class SignUpForm extends React.Component<Props> {
   pushNewUser = (newAccount: string) => {
-    userStore.push({
-      account: newAccount,
-      name: newAccount,
-      faculty: '',
-      accepted: 'false',
-      avatar: '/avatars/guest.png',
-      role: 'Новый пользователь'
-    });
+    // userStore.push({
+    //   account: newAccount,
+    //   name: newAccount,
+    //   faculty: '',
+    //   accepted: 'false',
+    //   avatar: '/avatars/guest.png',
+    //   role: 'Студент',
+    //   lectures: {
+    //     id: [],
+    //     done: [],
+    //     visited: []
+    //   }
+    // });
   };
   render() {
     const { handleSubmit, setAccount } = this.props; // No fields prop

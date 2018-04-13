@@ -1,0 +1,36 @@
+.login-box {
+  max-width: 242px;
+  margin: 64px auto 0;
+  .login-avatar {
+    width: 78px;
+    height: 78px;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    line-height: 78px;
+    font-size: 78px;
+    color: #2196f3;
+  }
+  .login-title {
+    margin: 25px 0 35px;
+    text-align: center;
+  }
+  .login-field {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .login-button {
+    margin: 10px auto 0 auto;
+    width: 168px;
+    display: block;
+    text-align: center;
+  }
+  .check-el {
+    margin-bottom: 32px;
+  }
+  form {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
