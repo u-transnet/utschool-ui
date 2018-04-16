@@ -20,6 +20,9 @@
   }
   .card-actions {
     padding: 16px 24px;
+    @media (max-width: 600px) {
+      padding: 16px;
+    }
   }
   .lecture-status {
     margin: 0;

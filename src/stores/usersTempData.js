@@ -5,7 +5,6 @@ export default [
     account: 'guest',
     name: 'Гость',
     faculty: '',
-    accepted: 'false',
     avatar: '/avatars/guest.png',
     role: 'Студент'
   },
@@ -13,7 +12,6 @@ export default [
     account: 'stas',
     name: 'Стас Фёдоров',
     faculty: 'Филологии',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -21,7 +19,6 @@ export default [
     account: 'sergey',
     name: 'Сергей Петров',
     faculty: 'Филологии',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -29,7 +26,6 @@ export default [
     account: 'dima',
     name: 'Дмитрий Козлов',
     faculty: 'Филологии',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -37,15 +33,13 @@ export default [
     account: 'anna',
     name: 'Анна Мирошниченко',
     faculty: 'Филологии',
-    accepted: 'true',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
   {
-    account: 'petya',
+    account: 'cptn-solo',
     name: 'Пётр Манов',
     faculty: 'Филологии',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -53,7 +47,6 @@ export default [
     account: 'dasha',
     name: 'Дарья Семенченко',
     faculty: 'Филологии',
-    accepted: 'true',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -61,7 +54,6 @@ export default [
     account: 'kuzya',
     name: 'Сигизмунд Кузькин',
     faculty: 'Филологии',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -69,15 +61,13 @@ export default [
     account: 'efpian',
     name: 'Епифан Обормотов',
     faculty: 'Филологии',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
   {
-    account: 'vladlen',
+    account: 'superpchelka23',
     name: 'Владлен Коровин',
     faculty: 'Филологии',
-    accepted: 'true',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -85,7 +75,6 @@ export default [
     account: 'ivan',
     name: 'Иван Ганин',
     faculty: 'Филологии',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   },
@@ -93,7 +82,6 @@ export default [
     account: 'markup-ua',
     name: 'Tom Molotko',
     faculty: '',
-    accepted: 'false',
     avatar: '/avatars/avatar.png',
     role: 'Студент'
   }

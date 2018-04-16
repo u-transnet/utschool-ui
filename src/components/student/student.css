@@ -21,7 +21,13 @@
 }
 
 .student-card .card-actions {
-  padding: 16px 24px;
+  padding: 16px;
+}
+
+@media (min-width: 600px) {
+  .student-card .card-actions {
+    padding: 16px 24px;
+  }
 }
 
 .student-card .lecture-status {

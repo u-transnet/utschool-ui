@@ -8,7 +8,12 @@
 
 .lecture-card .card-actions {
   padding: 16px 24px;
-  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .lecture-card .card-actions {
+    padding: 16px;
+  }
 }
 
 .lecture-card .card-actions .action-btn {

@@ -13,7 +13,8 @@ const ITEM_HEIGHT = 48;
 
 type Props = {
   name: string,
-  description: string
+  description: string,
+  stats: any
 };
 type State = {
   anchorEl: any
@@ -34,7 +35,7 @@ export default class StudentCard extends React.Component<Props, State> {
     this.setState({ anchorEl: null });
   };
   render() {
-    const { name, description } = this.props;
+    const { name, description, stats } = this.props;
     const { anchorEl } = this.state;
     return (
       <div className="student-card">
@@ -80,18 +81,30 @@ export default class StudentCard extends React.Component<Props, State> {
           {/* TODO need add checking */}
           <CardActions className="card-actions">
             <ul className="lecture-status">
-              <li>
-                <i className="material-icons">check_circle</i>
-                <span>Записан</span>
-              </li>
-              <li>
-                <i className="material-icons">check_circle</i>
-                <span>Пришел</span>
-              </li>
-              <li>
-                <i className="material-icons">check_circle</i>
-                <span>Сдан</span>
-              </li>
+              {stats['1.3.3347'].accepted ? (
+                <li>
+                  <i className="material-icons">check_circle</i>
+                  <span>Записан</span>
+                </li>
+              ) : (
+                ''
+              )}
+              {stats['1.3.3348'].accepted ? (
+                <li>
+                  <i className="material-icons">check_circle</i>
+                  <span>Пришел</span>
+                </li>
+              ) : (
+                ''
+              )}
+              {stats['1.3.3349'].accepted ? (
+                <li>
+                  <i className="material-icons">check_circle</i>
+                  <span>Сдан</span>
+                </li>
+              ) : (
+                ''
+              )}
             </ul>
           </CardActions>
         </Card>
