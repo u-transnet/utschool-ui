@@ -56,6 +56,23 @@ class LoginForm extends React.Component<Props> {
             _error: 'Login failed!'
           });
         } else {
+          // TODO we need changing request
+          fetch(
+            'https://utschool.herokuapp.com/api/v1/accounts=' + values.account,
+            {
+              mode: 'no-cors'
+            }
+          )
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(data) {
+              //console.log('data', data);
+            })
+            .catch(function(error) {
+              //console.log('error', error);
+            });
+          // TODO we need doing this after the request
           let nodeUrl = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
           let accountName = values.account; // Имя учетной записи
           let privateKey = null; //Приватный ключ
