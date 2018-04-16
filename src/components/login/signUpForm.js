@@ -15,6 +15,7 @@ import { setAccountName } from '../../actions/actionsUser';
 import validate from './validate';
 import userStore from '../../stores/usersTempData';
 import history from '../../history';
+import OAuth from '../../services/oauth2';
 //
 import './login.css';
 
@@ -91,6 +92,9 @@ class SignUpForm extends React.Component<Props> {
           <div className="check-el">
             <Field name="rememberMe" component={renderRememberCheckbox} />
           </div>
+        </Grid>
+        <Grid item xs={12}>
+          <OAuth />
         </Grid>
         <Grid item xs={12}>
           <Button
