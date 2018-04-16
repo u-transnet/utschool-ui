@@ -16,18 +16,17 @@ import './login.css';
 type Props = {
   toggleForm: Function,
   backToLogin: Function,
-  title: string,
   formFlag: boolean
 };
 type State = {};
 
 class Login extends React.Component<Props, State> {
   render() {
-    const { backToLogin } = this.props;
-    const back = () => backToLogin(this.props.formFlag);
+    const { backToLogin, formFlag } = this.props;
+    const back = () => backToLogin(formFlag);
     return (
       <div className="login-wrap">
-        {this.props.formFlag ? (
+        {formFlag ? (
           <IconButton className="back-button" color="inherit" onClick={back}>
             <i className="material-icons">arrow_back</i>
           </IconButton>
@@ -45,10 +44,10 @@ class Login extends React.Component<Props, State> {
                 component="h1"
                 className="login-title"
               >
-                {this.props.title}
+                UT-SCHOOL
               </Typography>
             </Grid>
-            {!this.props.formFlag ? <LoginForm /> : <SignUpForm />}
+            {!formFlag ? <LoginForm /> : <SignUpForm />}
           </Grid>
         </div>
       </div>
@@ -58,8 +57,7 @@ class Login extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    formFlag: state.login.formFlag,
-    title: state.app.title
+    formFlag: state.login.formFlag
   };
 }
 

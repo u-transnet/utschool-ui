@@ -39,7 +39,8 @@ class LoginForm extends React.Component<Props> {
       onToggleForm,
       setAccount,
       onSetTitle,
-      onSetLectures
+      onSetLectures,
+      formFlag
     } = this.props; // No fields prop
     const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -105,7 +106,7 @@ class LoginForm extends React.Component<Props> {
             size="medium"
             color="primary"
             className="login-button"
-            onClick={() => onToggleForm(this.props.formFlag)}
+            onClick={() => onToggleForm(formFlag)}
           >
             Создать акаунт
           </Button>
