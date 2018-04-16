@@ -12,6 +12,10 @@
   list-style: none;
 }
 
+.student-card {
+  padding-bottom: 24px;
+}
+
 .student-card .check {
   background-color: #2196f3;
   width: 20px;
@@ -43,11 +47,41 @@
   color: #888;
 }
 
-.student-card .cardOne {
-  margin-bottom: 15px;
-}
-
 .student-card .cardOne-actions {
   margin: 10px 15px 5px 0;
+}
+
+.student-card .dd {
+  margin: 4px 0 0;
+}
+
+.student-card .card-actions {
+  padding: 16px 24px;
+}
+
+.student-card .lecture-status {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  overflow: hidden;
+}
+
+.student-card .lecture-status li {
+  float: left;
+  height: 24px;
+  line-height: 24px;
+  padding-right: 24px;
+}
+
+.student-card .lecture-status li i {
+  float: left;
+  margin-right: 8px;
+  color: #00c853;
+}
+
+.student-card .lecture-status li span {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.54);
 }
 /*# sourceMappingURL=student.css.map */

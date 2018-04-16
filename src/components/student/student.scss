@@ -14,6 +14,7 @@
 }
 
 .student-card {
+  padding-bottom: 24px;
   .check {
     background-color: #2196f3;
     width: 20px;
@@ -40,10 +41,35 @@
   .grey {
     color: #888;
   }
-  .cardOne {
-    margin-bottom: 15px;
-  }
   .cardOne-actions {
     margin: 10px 15px 5px 0;
+  }
+  .dd {
+    margin: 4px 0 0;
+  }
+  .card-actions {
+    padding: 16px 24px;
+  }
+  .lecture-status {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    overflow: hidden;
+    li {
+      float: left;
+      height: 24px;
+      line-height: 24px;
+      padding-right: 24px;
+      i {
+        float: left;
+        margin-right: 8px;
+        color: #00c853;
+      }
+      span {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.54);
+      }
+    }
   }
 }
