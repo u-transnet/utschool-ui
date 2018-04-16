@@ -13,15 +13,12 @@ const ITEM_HEIGHT = 48;
 
 type Props = {
   name: string,
-  description: string,
-  teacher: any,
-  stats: any
+  description: string
 };
 type State = {
   anchorEl: any
 };
 
-//const StudentCard = (props: any, state: any) => {
 export default class StudentCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
