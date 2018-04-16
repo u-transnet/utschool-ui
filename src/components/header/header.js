@@ -8,7 +8,6 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import MoreVert from 'material-ui-icons/MoreVert';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
 import Card, { CardContent } from 'material-ui/Card';
@@ -16,13 +15,6 @@ import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-import MenuIcon from 'material-ui-icons/Menu';
-import ExitToAppIcon from 'material-ui-icons/ExitToApp';
-import HelpIcon from 'material-ui-icons/Help';
-import SettingsIcon from 'material-ui-icons/Settings';
-import AccountCircleIcon from 'material-ui-icons/AccountCircle';
-import ChromeReaderModeIcon from 'material-ui-icons/ChromeReaderMode';
-import DescriptionIcon from 'material-ui-icons/Description';
 //
 import userStore from '../../stores/usersTempData';
 import userInfo from '../getUserData';
@@ -75,7 +67,7 @@ class Header extends React.Component<Props, State> {
               aria-label="Menu"
               onClick={this.menuOpener}
             >
-              <MenuIcon />
+              <i className="material-icons">menu</i>
             </IconButton>
             <Typography variant="title" color="inherit" className="flex">
               {this.props.title}
@@ -88,7 +80,7 @@ class Header extends React.Component<Props, State> {
                 aria-haspopup="true"
                 onClick={this.handleClick}
               >
-                <MoreVert />
+                <i className="material-icons">more_vert</i>
               </IconButton>
               <Menu
                 id="long-menu"
@@ -144,7 +136,7 @@ class Header extends React.Component<Props, State> {
                 onClick={this.menuOpener}
               >
                 <ListItemIcon>
-                  <DescriptionIcon />
+                  <i className="material-icons">description</i>
                 </ListItemIcon>
                 <ListItemText primary="Мои лекции" />
               </ListItem>
@@ -157,7 +149,7 @@ class Header extends React.Component<Props, State> {
                   onClick={this.menuOpener}
                 >
                   <ListItemIcon>
-                    <ChromeReaderModeIcon />
+                    <i className="material-icons">chrome_reader_mode</i>
                   </ListItemIcon>
                   <ListItemText primary="Лекции" />
                 </ListItem>
@@ -171,7 +163,7 @@ class Header extends React.Component<Props, State> {
                 onClick={this.menuOpener}
               >
                 <ListItemIcon>
-                  <AccountCircleIcon />
+                  <i className="material-icons">account_circle</i>
                 </ListItemIcon>
                 <ListItemText primary="Мой профиль" />
               </ListItem>
@@ -183,7 +175,7 @@ class Header extends React.Component<Props, State> {
                 onClick={this.menuOpener}
               >
                 <ListItemIcon>
-                  <SettingsIcon />
+                  <i className="material-icons">settings</i>
                 </ListItemIcon>
                 <ListItemText primary="Настройки" />
               </ListItem>
@@ -194,7 +186,7 @@ class Header extends React.Component<Props, State> {
                 onClick={this.menuOpener}
               >
                 <ListItemIcon>
-                  <HelpIcon />
+                  <i className="material-icons">help</i>
                 </ListItemIcon>
                 <ListItemText primary="Помощь" />
               </ListItem>
@@ -206,7 +198,7 @@ class Header extends React.Component<Props, State> {
                 onClick={this.menuOpener}
               >
                 <ListItemIcon>
-                  <ExitToAppIcon className="rotate" />
+                  <i className="material-icons rotate">exit_to_app</i>
                 </ListItemIcon>
                 <ListItemText primary="Выйти" />
               </ListItem>
