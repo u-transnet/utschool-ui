@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 //
 import Tabs, { Tab } from 'material-ui/Tabs';
 //
+import LectureCard from '../lectures/lectureCard';
 import StudentCard from './studentCard';
 import './student.css';
 //
@@ -44,7 +45,7 @@ class DashboardStudentContent extends React.Component<Props, State> {
           {value === 0 && (
             <TabContainer>
               {lecturesBTS.map((lectures, index) => (
-                <StudentCard {...lectures} key={index} />
+                <LectureCard {...lectures} key={index} />
               ))}
             </TabContainer>
           )}

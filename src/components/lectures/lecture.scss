@@ -1,0 +1,30 @@
+.lecture-card {
+  padding: 0 0 24px;
+  .dd {
+    margin: 4px 0 0;
+  }
+  .card-actions {
+    padding: 16px 24px;
+    overflow: hidden;
+    .action-btn {
+      justify-content: flex-end;
+    }
+  }
+  .lecture-status {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex: 1;
+    li {
+      float: left;
+      height: 24px;
+      line-height: 24px;
+      padding-right: 24px;
+      em {
+        font-size: 14px;
+        color: #e64a19;
+        font-style: normal;
+      }
+    }
+  }
+}
