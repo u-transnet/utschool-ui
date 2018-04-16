@@ -2,147 +2,92 @@
 
 export default [
   {
-    account: 'Гость',
+    account: 'guest',
     name: 'Гость',
     faculty: '',
     accepted: 'false',
     avatar: '/avatars/guest.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 2],
-      done: [1],
-      visited: [1, 2]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Stas',
+    account: 'stas',
     name: 'Стас Фёдоров',
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Sergey',
+    account: 'sergey',
     name: 'Сергей Петров',
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Dima',
+    account: 'dima',
     name: 'Дмитрий Козлов',
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Anna',
+    account: 'anna',
     name: 'Анна Мирошниченко',
     faculty: 'Филологии',
     accepted: 'true',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Petya',
+    account: 'petya',
     name: 'Пётр Манов',
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Dasha',
+    account: 'dasha',
     name: 'Дарья Семенченко',
     faculty: 'Филологии',
     accepted: 'true',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Kuzya',
+    account: 'kuzya',
     name: 'Сигизмунд Кузькин',
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Efpian',
+    account: 'efpian',
     name: 'Епифан Обормотов',
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Vladlen',
+    account: 'vladlen',
     name: 'Владлен Коровин',
     faculty: 'Филологии',
     accepted: 'true',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
-    account: 'Ivan',
+    account: 'ivan',
     name: 'Иван Ганин',
     faculty: 'Филологии',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   },
   {
     account: 'markup-ua',
@@ -150,11 +95,6 @@ export default [
     faculty: '',
     accepted: 'false',
     avatar: '/avatars/avatar.png',
-    role: 'Студент',
-    lectures: {
-      id: [1, 3],
-      done: [3],
-      visited: [1, 3]
-    }
+    role: 'Студент'
   }
 ];

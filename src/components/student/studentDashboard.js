@@ -8,9 +8,10 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import StudentCard from './studentCard';
 import './student.css';
 //
-import allLectures from '../../stores/lecturesTempData';
 
-type Props = {};
+type Props = {
+  lecturesBTS: any
+};
 type State = {
   value: number
 };
@@ -22,23 +23,16 @@ class DashboardStudentContent extends React.Component<Props, State> {
       value: 0
     };
   }
-
   handleTabChange = (event: any, value: number) => {
     this.setState({ value });
   };
 
   render() {
     const { value } = this.state;
-
+    const { lecturesBTS } = this.props;
     const TabContainer = props => {
       return <div>{[props.children]}</div>;
     };
-    let lecturesNew = allLectures.filter(function(theLecture) {
-      //return theLecture['accepted'] === 'false';
-    });
-    let lecturesAccepted = allLectures.filter(function(theLecture) {
-      //return theLecture['accepted'] === 'true';
-    });
 
     return (
       <div className="tabs-wrap">
@@ -49,14 +43,14 @@ class DashboardStudentContent extends React.Component<Props, State> {
         <div className="tab-container">
           {value === 0 && (
             <TabContainer>
-              {lecturesNew.map((lectures, index) => (
+              {lecturesBTS.map((lectures, index) => (
                 <StudentCard {...lectures} key={index} />
               ))}
             </TabContainer>
           )}
           {value === 1 && (
             <TabContainer>
-              {lecturesAccepted.map((lectures, index) => (
+              {lecturesBTS.map((lectures, index) => (
                 <StudentCard {...lectures} key={index} />
               ))}
             </TabContainer>
@@ -69,7 +63,8 @@ class DashboardStudentContent extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    account: state.user.account
+    account: state.user.account,
+    lecturesBTS: state.lectures.lecturesBTS
   };
 }
 

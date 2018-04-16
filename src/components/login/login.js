@@ -22,9 +22,6 @@ type Props = {
 type State = {};
 
 class Login extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-  }
   render() {
     const { backToLogin } = this.props;
     const back = () => backToLogin(this.props.formFlag);

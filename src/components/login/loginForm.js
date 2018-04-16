@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
+import Api from 'utschool-js';
 //
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
@@ -12,7 +13,9 @@ import renderRememberCheckbox from './rememberCheckbox';
 //
 import { toggleForm } from '../../actions/loginAction';
 import { setAccountName } from '../../actions/actionsUser';
+import { setLectures } from '../../actions/lecturesAction';
 import { setTitle } from '../../actions';
+//import getLecturesBTS from '../../services/getLecturesBTS';
 import validate from './validate';
 import userStore from '../../stores/usersTempData';
 import history from '../../history';
@@ -24,13 +27,20 @@ type Props = {
   handleSubmit: Function,
   setAccount: Function,
   onSetTitle: Function,
+  onSetLectures: Function,
   formFlag: boolean,
   account: string
 };
 
 class LoginForm extends React.Component<Props> {
   render() {
-    const { handleSubmit, onToggleForm, setAccount, onSetTitle } = this.props; // No fields prop
+    const {
+      handleSubmit,
+      onToggleForm,
+      setAccount,
+      onSetTitle,
+      onSetLectures
+    } = this.props; // No fields prop
     const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     let loginSubmit = (values: any) => {
@@ -45,8 +55,22 @@ class LoginForm extends React.Component<Props> {
             _error: 'Login failed!'
           });
         } else {
-          onSetTitle('Лекции');
-          setAccount(values.account);
+          let nodeUrl = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
+          let accountName = values.account; // Имя учетной записи
+          let privateKey = null; //Приватный ключ
+
+          Api.init(nodeUrl, accountName, privateKey).then(api => {
+            api.studentApi
+              .getLectures()
+              .then(resp => {
+                onSetLectures(resp);
+                onSetTitle('Лекции');
+                setAccount(values.account);
+              })
+              .catch(error => {
+                alert(error);
+              });
+          });
         }
       });
     };
@@ -107,6 +131,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetTitle(val) {
     dispatch(setTitle(val));
+  },
+  onSetLectures(val) {
+    dispatch(setLectures(val));
   }
 });
 

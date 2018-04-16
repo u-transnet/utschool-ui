@@ -98,7 +98,7 @@ const StudentCard = (props: any) => {
           <div className="status">
             <Typography gutterBottom>
               <SchoolIcon />
-              {props.lecturer}
+              {props.teacher}
             </Typography>
           </div>
         </div>
@@ -176,12 +176,29 @@ const StudentCard = (props: any) => {
               </Menu> */}
             </div>
           }
-          title={props.title}
+          title={props.name}
         />
         <CardContent>
           <Typography component="p">{props.description}</Typography>
         </CardContent>
         {/* {props.accepted === 'false' ? take() : actions()} */}
+        {/* <div>
+          <div className="flex">
+            <div className="status">
+              <Typography gutterBottom>
+                <PlaceIcon />
+                {props.location}
+              </Typography>
+            </div>
+            <div className="status">
+              <Typography gutterBottom>
+                <SchoolIcon />
+                {props.teacher}
+              </Typography>
+            </div>
+          </div>
+          <Button color="primary">Записаться</Button>
+        </div> */}
       </Card>
     </div>
   );
