@@ -51,7 +51,7 @@ export default [
     role: 'Студент'
   },
   {
-    account: 'kuzya',
+    account: 'superpchelka2367',
     name: 'Сигизмунд Кузькин',
     faculty: 'Филологии',
     avatar: '/avatars/avatar.png',
@@ -72,7 +72,7 @@ export default [
     role: 'Студент'
   },
   {
-    account: 'ivan',
+    account: 'superpchelka23642',
     name: 'Иван Ганин',
     faculty: 'Филологии',
     avatar: '/avatars/avatar.png',
