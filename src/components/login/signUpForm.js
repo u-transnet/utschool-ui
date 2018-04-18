@@ -13,7 +13,6 @@ import renderRememberCheckbox from './rememberCheckbox';
 //
 import { setAccountName } from '../../actions/actionsUser';
 import validate from './validate';
-import userStore from '../../stores/usersTempData';
 import history from '../../history';
 import OAuth from '../../services/oauth2';
 //
@@ -46,9 +45,9 @@ class SignUpForm extends React.Component<Props> {
 
     let signupSubmit = (values: any) => {
       let accounts: any[] = [];
-      for (let i of userStore) {
-        accounts.push(i.account);
-      }
+      // for (let i of userStore) {
+      //   accounts.push(i.account);
+      // }
       return sleep(100).then(() => {
         let passValid = values.password
           ? values.password.match(

@@ -16,20 +16,21 @@ import Divider from 'material-ui/Divider';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 //
-import userStore from '../../stores/usersTempData';
-import userInfo from '../getUserData';
-//
 import './header.css';
 
 //types
 type Props = {
   title: string,
-  account: string
+  account: string,
+  lastName: string,
+  firstName: string,
+  avatar: string,
+  role: string
 };
 type State = {
   anchorEl: any,
-  userData: any,
-  openMenu: boolean
+  openMenu: boolean,
+  name: string
 };
 
 //CONSTS
@@ -42,7 +43,7 @@ class Header extends React.Component<Props, State> {
     this.state = {
       openMenu: false,
       anchorEl: null,
-      userData: userInfo(userStore, this.props.account)
+      name: this.props.firstName + ' ' + this.props.lastName
     };
   }
 
@@ -55,7 +56,8 @@ class Header extends React.Component<Props, State> {
   menuOpener = () => this.setState({ openMenu: !this.state.openMenu });
 
   render() {
-    const { anchorEl, userData } = this.state;
+    const { anchorEl, name, openMenu } = this.state;
+    const { role, avatar } = this.props;
     return (
       <div className="header">
         {/* top bar */}
@@ -104,11 +106,7 @@ class Header extends React.Component<Props, State> {
           </Toolbar>
         </AppBar>
         {/* sidebar */}
-        <Drawer
-          className="sidebar"
-          open={this.state.openMenu}
-          onClose={this.menuOpener}
-        >
+        <Drawer className="sidebar" open={openMenu} onClose={this.menuOpener}>
           <div
             className="sidebar-inner"
             tabIndex={0}
@@ -117,14 +115,10 @@ class Header extends React.Component<Props, State> {
           >
             <Card className="card">
               <CardContent>
-                <Avatar
-                  alt="Logo"
-                  src={userData.avatar}
-                  className="card-avatar"
-                />
+                <Avatar alt="Logo" src={avatar} className="card-avatar" />
                 <div className="user-title">
-                  <span>{userData.name}</span>
-                  <em>{userData.role}</em>
+                  <span>{name}</span>
+                  <em>{role}</em>
                 </div>
               </CardContent>
             </Card>
@@ -141,7 +135,7 @@ class Header extends React.Component<Props, State> {
                 <ListItemText primary="Мои лекции" />
               </ListItem>
 
-              {userData.role === 'Студент' ? (
+              {role === 'Студент' ? (
                 <ListItem
                   button
                   component={Link}
@@ -213,7 +207,11 @@ class Header extends React.Component<Props, State> {
 function mapStateToProps(state) {
   return {
     title: state.app.title,
-    account: state.user.account
+    account: state.user.account,
+    avatar: state.user.avatar,
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
+    role: state.user.role
   };
 }
 

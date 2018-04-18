@@ -3,35 +3,35 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 //
-import userStore from '../../stores/usersTempData';
-import userInfo from '../getUserData';
 import Header from '../header/header';
 import DashboardStudentContent from '../student/studentDashboard';
 
 type Props = {
-  account: string,
+  firstName: string,
+  lastName: string,
   role: string
 };
 type State = {
-  userData: any
+  name: string
 };
 
 class Dashboard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      userData: userInfo(userStore, this.props.account)
+      name: this.props.firstName + ' ' + this.props.lastName
     };
   }
   render() {
-    const { userData } = this.state;
+    const { role } = this.props;
+    const { name } = this.state;
     return (
       <div>
         <Header title="Мои лекции" />
-        {userData.role === 'Студент' ? (
+        {role === 'Студент' ? (
           <DashboardStudentContent />
         ) : (
-          <h1>Dashboard {userData.name}</h1>
+          <h1>Dashboard {name}</h1>
         )}
       </div>
     );
@@ -40,7 +40,9 @@ class Dashboard extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    account: state.user.account
+    firstName: state.user.firstName,
+    lastName: state.user.lastName,
+    role: state.user.role
   };
 }
 

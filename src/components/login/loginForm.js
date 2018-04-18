@@ -12,12 +12,15 @@ import renderAccountField from './accountField';
 import renderRememberCheckbox from './rememberCheckbox';
 //
 import { toggleForm } from '../../actions/loginAction';
-import { setAccountName } from '../../actions/actionsUser';
+import {
+  setAccountName,
+  setAvatar,
+  setFirstName,
+  setLastName
+} from '../../actions/actionsUser';
 import { setLectures } from '../../actions/lecturesAction';
 import { setTitle } from '../../actions';
-//import getLecturesBTS from '../../services/getLecturesBTS';
 import validate from './validate';
-//import userStore from '../../stores/usersTempData';
 import history from '../../history';
 //
 import './login.css';
@@ -28,6 +31,9 @@ type Props = {
   setAccount: Function,
   onSetTitle: Function,
   onSetLectures: Function,
+  onSetAvatar: Function,
+  onSetFirstName: Function,
+  onSetLastName: Function,
   formFlag: boolean,
   account: string
 };
@@ -50,6 +56,9 @@ class LoginForm extends React.Component<Props, State> {
       setAccount,
       onSetTitle,
       onSetLectures,
+      onSetAvatar,
+      onSetFirstName,
+      onSetLastName,
       formFlag
     } = this.props; // No fields prop
     const { errorFlag } = this.state;
@@ -67,7 +76,7 @@ class LoginForm extends React.Component<Props, State> {
         )
           .then(function(response) {
             if (response.status !== 200) {
-              console.log(
+              alert(
                 'Looks like there was a problem. Status Code: ' +
                   response.status
               );
@@ -79,7 +88,6 @@ class LoginForm extends React.Component<Props, State> {
           })
           .then(function(data: any) {
             if (data.length > 0) {
-              console.log(data);
               let nodeUrl = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
               let accountName = values.account; // Имя учетной записи
               let privateKey = null; //Приватный ключ
@@ -88,21 +96,24 @@ class LoginForm extends React.Component<Props, State> {
                 api.studentApi
                   .getLectures()
                   .then(resp => {
+                    onSetAvatar(data[0].photo);
+                    onSetFirstName(data[0].first_name);
+                    onSetLastName(data[0].last_name);
                     onSetLectures(resp);
                     onSetTitle('Лекции');
                     setAccount(values.account);
                   })
                   .catch(error => {
-                    console.log(error);
+                    alert(error);
                   });
               });
             } else {
               this.setState({ errorFlag: true });
-              console.log(errorFlag);
+              alert(errorFlag);
             }
           })
           .catch(function(error) {
-            console.log('error', error);
+            alert('error ' + error);
           });
         if (errorFlag) {
           throw new SubmissionError({
@@ -112,6 +123,7 @@ class LoginForm extends React.Component<Props, State> {
         }
       });
     };
+
     return (
       <form onSubmit={handleSubmit(loginSubmit)}>
         <Grid item xs={12}>
@@ -172,6 +184,15 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLectures(val) {
     dispatch(setLectures(val));
+  },
+  onSetAvatar(val) {
+    dispatch(setAvatar(val));
+  },
+  onSetFirstName(val) {
+    dispatch(setFirstName(val));
+  },
+  onSetLastName(val) {
+    dispatch(setLastName(val));
   }
 });
 
