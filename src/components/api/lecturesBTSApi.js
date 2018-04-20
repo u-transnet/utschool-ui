@@ -13,7 +13,7 @@ export default function lecturesBTSApi(account: string) {
         return resp;
       })
       .catch(error => {
-        alert(error);
+        return error;
       });
   });
 }
