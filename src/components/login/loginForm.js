@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
-import Api from 'utschool-js';
 //
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
@@ -11,7 +10,12 @@ import Button from 'material-ui/Button';
 import renderAccountField from './accountField';
 import renderRememberCheckbox from './rememberCheckbox';
 //
+import lecturesBTSApi from '../api/lecturesBTSApi';
+import getUserFausetApi from '../api/getUserFaucetApi';
+//
 import { toggleForm } from '../../actions/loginAction';
+import { errorFlag } from '../../actions/loginAction';
+
 import {
   setAccountName,
   setAvatar,
@@ -27,6 +31,7 @@ import './login.css';
 
 type Props = {
   onToggleForm: Function,
+  errorFlag: Function,
   handleSubmit: Function,
   setAccount: Function,
   onSetTitle: Function,
@@ -34,21 +39,15 @@ type Props = {
   onSetAvatar: Function,
   onSetFirstName: Function,
   onSetLastName: Function,
+  onSetErrorFlag: Function,
   formFlag: boolean,
+  errorField: boolean,
   account: string
 };
 
-type State = {
-  errorFlag: boolean
-};
+type State = {};
 
 class LoginForm extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      errorFlag: false
-    };
-  }
   render() {
     const {
       handleSubmit,
@@ -59,63 +58,40 @@ class LoginForm extends React.Component<Props, State> {
       onSetAvatar,
       onSetFirstName,
       onSetLastName,
-      formFlag
+      onSetErrorFlag,
+      formFlag,
+      errorField
     } = this.props; // No fields prop
-    const { errorFlag } = this.state;
+
     const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
+
     let loginSubmit = (values: any) => {
       return sleep(100).then(() => {
-        fetch(
-          'https://cors-anywhere.herokuapp.com/' +
-            `https://utschool.herokuapp.com/api/v1/accounts?accounts=${
-              values.account
-            }`,
-          {
-            mode: 'cors'
-          }
-        )
-          .then(function(response) {
-            if (response.status !== 200) {
-              alert(
-                'Looks like there was a problem. Status Code: ' +
-                  response.status
-              );
+        //get lectures data from BTS
+        let lecturesBTSData = lecturesBTSApi(values.account);
+        lecturesBTSData.then(resp => {
+          onSetLectures(resp);
+        });
+        // end of get lectures
+        //get user data from Fauset
+        let userFausetData = getUserFausetApi(values.account);
+        userFausetData
+          .then(data => {
+            if (!data) {
+              onSetErrorFlag(true);
               return;
-            }
-
-            // Examine the text in the response
-            return response.json();
-          })
-          .then(function(data: any) {
-            if (data.length > 0) {
-              let nodeUrl = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
-              let accountName = values.account; // Имя учетной записи
-              let privateKey = null; //Приватный ключ
-
-              Api.init(nodeUrl, accountName, privateKey).then(api => {
-                api.studentApi
-                  .getLectures()
-                  .then(resp => {
-                    onSetAvatar(data[0].photo);
-                    onSetFirstName(data[0].first_name);
-                    onSetLastName(data[0].last_name);
-                    onSetLectures(resp);
-                    onSetTitle('Лекции');
-                    setAccount(values.account);
-                  })
-                  .catch(error => {
-                    alert(error);
-                  });
-              });
             } else {
-              this.setState({ errorFlag: true });
-              alert(errorFlag);
+              onSetErrorFlag(false);
+              onSetAvatar(data.photo);
+              onSetFirstName(data.first_name);
+              onSetLastName(data.last_name);
+              onSetTitle('Лекции');
+              setAccount(values.account);
             }
           })
-          .catch(function(error) {
-            alert('error ' + error);
-          });
-        if (errorFlag) {
+          .catch(error => onSetErrorFlag(true));
+        //end of get user data
+        if (errorField) {
           throw new SubmissionError({
             account: 'Такой учетной записи не существует.',
             _error: 'Login failed!'
@@ -167,7 +143,8 @@ class LoginForm extends React.Component<Props, State> {
 
 const mapStateToProps = state => {
   return {
-    formFlag: state.login.formFlag
+    formFlag: state.login.formFlag,
+    errorField: state.login.error
   };
 };
 
@@ -193,6 +170,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLastName(val) {
     dispatch(setLastName(val));
+  },
+  onSetErrorFlag(val) {
+    dispatch(errorFlag(val));
   }
 });
 

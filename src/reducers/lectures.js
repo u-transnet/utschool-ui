@@ -17,7 +17,7 @@ export default function theApp(
   switch (action.type) {
     case SET_LECTURES:
       return Object.assign({}, state, {
-        lecturesBTS: action.lectures
+        lecturesBTS: action.lecturesBTS
       });
     default:
       return state;

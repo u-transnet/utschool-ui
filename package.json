@@ -9,16 +9,19 @@
   "author": "Tom Molotko",
   "license": "ISC",
   "dependencies": {
+    "bitsharesjs": "^1.6.1",
     "history": "^4.7.2",
-    "material-ui": "^1.0.0-beta.41",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "isomorphic-fetch": "^2.2.1",
+    "material-ui": "^1.0.0-beta.42",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
     "react-social-login": "^3.4.2",
     "redux": "^3.7.2",
     "redux-form": "^7.3.0",
+    "redux-thunk": "^2.2.0",
     "utschool-js": "git+https://github.com/u-transnet/utschool-js.git"
   },
   "scripts": {
@@ -30,10 +33,10 @@
     "flow": "flow"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.2",
+    "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-react-app": "^2.1.0",
-    "eslint-plugin-flowtype": "^2.46.1",
+    "eslint-plugin-flowtype": "^2.46.3",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.7.0",

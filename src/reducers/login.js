@@ -1,13 +1,15 @@
 // @flow
 import { Action, Props } from 'redux';
-import { TOGGLE_FORM } from '../actions/loginAction';
+import { TOGGLE_FORM, ERROR_FLAG } from '../actions/loginAction';
 
 type State = {
-  formFlag: boolean
+  formFlag: boolean,
+  error: boolean
 };
 
 const initialState: State = {
-  formFlag: false
+  formFlag: false,
+  error: false
 };
 
 export default function theLogin(
@@ -19,6 +21,10 @@ export default function theLogin(
     case TOGGLE_FORM:
       return Object.assign({}, state, {
         formFlag: !action.flag
+      });
+    case ERROR_FLAG:
+      return Object.assign({}, state, {
+        error: action.error
       });
     default:
       return state;

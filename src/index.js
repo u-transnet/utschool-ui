@@ -1,6 +1,9 @@
+// @flow
+
 import * as React from 'react';
 import { render } from 'react-dom';
 import { createStore } from 'redux';
+//import thunkMiddleware from 'redux-thunk'
 
 import Root from './components/Root';
 import theReducers from './reducers';
