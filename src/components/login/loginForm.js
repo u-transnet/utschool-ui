@@ -14,8 +14,6 @@ import lecturesBTSApi from '../api/lecturesBTSApi';
 import getUserFausetApi from '../api/getUserFaucetApi';
 //
 import { toggleForm } from '../../actions/loginAction';
-import { errorFlag } from '../../actions/loginAction';
-
 import {
   setAccountName,
   setAvatar,
@@ -39,9 +37,7 @@ type Props = {
   onSetAvatar: Function,
   onSetFirstName: Function,
   onSetLastName: Function,
-  onSetErrorFlag: Function,
   formFlag: boolean,
-  errorField: boolean,
   account: string
 };
 
@@ -58,46 +54,37 @@ class LoginForm extends React.Component<Props, State> {
       onSetAvatar,
       onSetFirstName,
       onSetLastName,
-      onSetErrorFlag,
-      formFlag,
-      errorField
+      formFlag
     } = this.props; // No fields prop
 
-    const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
-
     let loginSubmit = (values: any) => {
-      return sleep(100).then(() => {
-        //get lectures data from BTS
-        let lecturesBTSData = lecturesBTSApi(values.account);
-        lecturesBTSData.then(resp => {
-          onSetLectures(resp);
-        });
-        // end of get lectures
-        //get user data from Fauset
-        let userFausetData = getUserFausetApi(values.account);
-        userFausetData
-          .then(data => {
-            if (!data) {
-              onSetErrorFlag(true);
-              return;
-            } else {
-              onSetErrorFlag(false);
-              onSetAvatar(data.photo);
-              onSetFirstName(data.first_name);
-              onSetLastName(data.last_name);
-              onSetTitle('Лекции');
-              setAccount(values.account);
-            }
-          })
-          .catch(error => onSetErrorFlag(true));
-        //end of get user data
-        if (errorField) {
+      let lecturesBTSData = lecturesBTSApi(values.account);
+      let userFausetData = getUserFausetApi(values.account);
+
+      return userFausetData
+        .then(data => {
+          if (!data) {
+            throw new SubmissionError({
+              account: 'Такой учетной записи не существует.',
+              _error: 'Login failed!'
+            });
+          } else {
+            lecturesBTSData.then(resp => {
+              onSetLectures(resp);
+            });
+            onSetAvatar(data.photo);
+            onSetFirstName(data.first_name);
+            onSetLastName(data.last_name);
+            onSetTitle('Лекции');
+            setAccount(values.account);
+          }
+        })
+        .catch(error => {
           throw new SubmissionError({
             account: 'Такой учетной записи не существует.',
             _error: 'Login failed!'
           });
-        }
-      });
+        });
     };
 
     return (
@@ -143,8 +130,7 @@ class LoginForm extends React.Component<Props, State> {
 
 const mapStateToProps = state => {
   return {
-    formFlag: state.login.formFlag,
-    errorField: state.login.error
+    formFlag: state.login.formFlag
   };
 };
 
@@ -170,9 +156,6 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLastName(val) {
     dispatch(setLastName(val));
-  },
-  onSetErrorFlag(val) {
-    dispatch(errorFlag(val));
   }
 });
 
