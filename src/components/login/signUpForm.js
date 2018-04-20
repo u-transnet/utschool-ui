@@ -12,49 +12,42 @@ import renderPasswordField from './passwordField';
 import renderRememberCheckbox from './rememberCheckbox';
 //
 import { setAccountName } from '../../actions/actionsUser';
+import { setLectures } from '../../actions/lecturesAction';
 import validate from './validate';
 import history from '../../history';
-import OAuth from '../../services/oauth2';
+//
+import putUserFaucetApi from '../api/putUserFaucetApi';
+import getUserFaucetApi from '../api/getUserFaucetApi';
+import lecturesBTSApi from '../api/lecturesBTSApi';
 //
 import './login.css';
 
 type Props = {
   handleSubmit: Function,
-  setAccount: Function
+  setAccount: Function,
+  onSetLectures: Function
 };
 
 class SignUpForm extends React.Component<Props> {
-  pushNewUser = (newAccount: string) => {
-    // userStore.push({
-    //   account: newAccount,
-    //   name: newAccount,
-    //   faculty: '',
-    //   accepted: 'false',
-    //   avatar: '/avatars/guest.png',
-    //   role: 'Студент',
-    //   lectures: {
-    //     id: [],
-    //     done: [],
-    //     visited: []
-    //   }
-    // });
-  };
   render() {
-    const { handleSubmit, setAccount } = this.props; // No fields prop
-    const sleep: any = ms => new Promise(resolve => setTimeout(resolve, ms));
-
+    const { handleSubmit, setAccount, onSetLectures } = this.props; // No fields prop
     let signupSubmit = (values: any) => {
-      let accounts: any[] = [];
-      // for (let i of userStore) {
-      //   accounts.push(i.account);
-      // }
-      return sleep(100).then(() => {
+      let userFaucetData = getUserFaucetApi(values.newaccount);
+      let lecturesBTSData = lecturesBTSApi(values.newaccount);
+      let putUserFaucetData = putUserFaucetApi(
+        values.newaccount,
+        values.password,
+        'vk'
+      );
+      return userFaucetData.then(data => {
+        let flag = false;
+        data ? (flag = true) : (flag = false);
         let passValid = values.password
           ? values.password.match(
               /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g
             )
           : false;
-        if (accounts.includes(values.newaccount)) {
+        if (flag) {
           throw new SubmissionError({
             newaccount: 'Такая запись уже существует.',
             _error: 'SignUp failed!'
@@ -66,8 +59,12 @@ class SignUpForm extends React.Component<Props> {
             _error: 'SignUp failed!'
           });
         } else {
-          this.pushNewUser(values.newaccount);
-          setAccount(values.newaccount);
+          // lecturesBTSData.then(resp => {
+          //   onSetLectures(resp);
+          // });
+          putUserFaucetData.then(data => {
+            setAccount(values.newaccount);
+          });
         }
       });
     };
@@ -93,9 +90,6 @@ class SignUpForm extends React.Component<Props> {
           </div>
         </Grid>
         <Grid item xs={12}>
-          <OAuth />
-        </Grid>
-        <Grid item xs={12}>
           <Button
             type="submit"
             variant="raised"
@@ -119,6 +113,9 @@ const mapDispatchToProps = dispatch => ({
   setAccount(val) {
     dispatch(setAccountName(val));
     history.push('/dashboard');
+  },
+  onSetLectures(val) {
+    dispatch(setLectures(val));
   }
 });
 
