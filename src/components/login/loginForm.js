@@ -11,7 +11,7 @@ import renderAccountField from './accountField';
 import renderRememberCheckbox from './rememberCheckbox';
 //
 import lecturesBTSApi from '../api/lecturesBTSApi';
-import getUserFausetApi from '../api/getUserFaucetApi';
+import getUserFaucetApi from '../api/getUserFaucetApi';
 //
 import { toggleForm } from '../../actions/loginAction';
 import {
@@ -59,7 +59,7 @@ class LoginForm extends React.Component<Props, State> {
 
     let loginSubmit = (values: any) => {
       let lecturesBTSData = lecturesBTSApi(values.account);
-      let userFausetData = getUserFausetApi(values.account);
+      let userFausetData = getUserFaucetApi(values.account);
 
       return userFausetData
         .then(data => {
