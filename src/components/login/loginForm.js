@@ -137,6 +137,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   onToggleForm(val) {
     dispatch(toggleForm(val));
+    history.push('/sign-up');
   },
   setAccount(val) {
     dispatch(setAccountName(val));

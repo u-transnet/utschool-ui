@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import history from '../history';
 import Login from './login/login';
+import SignUp from './login/signup';
 import Dashboard from './dashboard/dashboard';
 
 import TeacherClassApplicants from './TeacherClassApplicants';
@@ -19,6 +20,7 @@ const Root = ({ store }) => (
       <Router history={history}>
         <Switch>
           <Route exact path="/" component={Login} />
+          <Route exact path="/sign-up" component={SignUp} />
           <Route exact path="/dashboard" component={Dashboard} />
           <Route
             exact

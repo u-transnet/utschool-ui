@@ -20,6 +20,8 @@ import putUserFaucetApi from '../api/putUserFaucetApi';
 import getUserFaucetApi from '../api/getUserFaucetApi';
 import lecturesBTSApi from '../api/lecturesBTSApi';
 //
+import vkAuthorization from '../authorization/vkAuthorization';
+//
 import './login.css';
 
 type Props = {
@@ -27,8 +29,22 @@ type Props = {
   setAccount: Function,
   onSetLectures: Function
 };
-
 class SignUpForm extends React.Component<Props> {
+  componentDidMount() {
+    //get vk token
+    let url = window.location.href;
+    let hashData = new URL(url).hash;
+    if (hashData) {
+      let token = hashData
+        .split('&')
+        .filter(function(el) {
+          if (el.match('access_token') !== null) return true;
+        })[0]
+        .split('=')[1];
+
+      console.log(token);
+    }
+  }
   render() {
     const { handleSubmit, setAccount, onSetLectures } = this.props; // No fields prop
     let signupSubmit = (values: any) => {
@@ -88,6 +104,17 @@ class SignUpForm extends React.Component<Props> {
           <div className="check-el">
             <Field name="rememberMe" component={renderRememberCheckbox} />
           </div>
+        </Grid>
+        <Grid item xs={12}>
+          <Button
+            ariant="raised"
+            size="medium"
+            color="primary"
+            onClick={vkAuthorization}
+            className="login-button"
+          >
+            Войти ВКонтакте
+          </Button>
         </Grid>
         <Grid item xs={12}>
           <Button

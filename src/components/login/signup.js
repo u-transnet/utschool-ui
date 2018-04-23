@@ -8,7 +8,7 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 //
 import history from '../../history';
-import LoginForm from './loginForm';
+import SignUpForm from './signUpForm';
 //
 import './login.css';
 
@@ -19,10 +19,13 @@ type Props = {
 };
 type State = {};
 
-class Login extends React.Component<Props, State> {
+class SignUp extends React.Component<Props, State> {
   render() {
     return (
       <div className="login-wrap">
+        <IconButton className="back-button" color="inherit" href="/">
+          <i className="material-icons">arrow_back</i>
+        </IconButton>
         <div className="login-box">
           <Grid container spacing={0}>
             <Grid item xs={12}>
@@ -37,7 +40,7 @@ class Login extends React.Component<Props, State> {
                 UT-SCHOOL
               </Typography>
             </Grid>
-            <LoginForm />
+            <SignUpForm />
           </Grid>
         </div>
       </div>
@@ -51,4 +54,4 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
