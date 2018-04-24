@@ -21,6 +21,7 @@ import vkAuthorization from '../authorization/vkAuthorization';
 //
 import { setAccountName } from '../../actions/actionsUser';
 import { setLectures } from '../../actions/lecturesAction';
+import { setVkToken } from '../../actions/loginAction';
 import validate from './validate';
 import LoginHeader from './loginHeader';
 import history from '../../history';
@@ -30,11 +31,21 @@ import './login.css';
 type Props = {
   handleSubmit: Function,
   setAccount: Function,
-  onSetLectures: Function
+  onSetLectures: Function,
+  onSetVkToken: Function,
+  vkToken: string
 };
-type State = {};
+type State = {
+  tokenFlag: boolean
+};
 
 class SignUp extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      tokenFlag: false
+    };
+  }
   componentDidMount() {
     //get vk token
     let url = window.location.href;
@@ -46,26 +57,21 @@ class SignUp extends React.Component<Props, State> {
           return el.match('access_token') !== null ? true : false;
         })[0]
         .split('=')[1];
-
-      console.log(token);
+      this.props.onSetVkToken(token);
+      this.setState({ tokenFlag: true });
     }
   }
   render() {
-    const { handleSubmit, setAccount, onSetLectures } = this.props; // No fields prop
+    const { handleSubmit, setAccount, onSetLectures, vkToken } = this.props; // No fields prop
     let signupSubmit = (values: any) => {
       let userFaucetData = getUserFaucetApi(values.newaccount);
       let lecturesBTSData = lecturesBTSApi(values.newaccount);
-      let putUserFaucetData = putUserFaucetApi(
-        values.newaccount,
-        values.password,
-        'vk'
-      );
       return userFaucetData.then(data => {
         let flag = false;
         data ? (flag = true) : (flag = false);
         let passValid = values.password
           ? values.password.match(
-              /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g
+              /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{12,}/g
             )
           : false;
         if (flag) {
@@ -76,16 +82,17 @@ class SignUp extends React.Component<Props, State> {
         } else if (!passValid) {
           throw new SubmissionError({
             password:
-              '8 символов минимум (цыфры, большие и маленькие буквы, символы).',
+              '12 символов минимум (цыфры, большие и маленькие буквы, символы).',
             _error: 'SignUp failed!'
           });
         } else {
           // lecturesBTSData.then(resp => {
           //   onSetLectures(resp);
           // });
-          putUserFaucetData.then(data => {
-            setAccount(values.newaccount);
-          });
+          // putUserFaucetData.then(data => {
+          //   setAccount(values.newaccount);
+          // });
+          putUserFaucetApi(values.newaccount, values.password, 'vk', vkToken);
         }
       });
     };
@@ -103,26 +110,7 @@ class SignUp extends React.Component<Props, State> {
         <div className="login-box">
           <Grid container spacing={0}>
             <LoginHeader />
-            <form onSubmit={handleSubmit(signupSubmit)}>
-              <Grid item xs={12}>
-                <Field
-                  name="newaccount"
-                  className="login-field"
-                  component={renderAccountField}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  name="password"
-                  className="login-field"
-                  component={renderPasswordField}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <div className="check-el">
-                  <Field name="rememberMe" component={renderRememberCheckbox} />
-                </div>
-              </Grid>
+            {!this.state.tokenFlag ? (
               <Grid item xs={12}>
                 <Button
                   ariant="raised"
@@ -134,18 +122,43 @@ class SignUp extends React.Component<Props, State> {
                   Войти ВКонтакте
                 </Button>
               </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="raised"
-                  size="medium"
-                  color="primary"
-                  className="login-button"
-                >
-                  Создать акаунт
-                </Button>
-              </Grid>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit(signupSubmit)}>
+                <Grid item xs={12}>
+                  <Field
+                    name="newaccount"
+                    className="login-field"
+                    component={renderAccountField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    name="password"
+                    className="login-field"
+                    component={renderPasswordField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <div className="check-el">
+                    <Field
+                      name="rememberMe"
+                      component={renderRememberCheckbox}
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="raised"
+                    size="medium"
+                    color="primary"
+                    className="login-button"
+                  >
+                    Создать акаунт
+                  </Button>
+                </Grid>
+              </form>
+            )}
           </Grid>
         </div>
       </div>
@@ -154,16 +167,21 @@ class SignUp extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    vkToken: state.login.vkToken
+  };
 }
 
 const mapDispatchToProps = dispatch => ({
   setAccount(val) {
     dispatch(setAccountName(val));
-    history.push('/dashboard');
+    // history.push('/dashboard');
   },
   onSetLectures(val) {
     dispatch(setLectures(val));
+  },
+  onSetVkToken(val) {
+    dispatch(setVkToken(val));
   }
 });
 
