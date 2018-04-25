@@ -2,7 +2,7 @@
 
 const REDIRECT_URL = 'http://localhost:3000/sign-up';
 const PERMISSION =
-  'status,email,photos,pages,friends,audio,notify,video,stories,notes,wall,ads,docs,groups,notifications,stats,market';
+  'photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,email,notifications,stats,ads,offline,docs,pages,stats,notifications';
 
 export default function vkAuthorization() {
   window.location.href =

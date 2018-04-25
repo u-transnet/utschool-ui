@@ -50,7 +50,7 @@ class SignUp extends React.Component<Props, State> {
     //get vk token
     let url = window.location.href;
     let hashData = new URL(url).hash;
-    if (hashData && !hashData.indexOf('access_denied')) {
+    if (hashData && hashData.indexOf('access_denied') === -1) {
       let token = hashData
         .split('&')
         .filter(function(el) {
@@ -61,6 +61,7 @@ class SignUp extends React.Component<Props, State> {
       this.setState({ tokenFlag: true });
     }
   }
+
   render() {
     const { handleSubmit, setAccount, onSetLectures, vkToken } = this.props; // No fields prop
     let signupSubmit = (values: any) => {
