@@ -18,18 +18,22 @@ export default function putUserFaucetApi(
     memo_key: keys.pubKeys.owner,
     referrer: 'ut-school'
   };
-  console.log(data);
+  // TODO проверить формат отправки даты с помощью fetch
+  let postData = Object.keys(data)
+    .map(key => {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+    })
+    .join('&');
   fetch(
     `https://cors-anywhere.herokuapp.com/` +
       `https://utschool.herokuapp.com/api/v1/accounts`,
     {
       headers: {
-        'X-Prototype-Version': '1.6.1',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application / x-www-form-urlencoded; charset = UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json; charset=utf-8'
       },
-      method: 'POST',
-      body: data
+      method: 'post',
+      body: postData
     }
   )
     .then(res => {
