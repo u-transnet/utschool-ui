@@ -50,7 +50,7 @@ class SignUp extends React.Component<Props, State> {
     //get vk token
     let url = window.location.href;
     let hashData = new URL(url).hash;
-    if (hashData) {
+    if (hashData && !hashData.indexOf('access_denied')) {
       let token = hashData
         .split('&')
         .filter(function(el) {
@@ -71,7 +71,7 @@ class SignUp extends React.Component<Props, State> {
         data ? (flag = true) : (flag = false);
         let passValid = values.password
           ? values.password.match(
-              /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{12,}/g
+              /(?=.*[0-9])(?=.*[!@#$%|^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{12,}/g
             )
           : false;
         if (flag) {
