@@ -1,6 +1,7 @@
 // @flow
 import { Login } from 'bitsharesjs';
 import fetch from 'isomorphic-fetch';
+import { SubmissionError } from 'redux-form';
 
 export default function putUserFaucetApi(
   account: string,
@@ -8,6 +9,22 @@ export default function putUserFaucetApi(
   social: string,
   token: string
 ) {
+  // validation of password
+  let passValid = password
+    ? password.match(
+        /(?=.*[0-9])(?=.*[!@#$%|^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{12,}/g
+      )
+    : false;
+
+  if (!passValid) {
+    throw new SubmissionError({
+      password:
+        '12 символов минимум (цыфры, большие и маленькие буквы, символы).',
+      _error: 'SignUp failed!'
+    });
+  }
+  // end validation of password
+
   let keys = Login.generateKeys(account, password);
   let data = {
     name: account,
@@ -24,7 +41,8 @@ export default function putUserFaucetApi(
       return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
     })
     .join('&');
-  fetch(
+
+  return fetch(
     `https://cors-anywhere.herokuapp.com/` +
       `https://utschool.herokuapp.com/api/v1/accounts`,
     {
@@ -36,11 +54,7 @@ export default function putUserFaucetApi(
       body: postData
     }
   )
-    .then(res => {
-      return res.json();
-    })
-    .then(data => {
-      console.log(JSON.stringify(data));
-    })
-    .catch(error => console.log('error ' + error));
+    .then(res => res.json())
+    .then(data => data)
+    .catch(error => error);
 }

@@ -14,13 +14,10 @@ import renderPasswordField from './passwordField';
 import renderRememberCheckbox from './rememberCheckbox';
 //
 import putUserFaucetApi from '../api/putUserFaucetApi';
-import getUserFaucetApi from '../api/getUserFaucetApi';
-import lecturesBTSApi from '../api/lecturesBTSApi';
 //
 import vkAuthorization from '../authorization/vkAuthorization';
 //
 import { setAccountName } from '../../actions/actionsUser';
-import { setLectures } from '../../actions/lecturesAction';
 import { setVkToken } from '../../actions/loginAction';
 import validate from './validate';
 import LoginHeader from './loginHeader';
@@ -31,7 +28,6 @@ import './login.css';
 type Props = {
   handleSubmit: Function,
   setAccount: Function,
-  onSetLectures: Function,
   onSetVkToken: Function,
   vkToken: string
 };
@@ -63,38 +59,44 @@ class SignUp extends React.Component<Props, State> {
   }
 
   render() {
-    const { handleSubmit, setAccount, onSetLectures, vkToken } = this.props; // No fields prop
+    const { handleSubmit, setAccount, vkToken } = this.props; // No fields prop
     let signupSubmit = (values: any) => {
-      let userFaucetData = getUserFaucetApi(values.newaccount);
-      let lecturesBTSData = lecturesBTSApi(values.newaccount);
-      return userFaucetData.then(data => {
-        let flag = false;
-        data ? (flag = true) : (flag = false);
-        let passValid = values.password
-          ? values.password.match(
-              /(?=.*[0-9])(?=.*[!@#$%|^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{12,}/g
-            )
-          : false;
-        if (flag) {
-          throw new SubmissionError({
-            newaccount: 'Такая запись уже существует.',
-            _error: 'SignUp failed!'
-          });
-        } else if (!passValid) {
-          throw new SubmissionError({
-            password:
-              '12 символов минимум (цыфры, большие и маленькие буквы, символы).',
-            _error: 'SignUp failed!'
-          });
-        } else {
-          // lecturesBTSData.then(resp => {
-          //   onSetLectures(resp);
-          // });
-          // putUserFaucetData.then(data => {
-          //   setAccount(values.newaccount);
-          // });
-          putUserFaucetApi(values.newaccount, values.password, 'vk', vkToken);
+      let putUserData = putUserFaucetApi(
+        values.newaccount,
+        values.password,
+        'vk',
+        vkToken
+      );
+      return putUserData.then(resp => {
+        console.log(resp);
+        if (resp.error) {
+          switch (resp.error.code) {
+            case 103: {
+              throw new SubmissionError({
+                newaccount: 'Такая запись уже существует.',
+                _error: 'SignUp failed!'
+              });
+            }
+            case 104: {
+              throw new SubmissionError({
+                newaccount: 'Не валидная учетная запись.',
+                _error: 'SignUp failed!'
+              });
+            }
+            case 107: {
+              throw new SubmissionError({
+                newaccount: 'Не валидная учетная запись.',
+                _error: 'SignUp failed!'
+              });
+            }
+
+            default:
+              break;
+          }
         }
+        // go to lectures
+        //TODO нужно забрать дату по юзерам после регистраци
+        setAccount(values.newaccount);
       });
     };
 
@@ -176,10 +178,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   setAccount(val) {
     dispatch(setAccountName(val));
-    // history.push('/dashboard');
-  },
-  onSetLectures(val) {
-    dispatch(setLectures(val));
+    history.push('/dashboard');
   },
   onSetVkToken(val) {
     dispatch(setVkToken(val));

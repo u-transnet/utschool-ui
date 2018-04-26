@@ -143,7 +143,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setTitle(val));
   },
   onSetLectures(val) {
-    //dispatch(setLectures(val));
+    dispatch(setLectures(val));
   },
   onSetAvatar(val) {
     dispatch(setAvatar(val));
