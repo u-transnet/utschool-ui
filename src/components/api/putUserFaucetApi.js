@@ -25,7 +25,7 @@ export default function putUserFaucetApi(
   }
   // end validation of password
 
-  let keys = Login.generateKeys(account, password);
+  let keys = Login.generateKeys(account, password, '', 'BTS');
   let data = {
     name: account,
     social_network: social,
