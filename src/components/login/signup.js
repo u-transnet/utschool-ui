@@ -68,7 +68,6 @@ class SignUp extends React.Component<Props, State> {
         vkToken
       );
       return putUserData.then(resp => {
-        console.log(resp);
         if (resp.error) {
           switch (resp.error.code) {
             case 103: {
@@ -89,7 +88,12 @@ class SignUp extends React.Component<Props, State> {
                 _error: 'SignUp failed!'
               });
             }
-
+            case 110: {
+              throw new SubmissionError({
+                newaccount: 'Вы уже регистрировались из этой соцсети.',
+                _error: 'SignUp failed!'
+              });
+            }
             default:
               break;
           }
