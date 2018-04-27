@@ -9,11 +9,7 @@ export default function lecturesBTSApi(account: string) {
   return Api.init(nodeUrl, accountName, privateKey).then(api => {
     return api.studentApi
       .getLectures()
-      .then(resp => {
-        return resp;
-      })
-      .catch(error => {
-        return error;
-      });
+      .then(resp => resp)
+      .catch(error => error);
   });
 }
