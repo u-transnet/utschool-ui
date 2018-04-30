@@ -7,8 +7,12 @@ import { Link } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 import Button from 'material-ui/Button';
-//
+import { CircularProgress } from 'material-ui/Progress';
+//get lectures
 import lecturesBTSApi from '../api/lecturesBTSApi';
+import getLectureFaucetApi from '../api/getLectureFaucetApi';
+import getLectureDataApi from '../api/getLectureDataApi';
+//end of get lectures
 import getUserFaucetApi from '../api/getUserFaucetApi';
 //
 import renderAccountField from './accountField';
@@ -32,30 +36,37 @@ type Props = {
   handleSubmit: Function,
   setAccount: Function,
   onSetTitle: Function,
-  onSetLectures: Function,
   onSetAvatar: Function,
   onSetFirstName: Function,
   onSetLastName: Function,
+  onSetLextures: Function,
   account: string
 };
-type State = {};
-
+type State = {
+  lecturesData: Array<any>,
+  loaderFlag: boolean
+};
 class Login extends React.Component<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      lecturesData: [],
+      loaderFlag: false
+    };
+  }
   render() {
     const {
       handleSubmit,
       setAccount,
       onSetTitle,
-      onSetLectures,
       onSetAvatar,
       onSetFirstName,
-      onSetLastName
+      onSetLastName,
+      onSetLextures
     } = this.props; // No fields prop
-
+    const { loaderFlag } = this.state;
     let loginSubmit = (values: any) => {
-      let lecturesBTSData = lecturesBTSApi(values.account);
       let userFausetData = getUserFaucetApi(values.account);
-
       return userFausetData
         .then(data => {
           if (!data) {
@@ -64,14 +75,44 @@ class Login extends React.Component<Props, State> {
               _error: 'Login failed!'
             });
           } else {
-            lecturesBTSData.then(resp => {
-              onSetLectures(resp);
+            this.setState({ loaderFlag: true });
+            // get lectures function
+            let lecturesData = [];
+            lecturesBTSApi(values.account).then(resp => {
+              for (let i of resp) {
+                let lectureState = {
+                  ticket: {
+                    accepted: i.stats['1.3.3347'].accepted,
+                    balance: i.stats['1.3.3347'].balance
+                  },
+                  settion: {
+                    accepted: i.stats['1.3.3348'].accepted,
+                    balance: i.stats['1.3.3348'].balance
+                  },
+                  grade: {
+                    accepted: i.stats['1.3.3349'].accepted,
+                    balance: i.stats['1.3.3349'].balance
+                  }
+                };
+                getLectureFaucetApi(i.name).then(resp => {
+                  getLectureDataApi(resp.topic_url).then(resp => {
+                    lecturesData.push({
+                      lecture: resp,
+                      state: lectureState
+                    });
+                    onSetLextures(lecturesData);
+                    //other data
+                    onSetAvatar(data.photo);
+                    onSetFirstName(data.first_name);
+                    onSetLastName(data.last_name);
+                    onSetTitle('Лекции');
+                    setAccount(values.account);
+                    //end of other data
+                  });
+                });
+              }
             });
-            onSetAvatar(data.photo);
-            onSetFirstName(data.first_name);
-            onSetLastName(data.last_name);
-            onSetTitle('Лекции');
-            setAccount(values.account);
+            // end of get lectures function
           }
         })
         .catch(error => {
@@ -87,41 +128,50 @@ class Login extends React.Component<Props, State> {
           <Grid container spacing={0}>
             <LoginHeader />
             <form onSubmit={handleSubmit(loginSubmit)}>
-              <Grid item xs={12}>
-                <Field
-                  name="account"
-                  className="login-field"
-                  component={renderAccountField}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <div className="check-el">
-                  <Field name="rememberMe" component={renderRememberCheckbox} />
+              {loaderFlag ? (
+                <CircularProgress className="centered-loader" size={50} />
+              ) : (
+                <div>
+                  <Grid item xs={12}>
+                    <Field
+                      name="account"
+                      className="login-field"
+                      component={renderAccountField}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <div className="check-el">
+                      <Field
+                        name="rememberMe"
+                        component={renderRememberCheckbox}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      variant="raised"
+                      size="medium"
+                      color="primary"
+                      className="login-button"
+                    >
+                      Логин
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      variant="raised"
+                      size="medium"
+                      color="primary"
+                      className="login-button"
+                      component={Link}
+                      to="/sign-up"
+                    >
+                      Создать акаунт
+                    </Button>
+                  </Grid>
                 </div>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  variant="raised"
-                  size="medium"
-                  color="primary"
-                  className="login-button"
-                >
-                  Логин
-                </Button>
-              </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="raised"
-                  size="medium"
-                  color="primary"
-                  className="login-button"
-                  component={Link}
-                  to="/sign-up"
-                >
-                  Создать акаунт
-                </Button>
-              </Grid>
+              )}
             </form>
           </Grid>
         </div>
@@ -142,9 +192,6 @@ const mapDispatchToProps = dispatch => ({
   onSetTitle(val) {
     dispatch(setTitle(val));
   },
-  onSetLectures(val) {
-    dispatch(setLectures(val));
-  },
   onSetAvatar(val) {
     dispatch(setAvatar(val));
   },
@@ -153,6 +200,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLastName(val) {
     dispatch(setLastName(val));
+  },
+  onSetLextures(val) {
+    dispatch(setLectures(val));
   }
 });
 

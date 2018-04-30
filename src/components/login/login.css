@@ -57,4 +57,9 @@
 .header-wrap {
   width: 100%;
 }
+
+.centered-loader {
+  display: block !important;
+  margin: 0 auto;
+}
 /*# sourceMappingURL=login.css.map */
