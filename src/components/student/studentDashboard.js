@@ -34,7 +34,6 @@ class DashboardStudentContent extends React.Component<Props, State> {
     const TabContainer = props => {
       return <div>{[props.children]}</div>;
     };
-
     return (
       <div className="tabs-wrap">
         <Tabs value={value} onChange={this.handleTabChange}>
@@ -42,20 +41,20 @@ class DashboardStudentContent extends React.Component<Props, State> {
           <Tab label="Мои" className="tab" />
         </Tabs>
         <div className="tab-container">
-          {value === 0 && (
+          {value === 0 ? (
             <TabContainer>
               {lecturesBTS.map((lectures, index) => (
                 <LectureCard {...lectures} key={index} />
               ))}
             </TabContainer>
-          )}
-          {value === 1 && (
+          ) : null}
+          {value === 1 ? (
             <TabContainer>
               {lecturesBTS.map((lectures, index) => (
                 <StudentCard {...lectures} key={index} />
               ))}
             </TabContainer>
-          )}
+          ) : null}
         </div>
       </div>
     );

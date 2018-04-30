@@ -6,21 +6,21 @@ import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 //
+import getLectureFaucetApi from '../api/getLectureFaucetApi';
+import getLectureDataApi from '../api/getLectureDataApi';
+//
 import './lecture.css';
 
 const MENU_OPTIONS = ['Option 1', 'Option 2', 'Option 3'];
 const ITEM_HEIGHT = 48;
 
 type Props = {
-  name: string,
-  description: string,
-  teacher: any,
-  stats: any
+  lecture: any,
+  state: any
 };
 type State = {
   anchorEl: any
 };
-
 export default class LectureCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -36,7 +36,7 @@ export default class LectureCard extends React.Component<Props, State> {
     this.setState({ anchorEl: null });
   };
   render() {
-    const { name, description, teacher, stats } = this.props;
+    const { lecture, state } = this.props;
     const { anchorEl } = this.state;
     return (
       <div className="lecture-card">
@@ -73,18 +73,19 @@ export default class LectureCard extends React.Component<Props, State> {
                 </Menu>
               </div>
             }
-            title={name}
+            title={lecture.title}
           />
           <CardContent>
-            {/* TODO need add desctiprion */}
-            <Typography component="p">{description}</Typography>
-            <Typography component="p">Лектор: {teacher.name}</Typography>
+            <p>{lecture.text}</p>
+            <p>
+              <strong>Лектор:</strong> {lecture.teachername}
+            </p>
           </CardContent>
           {/* TODO need add checking */}
           <CardActions className="card-actions">
             <ul className="lecture-status">
               <li>
-                <em>Осталось мест {stats['1.3.3347'].balance}</em>
+                <em>Осталось мест {state.ticket.balance}</em>
               </li>
             </ul>
             <Button variant="raised" color="primary" className="action-btn">

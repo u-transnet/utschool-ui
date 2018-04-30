@@ -12,9 +12,8 @@ const MENU_OPTIONS = ['Option 1', 'Option 2', 'Option 3'];
 const ITEM_HEIGHT = 48;
 
 type Props = {
-  name: string,
-  description: string,
-  stats: any
+  lecture: any,
+  state: any
 };
 type State = {
   anchorEl: any
@@ -35,7 +34,7 @@ export default class StudentCard extends React.Component<Props, State> {
     this.setState({ anchorEl: null });
   };
   render() {
-    const { name, description, stats } = this.props;
+    const { lecture, state } = this.props;
     const { anchorEl } = this.state;
     return (
       <div className="student-card">
@@ -72,16 +71,15 @@ export default class StudentCard extends React.Component<Props, State> {
                 </Menu>
               </div>
             }
-            title={name}
+            title={lecture.title}
           />
           <CardContent>
-            {/* TODO need add desctiprion */}
-            <Typography component="p">{description}</Typography>
+            <p>{lecture.text}</p>
           </CardContent>
           {/* TODO need add checking */}
           <CardActions className="card-actions">
             <ul className="lecture-status">
-              {stats['1.3.3347'].accepted ? (
+              {state.ticket.accepted ? (
                 <li>
                   <i className="material-icons">check_circle</i>
                   <span>Записан</span>
@@ -89,7 +87,7 @@ export default class StudentCard extends React.Component<Props, State> {
               ) : (
                 ''
               )}
-              {stats['1.3.3348'].accepted ? (
+              {state.settion.accepted ? (
                 <li>
                   <i className="material-icons">check_circle</i>
                   <span>Пришел</span>
@@ -97,7 +95,7 @@ export default class StudentCard extends React.Component<Props, State> {
               ) : (
                 ''
               )}
-              {stats['1.3.3349'].accepted ? (
+              {state.grade.accepted ? (
                 <li>
                   <i className="material-icons">check_circle</i>
                   <span>Сдан</span>

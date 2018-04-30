@@ -22,9 +22,6 @@ class Dashboard extends React.Component<Props, State> {
       name: this.props.firstName + ' ' + this.props.lastName
     };
   }
-  componentDidMount() {
-    //TODO получение лекций
-  }
   render() {
     const { role } = this.props;
     const { name } = this.state;

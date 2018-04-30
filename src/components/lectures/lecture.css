@@ -39,4 +39,9 @@
   color: #e64a19;
   font-style: normal;
 }
+
+p {
+  padding: 0 0 24px;
+  margin: 0;
+}
 /*# sourceMappingURL=lecture.css.map */

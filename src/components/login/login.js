@@ -187,7 +187,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   setAccount(val) {
     dispatch(setAccountName(val));
-    history.push('/dashboard');
+    setTimeout(() => {
+      history.push('/dashboard');
+    }, 500);
   },
   onSetTitle(val) {
     dispatch(setTitle(val));
