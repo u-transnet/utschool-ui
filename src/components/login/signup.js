@@ -8,17 +8,29 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
+import { CircularProgress } from 'material-ui/Progress';
 //
 import renderAccountField from './accountField';
 import renderPasswordField from './passwordField';
 import renderRememberCheckbox from './rememberCheckbox';
-//
+//get lectures
+import lecturesBTSApi from '../api/lecturesBTSApi';
+import getLectureFaucetApi from '../api/getLectureFaucetApi';
+import getLectureDataApi from '../api/getLectureDataApi';
+//end of get lectures
 import putUserFaucetApi from '../api/putUserFaucetApi';
 //
 import vkAuthorization from '../authorization/vkAuthorization';
 //
-import { setAccountName } from '../../actions/actionsUser';
 import { setVkToken } from '../../actions/loginAction';
+import {
+  setAccountName,
+  setAvatar,
+  setFirstName,
+  setLastName
+} from '../../actions/actionsUser';
+import { setLectures } from '../../actions/lecturesAction';
+import { setTitle } from '../../actions';
 import validate from './validate';
 import LoginHeader from './loginHeader';
 import history from '../../history';
@@ -29,17 +41,24 @@ type Props = {
   handleSubmit: Function,
   setAccount: Function,
   onSetVkToken: Function,
+  onSetTitle: Function,
+  onSetAvatar: Function,
+  onSetFirstName: Function,
+  onSetLastName: Function,
+  onSetLextures: Function,
   vkToken: string
 };
 type State = {
-  tokenFlag: boolean
+  tokenFlag: boolean,
+  loaderFlag: boolean
 };
 
 class SignUp extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      tokenFlag: false
+      tokenFlag: false,
+      loaderFlag: false
     };
   }
   componentDidMount() {
@@ -59,7 +78,17 @@ class SignUp extends React.Component<Props, State> {
   }
 
   render() {
-    const { handleSubmit, setAccount, vkToken } = this.props; // No fields prop
+    const {
+      handleSubmit,
+      setAccount,
+      vkToken,
+      onSetTitle,
+      onSetAvatar,
+      onSetFirstName,
+      onSetLastName,
+      onSetLextures
+    } = this.props; // No fields prop
+    const { loaderFlag } = this.state;
     let signupSubmit = (values: any) => {
       let putUserData = putUserFaucetApi(
         values.newaccount,
@@ -97,10 +126,46 @@ class SignUp extends React.Component<Props, State> {
             default:
               break;
           }
+        } else {
+          onSetAvatar(resp.account.user_data.photo);
+          onSetFirstName(resp.account.user_data.first_name);
+          onSetLastName(resp.account.user_data.last_name);
+          this.setState({ loaderFlag: true });
+          // get lectures function
+          let lecturesData = [];
+          lecturesBTSApi(values.newaccount).then(resp => {
+            for (let i of resp) {
+              let lectureState = {
+                ticket: {
+                  accepted: i.stats['1.3.3347'].accepted,
+                  balance: i.stats['1.3.3347'].balance
+                },
+                settion: {
+                  accepted: i.stats['1.3.3348'].accepted,
+                  balance: i.stats['1.3.3348'].balance
+                },
+                grade: {
+                  accepted: i.stats['1.3.3349'].accepted,
+                  balance: i.stats['1.3.3349'].balance
+                }
+              };
+              getLectureFaucetApi(i.name).then(resp => {
+                getLectureDataApi(resp.topic_url).then(resp => {
+                  lecturesData.push({
+                    lecture: resp,
+                    state: lectureState
+                  });
+                  onSetLextures(lecturesData);
+                  //other data
+                  onSetTitle('Лекции');
+                  setAccount(values.newaccount);
+                  //end of other data
+                });
+              });
+            }
+          });
+          // end of get lectures function
         }
-        // go to lectures
-        //TODO нужно забрать дату по юзерам после регистраци
-        setAccount(values.newaccount);
       });
     };
 
@@ -131,39 +196,45 @@ class SignUp extends React.Component<Props, State> {
               </Grid>
             ) : (
               <form onSubmit={handleSubmit(signupSubmit)}>
-                <Grid item xs={12}>
-                  <Field
-                    name="newaccount"
-                    className="login-field"
-                    component={renderAccountField}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    name="password"
-                    className="login-field"
-                    component={renderPasswordField}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="check-el">
-                    <Field
-                      name="rememberMe"
-                      component={renderRememberCheckbox}
-                    />
+                {loaderFlag ? (
+                  <CircularProgress className="centered-loader" size={50} />
+                ) : (
+                  <div>
+                    <Grid item xs={12}>
+                      <Field
+                        name="newaccount"
+                        className="login-field"
+                        component={renderAccountField}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Field
+                        name="password"
+                        className="login-field"
+                        component={renderPasswordField}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <div className="check-el">
+                        <Field
+                          name="rememberMe"
+                          component={renderRememberCheckbox}
+                        />
+                      </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button
+                        type="submit"
+                        variant="raised"
+                        size="medium"
+                        color="primary"
+                        className="login-button"
+                      >
+                        Создать акаунт
+                      </Button>
+                    </Grid>
                   </div>
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    variant="raised"
-                    size="medium"
-                    color="primary"
-                    className="login-button"
-                  >
-                    Создать акаунт
-                  </Button>
-                </Grid>
+                )}
               </form>
             )}
           </Grid>
@@ -182,10 +253,27 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   setAccount(val) {
     dispatch(setAccountName(val));
-    history.push('/dashboard');
+    setTimeout(() => {
+      history.push('/dashboard');
+    }, 500);
   },
   onSetVkToken(val) {
     dispatch(setVkToken(val));
+  },
+  onSetTitle(val) {
+    dispatch(setTitle(val));
+  },
+  onSetAvatar(val) {
+    dispatch(setAvatar(val));
+  },
+  onSetFirstName(val) {
+    dispatch(setFirstName(val));
+  },
+  onSetLastName(val) {
+    dispatch(setLastName(val));
+  },
+  onSetLextures(val) {
+    dispatch(setLectures(val));
   }
 });
 
