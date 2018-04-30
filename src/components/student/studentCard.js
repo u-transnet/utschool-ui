@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import Card, { CardHeader, CardActions, CardContent } from 'material-ui/Card';
-import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Menu, { MenuItem } from 'material-ui/Menu';
 //
