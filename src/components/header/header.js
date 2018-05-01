@@ -9,17 +9,20 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Menu, { MenuItem } from 'material-ui/Menu';
-
+import Select from 'material-ui/Select';
 import Card, { CardContent } from 'material-ui/Card';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 //
+import { setUserRole } from '../../actions/actionsUser';
+//
 import './header.css';
 
 //types
 type Props = {
+  onChangeRole: Function,
   title: string,
   account: string,
   lastName: string,
@@ -54,6 +57,10 @@ class Header extends React.Component<Props, State> {
 
   // end off toolbar menu functions
   menuOpener = () => this.setState({ openMenu: !this.state.openMenu });
+
+  handleChange = event => {
+    this.props.onChangeRole(event.target.value);
+  };
 
   render() {
     const { anchorEl, name, openMenu } = this.state;
@@ -118,23 +125,18 @@ class Header extends React.Component<Props, State> {
                 <Avatar alt="Logo" src={avatar} className="card-avatar" />
                 <div className="user-title">
                   <span>{name}</span>
-                  <em>{role}</em>
+                  <Select
+                    value={role}
+                    onChange={this.handleChange}
+                    className="role-select"
+                  >
+                    <MenuItem value={'Студент'}>Студент</MenuItem>
+                    <MenuItem value={'Преподаватель'}>Преподаватель</MenuItem>
+                  </Select>
                 </div>
               </CardContent>
             </Card>
             <List className="drawer-list">
-              <ListItem
-                button
-                component={Link}
-                to="/dashboard"
-                onClick={this.menuOpener}
-              >
-                <ListItemIcon>
-                  <i className="material-icons">description</i>
-                </ListItemIcon>
-                <ListItemText primary="Мои лекции" />
-              </ListItem>
-
               {role === 'Студент' ? (
                 <ListItem
                   button
@@ -148,7 +150,17 @@ class Header extends React.Component<Props, State> {
                   <ListItemText primary="Лекции" />
                 </ListItem>
               ) : (
-                false
+                <ListItem
+                  button
+                  component={Link}
+                  to="/dashboard"
+                  onClick={this.menuOpener}
+                >
+                  <ListItemIcon>
+                    <i className="material-icons">description</i>
+                  </ListItemIcon>
+                  <ListItemText primary="Мои лекции" />
+                </ListItem>
               )}
               <ListItem
                 button
@@ -215,6 +227,10 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  onChangeRole(val) {
+    dispatch(setUserRole(val));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

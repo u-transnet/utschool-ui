@@ -27,6 +27,17 @@
     width: 62px;
     height: 62px;
   }
+  .role-select {
+    width: 100%;
+    color: #fff;
+    &:before,
+    &:after {
+      display: none;
+    }
+    svg {
+      color: #fff;
+    }
+  }
   .user-title {
     color: #fff;
     padding-top: 30px;

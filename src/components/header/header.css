@@ -32,6 +32,19 @@
   height: 62px;
 }
 
+.sidebar .role-select {
+  width: 100%;
+  color: #fff;
+}
+
+.sidebar .role-select:before, .sidebar .role-select:after {
+  display: none;
+}
+
+.sidebar .role-select svg {
+  color: #fff;
+}
+
 .sidebar .user-title {
   color: #fff;
   padding-top: 30px;
