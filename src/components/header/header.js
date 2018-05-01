@@ -17,12 +17,14 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 //
 import { setUserRole } from '../../actions/actionsUser';
+import { setTitle } from '../../actions';
 //
 import './header.css';
 
 //types
 type Props = {
   onChangeRole: Function,
+  onChangeTitle: Function,
   title: string,
   account: string,
   lastName: string,
@@ -60,6 +62,9 @@ class Header extends React.Component<Props, State> {
 
   handleChange = event => {
     this.props.onChangeRole(event.target.value);
+    event.target.value === 'Студент'
+      ? this.props.onChangeTitle('Лекции')
+      : this.props.onChangeTitle('Мои Лекции');
   };
 
   render() {
@@ -230,6 +235,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   onChangeRole(val) {
     dispatch(setUserRole(val));
+  },
+  onChangeTitle(val) {
+    dispatch(setTitle(val));
   }
 });
 
