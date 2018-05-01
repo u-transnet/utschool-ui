@@ -1,9 +1,10 @@
 .tabs-wrap {
+  position: relative;
+  z-index: 1;
   .tab {
     flex-grow: 1;
-    background-color: #2196f3;
     opacity: 1;
-    color: #fff;
+    background-color: #fff;
     max-width: 50%;
     width: 50%;
   }

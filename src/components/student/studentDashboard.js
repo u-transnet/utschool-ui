@@ -36,7 +36,12 @@ class DashboardStudentContent extends React.Component<Props, State> {
     };
     return (
       <div className="tabs-wrap">
-        <Tabs value={value} onChange={this.handleTabChange}>
+        <Tabs
+          value={value}
+          onChange={this.handleTabChange}
+          indicatorColor="primary"
+          textColor="primary"
+        >
           <Tab label="Возможныe" className="tab" />
           <Tab label="Мои" className="tab" />
         </Tabs>
