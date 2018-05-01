@@ -61,7 +61,7 @@ class Header extends React.Component<Props, State> {
     return (
       <div className="header">
         {/* top bar */}
-        <AppBar position="static" color="default">
+        <AppBar position="static" className="white-bg" color="default">
           <Toolbar>
             <IconButton
               className="menu-button"

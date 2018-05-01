@@ -41,6 +41,7 @@ class DashboardStudentContent extends React.Component<Props, State> {
           onChange={this.handleTabChange}
           indicatorColor="primary"
           textColor="primary"
+          className="shadow"
         >
           <Tab label="Возможныe" className="tab" />
           <Tab label="Мои" className="tab" />
