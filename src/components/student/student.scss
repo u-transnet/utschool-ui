@@ -17,7 +17,8 @@
 .student-card {
   padding-bottom: 24px;
   .dd {
-    margin: 4px 0 0;
+    position: relative;
+    top: 4px;
   }
   .card-actions {
     padding: 16px 24px;
