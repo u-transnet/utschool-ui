@@ -1,7 +1,7 @@
 // @flow
 import fetch from 'isomorphic-fetch';
 
-export default function getLectureDataApi(vkUrl: string) {
+export default function getLectureDataApi(vkUrl: string, account: string) {
   let urlData = vkUrl.split('-')[1];
   let groupId = urlData.split('_')[0];
   let topicId = urlData.split('_')[1];
@@ -25,6 +25,7 @@ export default function getLectureDataApi(vkUrl: string) {
     })
     .then(data => {
       let lectureData = {
+        account: account,
         title: data.response.items[0].title,
         text: data.response.items[0].first_comment,
         closed: data.response.items[0].is_closed,

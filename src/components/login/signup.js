@@ -150,7 +150,7 @@ class SignUp extends React.Component<Props, State> {
                 }
               };
               getLectureFaucetApi(i.name).then(resp => {
-                getLectureDataApi(resp.topic_url).then(resp => {
+                getLectureDataApi(resp.topic_url, i.name).then(resp => {
                   lecturesData.push({
                     lecture: resp,
                     state: lectureState
