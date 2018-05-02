@@ -3,7 +3,8 @@
 }
 
 .lecture-card .dd {
-  margin: 4px 0 0;
+  position: relative;
+  top: 4px;
 }
 
 .lecture-card .card-actions {

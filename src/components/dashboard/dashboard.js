@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 //
 import Header from '../header/header';
 import DashboardStudentContent from '../student/studentDashboard';
+import DashboardTeacherContent from '../teacher/teacherDashboard';
 
 type Props = {
   firstName: string,
@@ -27,11 +28,11 @@ class Dashboard extends React.Component<Props, State> {
     const { name } = this.state;
     return (
       <div>
-        <Header title="Мои лекции" />
+        <Header />
         {role === 'Студент' ? (
           <DashboardStudentContent />
         ) : (
-          <h1>Dashboard {name}</h1>
+          <DashboardTeacherContent />
         )}
       </div>
     );

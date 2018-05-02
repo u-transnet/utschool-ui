@@ -1,0 +1,62 @@
+.centered-loader {
+  margin-top: 64px;
+}
+.teacher-card {
+  padding: 24px 24px 0;
+  p {
+    padding: 0;
+  }
+  .dd {
+    position: relative;
+    top: 4px;
+  }
+  .card-actions {
+    padding: 16px 24px;
+    @media (max-width: 600px) {
+      padding: 16px;
+    }
+  }
+}
+.teacher-card-action {
+  margin: 0 !important;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  &:before,
+  &:after {
+    content: ' '; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+  li {
+    float: right;
+    margin: 0 -8px 0 0;
+    button {
+      font-weight: normal;
+      text-transform: none;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    em {
+      float: left;
+      font-style: normal;
+      font-size: 14px;
+      color: #fff;
+      height: 20px;
+      line-height: 20px;
+      padding: 0 8px;
+      border-radius: 2px;
+      background: #7ed321;
+      margin-right: 8px;
+    }
+    &:first-child {
+      float: left;
+      margin: 0 0 0 -8px;
+      em {
+        background: #4a90e2;
+      }
+    }
+  }
+}

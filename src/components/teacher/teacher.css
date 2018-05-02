@@ -1,1 +1,77 @@
-/* No CSS *//*# sourceMappingURL=teacher.css.map */
+.centered-loader {
+  margin-top: 64px;
+}
+
+.teacher-card {
+  padding: 24px 24px 0;
+}
+
+.teacher-card p {
+  padding: 0;
+}
+
+.teacher-card .dd {
+  position: relative;
+  top: 4px;
+}
+
+.teacher-card .card-actions {
+  padding: 16px 24px;
+}
+
+@media (max-width: 600px) {
+  .teacher-card .card-actions {
+    padding: 16px;
+  }
+}
+
+.teacher-card-action {
+  margin: 0 !important;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.teacher-card-action:before, .teacher-card-action:after {
+  content: ' ';
+  display: table;
+}
+
+.teacher-card-action:after {
+  clear: both;
+}
+
+.teacher-card-action li {
+  float: right;
+  margin: 0 -8px 0 0;
+}
+
+.teacher-card-action li button {
+  font-weight: normal;
+  text-transform: none;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.teacher-card-action li em {
+  float: left;
+  font-style: normal;
+  font-size: 14px;
+  color: #fff;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 8px;
+  border-radius: 2px;
+  background: #7ed321;
+  margin-right: 8px;
+}
+
+.teacher-card-action li:first-child {
+  float: left;
+  margin: 0 0 0 -8px;
+}
+
+.teacher-card-action li:first-child em {
+  background: #4a90e2;
+}
+/*# sourceMappingURL=teacher.css.map */
