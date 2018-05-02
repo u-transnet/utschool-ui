@@ -38,7 +38,7 @@ class LectureCard extends React.Component<Props, State> {
   };
 
   render() {
-    const { lecture, state, registrationLecture, account } = this.props;
+    const { lecture, state, account } = this.props;
     const { anchorEl } = this.state;
     return (
       <div className="lecture-card">

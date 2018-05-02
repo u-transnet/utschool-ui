@@ -1,7 +1,7 @@
 // @flow
 
 import Api from 'utschool-js';
-import { Login, PrivateKey, key } from 'bitsharesjs';
+import { Login } from 'bitsharesjs';
 
 export default function registrationLecture(
   account: string,

@@ -13,7 +13,6 @@ const ITEM_HEIGHT = 48;
 
 type Props = {
   lecture: any,
-  state: any,
   additionalInfo: any
 };
 type State = {
@@ -35,7 +34,7 @@ export default class TeacherCard extends React.Component<Props, State> {
     this.setState({ anchorEl: null });
   };
   render() {
-    const { lecture, state, additionalInfo } = this.props;
+    const { lecture, additionalInfo } = this.props;
     const { anchorEl } = this.state;
     return (
       <div className="teacher-card">
@@ -82,7 +81,7 @@ export default class TeacherCard extends React.Component<Props, State> {
             <ul className="teacher-card-action">
               <li>
                 {additionalInfo.applicationscount ? (
-                  <Button size="medium" component={Link} to="/applications">
+                  <Button size="medium" component={Link} to="/class#0">
                     <em>{additionalInfo.applicationscount}</em>
                     Записалось
                   </Button>
@@ -90,7 +89,7 @@ export default class TeacherCard extends React.Component<Props, State> {
               </li>
               <li>
                 {additionalInfo.participantscount ? (
-                  <Button size="medium" component={Link} to="/participants">
+                  <Button size="medium" component={Link} to="/class#1">
                     <em>{additionalInfo.participantscount}</em>
                     Приняты
                   </Button>

@@ -8,24 +8,13 @@ import DashboardStudentContent from '../student/studentDashboard';
 import DashboardTeacherContent from '../teacher/teacherDashboard';
 
 type Props = {
-  firstName: string,
-  lastName: string,
   role: string
 };
-type State = {
-  name: string
-};
+type State = {};
 
 class Dashboard extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      name: this.props.firstName + ' ' + this.props.lastName
-    };
-  }
   render() {
     const { role } = this.props;
-    const { name } = this.state;
     return (
       <div>
         <Header />
@@ -41,8 +30,6 @@ class Dashboard extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    firstName: state.user.firstName,
-    lastName: state.user.lastName,
     role: state.user.role
   };
 }
