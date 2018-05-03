@@ -5,6 +5,12 @@
   .flex {
     flex: 1;
   }
+  h2 {
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
   .toolbar-dd {
     margin: 0 -12px 0 12px;
   }
