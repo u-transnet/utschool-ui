@@ -74,4 +74,15 @@
 .teacher-card-action li:first-child em {
   background: #4a90e2;
 }
+
+p.empty-block {
+  font-size: 20px;
+  line-height: 28px;
+  padding: 24px;
+}
+
+.list-wrap {
+  margin-left: -24px !important;
+  margin-right: -24px !important;
+}
 /*# sourceMappingURL=teacher.css.map */

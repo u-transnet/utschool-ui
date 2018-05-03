@@ -7,7 +7,7 @@ import Login from './login/login';
 import SignUp from './login/signup';
 import Dashboard from './dashboard/dashboard';
 
-import TeacherClassApplicants from './TeacherClassApplicants';
+import ClassDashboard from './teacher/classDashboard';
 import Profile from './Profile';
 import Settings from './Settings';
 import Help from './Help';
@@ -22,11 +22,7 @@ const Root = ({ store }) => (
           <Route exact path="/" component={Login} />
           <Route exact path="/sign-up" component={SignUp} />
           <Route exact path="/dashboard" component={Dashboard} />
-          <Route
-            exact
-            path="/teacher-class-applicants/:id/:accepted"
-            component={TeacherClassApplicants}
-          />
+          <Route exact path="/class" component={ClassDashboard} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/settings" component={Settings} />
           <Route exact path="/help" component={Help} />
