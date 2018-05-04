@@ -34,6 +34,8 @@ class DashboardStudentContent extends React.Component<Props, State> {
     const TabContainer = props => {
       return <div>{[props.children]}</div>;
     };
+    let studentCardItems = 0;
+    let lectureCardItems = 0;
     return (
       <div className="tabs-wrap">
         <Tabs
@@ -49,16 +51,28 @@ class DashboardStudentContent extends React.Component<Props, State> {
         <div className="tab-container">
           {value === 0 ? (
             <TabContainer>
-              {lecturesBTS.map((lectures, index) => (
-                <LectureCard {...lectures} key={index} />
-              ))}
+              {lecturesBTS.map((lectures, index) => {
+                !lectures.state.ticket.accepted ? lectureCardItems++ : null;
+                return !lectures.state.ticket.accepted ? (
+                  <LectureCard {...lectures} key={index} />
+                ) : null;
+              })}
+              {!lectureCardItems ? (
+                <p>Вы зарегистрировались на все лекции.</p>
+              ) : null}
             </TabContainer>
           ) : null}
           {value === 1 ? (
             <TabContainer>
-              {lecturesBTS.map((lectures, index) => (
-                <StudentCard {...lectures} key={index} />
-              ))}
+              {lecturesBTS.map((lectures, index) => {
+                lectures.state.ticket.accepted ? studentCardItems++ : null;
+                return lectures.state.ticket.accepted ? (
+                  <StudentCard {...lectures} key={index} />
+                ) : null;
+              })}
+              {!studentCardItems ? (
+                <p>У Вас нет лекций! Зарегистрируйтесь на одну из лекций.</p>
+              ) : null}
             </TabContainer>
           ) : null}
         </div>

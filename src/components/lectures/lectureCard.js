@@ -33,7 +33,6 @@ type Props = {
 type State = {
   anchorEl: any,
   open: boolean,
-  openError: boolean,
   confirmRegistration: boolean
 };
 class LectureCard extends React.Component<Props, State> {
@@ -42,7 +41,6 @@ class LectureCard extends React.Component<Props, State> {
     this.state = {
       anchorEl: null,
       open: false,
-      openError: false,
       confirmRegistration: false
     };
   }
@@ -72,7 +70,7 @@ class LectureCard extends React.Component<Props, State> {
     } catch (error) {
       throw new SubmissionError({
         password: 'Неправильный пароль',
-        _error: 'SignUp failed!'
+        _error: 'Login failed!'
       });
     }
   }
@@ -203,7 +201,7 @@ const lectureCardConnect = connect(mapStateToProps, mapDispatchToProps)(
 );
 
 export default reduxForm({
-  form: 'SignUp', // a unique identifier for this form
+  form: 'login', // a unique identifier for this form
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true
 })(lectureCardConnect);
