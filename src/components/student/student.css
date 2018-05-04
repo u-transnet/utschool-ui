@@ -1,6 +1,14 @@
 .tabs-wrap {
   position: relative;
-  z-index: 1;
+  padding-top: 48px;
+}
+
+.tabs-wrap .shadow {
+  position: fixed;
+  left: 0;
+  top: 56px;
+  z-index: 2000;
+  width: 100%;
 }
 
 .tabs-wrap .tab {
