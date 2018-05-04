@@ -1,11 +1,21 @@
 // @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
+//
 import Card, { CardHeader, CardActions, CardContent } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import TextField from 'material-ui/TextField';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from 'material-ui/Dialog';
 //
+import renderPasswordField from '../login/passwordField';
 import registrationLecture from '../api/registrationOnLecture';
 //
 import './lecture.css';
@@ -15,18 +25,25 @@ const ITEM_HEIGHT = 48;
 
 type Props = {
   registrationLecture: Function,
+  handleSubmit: Function,
   account: string,
   lecture: any,
   state: any
 };
 type State = {
-  anchorEl: any
+  anchorEl: any,
+  open: boolean,
+  openError: boolean,
+  confirmRegistration: boolean
 };
 class LectureCard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      anchorEl: null
+      anchorEl: null,
+      open: false,
+      openError: false,
+      confirmRegistration: false
     };
   }
   handleClick = (event: any) => {
@@ -37,9 +54,36 @@ class LectureCard extends React.Component<Props, State> {
     this.setState({ anchorEl: null });
   };
 
+  handleClickOpenDialog = () => {
+    this.setState({ open: true });
+  };
+
+  handleCloseDialog = () => {
+    this.setState({ open: false });
+  };
+
+  registration(account, lecture, password) {
+    try {
+      registrationLecture(account, lecture, password)
+        .then(resp => {
+          this.setState({ confirmRegistration: true });
+        })
+        .catch(error => error);
+    } catch (error) {
+      throw new SubmissionError({
+        password: 'Неправильный пароль',
+        _error: 'SignUp failed!'
+      });
+    }
+  }
+
   render() {
-    const { lecture, state, account } = this.props;
-    const { anchorEl } = this.state;
+    const { lecture, state, account, handleSubmit } = this.props;
+    const { anchorEl, confirmRegistration } = this.state;
+    let loginSubmit = (values: any) => {
+      this.registration(account, lecture.account, values.password);
+      this.handleCloseDialog;
+    };
     return (
       <div className="lecture-card">
         <Card>
@@ -94,20 +138,57 @@ class LectureCard extends React.Component<Props, State> {
               variant="raised"
               color="primary"
               className="action-btn"
-              onClick={() => registration(account, lecture.account)}
+              onClick={this.handleClickOpenDialog}
             >
               Записаться
             </Button>
           </CardActions>
         </Card>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleCloseDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <form onSubmit={handleSubmit(loginSubmit)}>
+            <DialogTitle id="form-dialog-title">Логин</DialogTitle>
+            {confirmRegistration ? (
+              <div>
+                <DialogContent>
+                  <DialogContentText>
+                    Регистрация прошла успешно и ожидает подтверждения
+                    преподавателя7
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleCloseDialog} color="primary">
+                    Закрыть
+                  </Button>
+                </DialogActions>
+              </div>
+            ) : (
+              <div>
+                <DialogContent>
+                  <Field
+                    className="dialog-field"
+                    name="password"
+                    component={renderPasswordField}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleCloseDialog} color="primary">
+                    Отмена
+                  </Button>
+                  <Button type="submit" color="primary">
+                    Логин
+                  </Button>
+                </DialogActions>
+              </div>
+            )}
+          </form>
+        </Dialog>
       </div>
     );
   }
-}
-function registration(account, lecture) {
-  registrationLecture(account, lecture)
-    .then(resp => resp)
-    .catch(error => error);
 }
 function mapStateToProps(state) {
   return {
@@ -117,4 +198,12 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(LectureCard);
+const lectureCardConnect = connect(mapStateToProps, mapDispatchToProps)(
+  LectureCard
+);
+
+export default reduxForm({
+  form: 'SignUp', // a unique identifier for this form
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true
+})(lectureCardConnect);
