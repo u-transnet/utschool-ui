@@ -94,7 +94,6 @@ class TeacherCard extends React.Component<Props, State> {
           <CardContent>
             <p>{lecture.text}</p>
           </CardContent>
-          {/* TODO need add checking */}
           <CardActions className="card-actions">
             <ul className="teacher-card-action">
               <li>

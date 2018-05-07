@@ -125,7 +125,6 @@ class LectureCard extends React.Component<Props, State> {
               <strong>Лектор:</strong> {lecture.teachername}
             </p>
           </CardContent>
-          {/* TODO need add checking */}
           <CardActions className="card-actions">
             <ul className="lecture-status">
               <li>
@@ -154,7 +153,7 @@ class LectureCard extends React.Component<Props, State> {
                 <DialogContent>
                   <DialogContentText>
                     Регистрация прошла успешно и ожидает подтверждения
-                    преподавателя7
+                    преподавателя.
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

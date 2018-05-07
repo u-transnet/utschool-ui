@@ -52,6 +52,7 @@ class ClassDashboard extends React.Component<Props, State> {
       let usersData = [];
       let n = this.props.currentLecture.additionalInfo.participants.length;
       if (this.props.currentLecture.additionalInfo.participants.length) {
+        console.log(this.props.currentLecture.additionalInfo.participants);
         for (let i of this.props.currentLecture.additionalInfo.participants) {
           getUserFaucetApi(i.name)
             .then(resp => {
@@ -74,10 +75,14 @@ class ClassDashboard extends React.Component<Props, State> {
       let usersData = [];
       if (this.props.currentLecture.additionalInfo.applications.length) {
         let n = this.props.currentLecture.additionalInfo.applications.length;
+        console.log(this.props.currentLecture.additionalInfo.applications);
         for (let i of this.props.currentLecture.additionalInfo.applications) {
-          getUserFaucetApi(i.name)
+          getUserFaucetApi(i.account.name)
             .then(resp => {
-              usersData.push(resp);
+              usersData.push({
+                userData: resp,
+                studentId: i.id
+              });
               n--;
               if (!n) {
                 this.props.onSetApplications(usersData);
@@ -179,3 +184,47 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClassDashboard);
+
+// {ref_block_num: 11507, ref_block_prefix: 3593305144, expiration: "2018-05-04T13:14:30", operations: Array(1), extensions: Array(0), …}
+// expiration
+// :
+// "2018-05-04T13:14:30"
+// extensions
+// :
+// []
+// operations
+// :
+// Array(1)
+// 0
+// :
+// Array(2)
+// 0
+// :
+// 23
+// 1
+// :
+// {fee: {…}, fee_paying_account: "1.2.863957", proposal: "1.10.9864", active_approvals_to_add: Array(1), active_approvals_to_remove: Array(0), …}
+// length
+// :
+// 2
+// __proto__
+// :
+// Array(0)
+// length
+// :
+// 1
+// __proto__
+// :
+// Array(0)
+// ref_block_num
+// :
+// 11507
+// ref_block_prefix
+// :
+// 3593305144
+// signatures
+// :
+// ["1f22669d447f20665405c0ece86f9f592e2b2de3ddb70e070a…4981a2bf645e42c287c249f11ad227f9d7983ee92e12671af"]
+// __proto__
+// :
+// Object
