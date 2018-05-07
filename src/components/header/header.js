@@ -17,6 +17,13 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 //
 import { setUserRole } from '../../actions/actionsUser';
+import {
+  setLectures,
+  setTeacherLectures,
+  setParticipants,
+  setApplications,
+  setCurrentLecture
+} from '../../actions/lecturesAction';
 import { setTitle } from '../../actions';
 //
 import './header.css';
@@ -25,6 +32,11 @@ import './header.css';
 type Props = {
   onChangeRole: Function,
   onChangeTitle: Function,
+  onSetLectures: Function,
+  onSetTeacherLectures: Function,
+  onSetParticipants: Function,
+  onSetApplications: Function,
+  onSetCurrentLecture: Function,
   title: string,
   account: string,
   lastName: string,
@@ -67,9 +79,41 @@ class Header extends React.Component<Props, State> {
       : this.props.onChangeTitle('Мои Лекции');
   };
 
+  onProfile = () => {
+    this.props.onChangeTitle('Профиль');
+    this.menuOpener();
+  };
+
+  onDashboard = () => {
+    this.props.onChangeTitle('Лекции');
+    this.menuOpener();
+  };
+
+  onSettings = () => {
+    this.props.onChangeTitle('Настройки');
+    this.menuOpener();
+  };
+
+  onHelp = () => {
+    this.props.onChangeTitle('Помощь');
+    this.menuOpener();
+  };
+
+  //clear data
+  onLogout = () => {
+    this.props.onChangeTitle('Лекции');
+    this.props.onChangeRole('Студент');
+    this.props.onSetLectures([]);
+    this.props.onSetTeacherLectures([]);
+    this.props.onSetParticipants([]);
+    this.props.onSetApplications([]);
+    this.props.onSetCurrentLecture([]);
+    this.menuOpener();
+  };
+
   render() {
     const { anchorEl, name, openMenu } = this.state;
-    const { role, avatar } = this.props;
+    const { role, avatar, onChangeTitle } = this.props;
     return (
       <div className="header">
         {/* top bar */}
@@ -147,7 +191,7 @@ class Header extends React.Component<Props, State> {
                   button
                   component={Link}
                   to="/dashboard"
-                  onClick={this.menuOpener}
+                  onClick={this.onDashboard}
                 >
                   <ListItemIcon>
                     <i className="material-icons">chrome_reader_mode</i>
@@ -171,7 +215,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/profile"
-                onClick={this.menuOpener}
+                onClick={this.onProfile}
               >
                 <ListItemIcon>
                   <i className="material-icons">account_circle</i>
@@ -183,7 +227,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/settings"
-                onClick={this.menuOpener}
+                onClick={this.onSettings}
               >
                 <ListItemIcon>
                   <i className="material-icons">settings</i>
@@ -194,7 +238,7 @@ class Header extends React.Component<Props, State> {
                 button
                 component={Link}
                 to="/help"
-                onClick={this.menuOpener}
+                onClick={this.onHelp}
               >
                 <ListItemIcon>
                   <i className="material-icons">help</i>
@@ -202,12 +246,7 @@ class Header extends React.Component<Props, State> {
                 <ListItemText primary="Помощь" />
               </ListItem>
               <Divider />
-              <ListItem
-                button
-                component={Link}
-                to="/"
-                onClick={this.menuOpener}
-              >
+              <ListItem button component={Link} to="/" onClick={this.onLogout}>
                 <ListItemIcon>
                   <i className="material-icons rotate">exit_to_app</i>
                 </ListItemIcon>
@@ -238,6 +277,21 @@ const mapDispatchToProps = dispatch => ({
   },
   onChangeTitle(val) {
     dispatch(setTitle(val));
+  },
+  onSetLectures(val) {
+    dispatch(setLectures(val));
+  },
+  onSetTeacherLectures(val) {
+    dispatch(setTeacherLectures(val));
+  },
+  onSetParticipants(val) {
+    dispatch(setParticipants(val));
+  },
+  onSetApplications(val) {
+    dispatch(setApplications(val));
+  },
+  onSetCurrentLecture(val) {
+    dispatch(setCurrentLecture(val));
   }
 });
 
