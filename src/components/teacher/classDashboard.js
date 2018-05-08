@@ -50,9 +50,8 @@ class ClassDashboard extends React.Component<Props, State> {
   componentDidMount() {
     if (!this.props.participants.length) {
       let usersData = [];
-      let n = this.props.currentLecture.additionalInfo.participants.length;
       if (this.props.currentLecture.additionalInfo.participants.length) {
-        console.log(this.props.currentLecture.additionalInfo.participants);
+        let n = this.props.currentLecture.additionalInfo.participants.length;
         for (let i of this.props.currentLecture.additionalInfo.participants) {
           getUserFaucetApi(i.name)
             .then(resp => {
@@ -75,7 +74,6 @@ class ClassDashboard extends React.Component<Props, State> {
       let usersData = [];
       if (this.props.currentLecture.additionalInfo.applications.length) {
         let n = this.props.currentLecture.additionalInfo.applications.length;
-        console.log(this.props.currentLecture.additionalInfo.applications);
         for (let i of this.props.currentLecture.additionalInfo.applications) {
           getUserFaucetApi(i.account.name)
             .then(resp => {
