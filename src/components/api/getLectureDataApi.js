@@ -6,7 +6,7 @@ export default function getLectureDataApi(vkUrl: string, account: string) {
   let groupId = urlData.split('_')[0];
   let topicId = urlData.split('_')[1];
   let url =
-    'https://api.vk.com/method/board.getTopics?group_id=' +
+    'https://api.vk.com/method/board.getTopics?access_token=f42d4ac8f42d4ac8f42d4ac851f44f2772ff42df42d4ac8aef9b8406849f91f1a8b1f86&group_id=' +
     groupId +
     '&topic_ids=' +
     topicId +
