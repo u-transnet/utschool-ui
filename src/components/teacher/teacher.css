@@ -46,11 +46,12 @@
   margin: 0 -8px 0 0;
 }
 
-.teacher-card-action li button {
+.teacher-card-action li a {
   font-weight: normal;
   text-transform: none;
   padding-left: 8px;
   padding-right: 8px;
+  font-size: 14px;
 }
 
 .teacher-card-action li em {
@@ -83,6 +84,10 @@ p.empty-block {
 
 .list-wrap {
   margin-left: -24px !important;
-  margin-right: -24px !important;
+  margin-right: -12px !important;
+}
+
+.dialog-wrap {
+  min-width: 360px;
 }
 /*# sourceMappingURL=teacher.css.map */

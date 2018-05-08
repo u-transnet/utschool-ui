@@ -35,7 +35,7 @@ export default function putUserFaucetApi(
     memo_key: keys.pubKeys.owner,
     referrer: 'ut-school'
   };
-  // TODO проверить формат отправки даты с помощью fetch
+  // TODO: проверить формат отправки даты с помощью fetch
   let postData = Object.keys(data)
     .map(key => {
       return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);

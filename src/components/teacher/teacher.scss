@@ -33,11 +33,12 @@
   li {
     float: right;
     margin: 0 -8px 0 0;
-    button {
+    a {
       font-weight: normal;
       text-transform: none;
       padding-left: 8px;
       padding-right: 8px;
+      font-size: 14px;
     }
     em {
       float: left;
@@ -69,5 +70,8 @@ p {
 }
 .list-wrap {
   margin-left: -24px !important;
-  margin-right: -24px !important;
+  margin-right: -12px !important;
+}
+.dialog-wrap {
+  min-width: 360px;
 }

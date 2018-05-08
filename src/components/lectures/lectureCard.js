@@ -7,7 +7,6 @@ import Card, { CardHeader, CardActions, CardContent } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
-import TextField from 'material-ui/TextField';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -80,7 +79,7 @@ class LectureCard extends React.Component<Props, State> {
     const { anchorEl, confirmRegistration } = this.state;
     let loginSubmit = (values: any) => {
       this.registration(account, lecture.account, values.password);
-      this.handleCloseDialog;
+      this.handleCloseDialog();
     };
     return (
       <div className="lecture-card">
@@ -142,6 +141,7 @@ class LectureCard extends React.Component<Props, State> {
           </CardActions>
         </Card>
         <Dialog
+          className="dialog-wrap"
           open={this.state.open}
           onClose={this.handleCloseDialog}
           aria-labelledby="form-dialog-title"

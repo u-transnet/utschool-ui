@@ -11,7 +11,6 @@ import {
   ListItemSecondaryAction
 } from 'material-ui/List';
 import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -54,12 +53,12 @@ class ApplicationsItem extends React.Component<Props, State> {
 
   acceptApplication = val => {
     try {
-      console.log(val);
-      console.log('teacher ' + this.props.account);
-      console.log('id ' + this.props.studentId);
       acceptApplication(this.props.account, this.props.studentId, val)
-        .then(resp => console.log(resp))
-        .catch(error => console.log(error));
+        .then(resp => {
+          console.log(resp.expiration);
+          resp.expiration ? this.setState({ confirmAccept: true }) : null;
+        })
+        .catch(error => error);
     } catch (error) {
       throw new SubmissionError({
         password: 'Неправильный пароль',
@@ -92,6 +91,7 @@ class ApplicationsItem extends React.Component<Props, State> {
           </ListItemSecondaryAction>
         </ListItem>
         <Dialog
+          className="dialog-wrap"
           open={this.state.open}
           onClose={this.handleCloseDialog}
           aria-labelledby="form-dialog-title"
