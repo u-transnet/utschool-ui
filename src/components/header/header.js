@@ -113,7 +113,7 @@ class Header extends React.Component<Props, State> {
 
   render() {
     const { anchorEl, name, openMenu } = this.state;
-    const { role, avatar, onChangeTitle } = this.props;
+    const { role, avatar } = this.props;
     return (
       <div className="header">
         {/* top bar */}
