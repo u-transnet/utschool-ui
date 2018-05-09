@@ -79,7 +79,9 @@ class LectureCard extends React.Component<Props, State> {
     const { anchorEl, confirmRegistration } = this.state;
     let loginSubmit = (values: any) => {
       this.registration(account, lecture.account, values.password);
-      this.handleCloseDialog();
+      setTimeout(() => {
+        this.handleCloseDialog();
+      }, 5000);
     };
     return (
       <div className="lecture-card">
