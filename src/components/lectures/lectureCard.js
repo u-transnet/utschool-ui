@@ -141,7 +141,6 @@ class LectureCard extends React.Component<Props, State> {
           </CardActions>
         </Card>
         <Dialog
-          className="dialog-wrap"
           open={this.state.open}
           onClose={this.handleCloseDialog}
           aria-labelledby="form-dialog-title"
@@ -149,7 +148,7 @@ class LectureCard extends React.Component<Props, State> {
           <form onSubmit={handleSubmit(loginSubmit)}>
             <DialogTitle id="form-dialog-title">Логин</DialogTitle>
             {confirmRegistration ? (
-              <div>
+              <div className="dialog-wrap">
                 <DialogContent>
                   <DialogContentText>
                     Регистрация прошла успешно и ожидает подтверждения
@@ -163,7 +162,7 @@ class LectureCard extends React.Component<Props, State> {
                 </DialogActions>
               </div>
             ) : (
-              <div>
+              <div className="dialog-wrap">
                 <DialogContent>
                   <Field
                     className="dialog-field"

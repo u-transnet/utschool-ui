@@ -132,7 +132,6 @@ class TeacherCard extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    // account: state.user.account,
     currentLecture: state.lectures.currentLecture,
     participants: state.lectures.participants
   };
