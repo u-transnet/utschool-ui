@@ -26,7 +26,8 @@ type Props = {
 };
 type State = {
   value: number,
-  loaderFlag: boolean
+  loaderFlag: boolean,
+  loaderParticipantsFlag: boolean
 };
 
 class ClassDashboard extends React.Component<Props, State> {
@@ -35,10 +36,18 @@ class ClassDashboard extends React.Component<Props, State> {
     let url = window.location.href.split('/')[3];
     switch (url) {
       case 'class':
-        this.state = { value: 0, loaderFlag: true };
+        this.state = {
+          value: 0,
+          loaderFlag: true,
+          loaderParticipantsFlag: true
+        };
         break;
       case 'class#1':
-        this.state = { value: 1, loaderFlag: true };
+        this.state = {
+          value: 1,
+          loaderFlag: true,
+          loaderParticipantsFlag: true
+        };
         break;
       default:
         break;
@@ -58,15 +67,15 @@ class ClassDashboard extends React.Component<Props, State> {
               if (!n) {
                 this.props.onSetParticipants(usersData);
                 usersData.length
-                  ? this.setState({ loaderFlag: false })
-                  : this.setState({ loaderFlag: true });
+                  ? this.setState({ loaderParticipantsFlag: false })
+                  : this.setState({ loaderParticipantsFlag: true });
               }
             })
             .catch(error => alert(error));
         }
+      } else {
+        this.setState({ loaderParticipantsFlag: false });
       }
-    } else {
-      this.setState({ loaderFlag: false });
     }
     if (!this.props.applications.length) {
       let usersData = [];
@@ -89,9 +98,9 @@ class ClassDashboard extends React.Component<Props, State> {
             })
             .catch(error => alert(error));
         }
+      } else {
+        this.setState({ loaderFlag: false });
       }
-    } else {
-      this.setState({ loaderFlag: false });
     }
   }
   handleTabChange = (event: any, value: number) => {
@@ -99,7 +108,7 @@ class ClassDashboard extends React.Component<Props, State> {
   };
 
   render() {
-    const { value, loaderFlag } = this.state;
+    const { value, loaderFlag, loaderParticipantsFlag } = this.state;
     const { currentLecture, participants, applications } = this.props;
     const TabContainer = props => {
       return <div>{[props.children]}</div>;
@@ -138,7 +147,7 @@ class ClassDashboard extends React.Component<Props, State> {
             ) : null}
             {value === 1 ? (
               <TabContainer>
-                {loaderFlag ? (
+                {loaderParticipantsFlag ? (
                   <CircularProgress className="centered-loader" size={50} />
                 ) : participants.length ? (
                   <List className="list-wrap">
