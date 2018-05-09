@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,YAAY,CAAC;EACX,SAAS,EAAE,KAAK;EAChB,UAAU,EAAE,KAAK;CAClB;;AACD,AAAA,aAAa,CAAC;EACZ,KAAK,EAAE,eAAe;EACtB,QAAQ,EAAE,MAAM;CACjB;;AACD,AAAA,gBAAgB,CAAC;EACf,cAAc,EAAE,eAAe;CAChC",
+    "sources": [
+        "dialog.scss"
+    ],
+    "names": [],
+    "file": "dialog.css"
+}
