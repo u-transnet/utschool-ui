@@ -18,14 +18,26 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 //
+import {
+  setTeacherLectures,
+  setParticipants,
+  setApplications
+} from '../../actions/lecturesAction';
 import renderPasswordField from '../login/passwordField';
 import acceptApplication from '../api/acceptApplication';
+import getUserFaucetApi from '../api/getUserFaucetApi';
 //
 import './teacher.css';
 
 type Props = {
   handleSubmit: Function,
+  onSetTeacherLectures: Function,
+  onSetParticipants: Function,
+  onSetApplications: Function,
   userData: any,
+  participants: any,
+  applications: any,
+  currentLecture: any,
   studentId: string,
   account: string
 };
@@ -55,8 +67,54 @@ class ApplicationsItem extends React.Component<Props, State> {
     try {
       acceptApplication(this.props.account, this.props.studentId, val)
         .then(resp => {
-          console.log(resp.expiration);
-          resp.expiration ? this.setState({ confirmAccept: true }) : null;
+          if (resp.expiration) {
+            this.setState({ confirmAccept: true });
+            setTimeout(() => {
+              this.props.onSetTeacherLectures([]);
+              this.props.onSetApplications([]);
+              this.props.onSetParticipants([]);
+              // TODO: нужно создать функцию проверки в отдельном файле c изменением после подтверждения
+              if (!this.props.participants.length) {
+                let usersData = [];
+                let n = this.props.currentLecture.additionalInfo.participants
+                  .length;
+                for (let i of this.props.currentLecture.additionalInfo
+                  .participants) {
+                  getUserFaucetApi(i.name)
+                    .then(resp => {
+                      usersData.push(resp);
+                      n--;
+                      if (!n) {
+                        this.props.onSetParticipants(usersData);
+                      }
+                    })
+                    .catch(error => alert(error));
+                }
+              }
+              if (!this.props.applications.length) {
+                let usersData = [];
+                let n = this.props.currentLecture.additionalInfo.applications
+                  .length;
+                for (let i of this.props.currentLecture.additionalInfo
+                  .applications) {
+                  getUserFaucetApi(i.account.name)
+                    .then(resp => {
+                      usersData.push({
+                        userData: resp,
+                        studentId: i.id
+                      });
+                      n--;
+                      if (!n) {
+                        this.props.onSetApplications(usersData);
+                      }
+                    })
+                    .catch(error => alert(error));
+                }
+              }
+            }, 5000);
+          } else {
+            return resp;
+          }
         })
         .catch(error => error);
     } catch (error) {
@@ -91,7 +149,6 @@ class ApplicationsItem extends React.Component<Props, State> {
           </ListItemSecondaryAction>
         </ListItem>
         <Dialog
-          className="dialog-wrap"
           open={this.state.open}
           onClose={this.handleCloseDialog}
           aria-labelledby="form-dialog-title"
@@ -99,7 +156,7 @@ class ApplicationsItem extends React.Component<Props, State> {
           <form onSubmit={handleSubmit(loginSubmit)}>
             <DialogTitle id="form-dialog-title">Логин</DialogTitle>
             {confirmAccept ? (
-              <div>
+              <div className="dialog-wrap">
                 <DialogContent>
                   <DialogContentText>Заявка подтверждена</DialogContentText>
                 </DialogContent>
@@ -110,7 +167,7 @@ class ApplicationsItem extends React.Component<Props, State> {
                 </DialogActions>
               </div>
             ) : (
-              <div>
+              <div className="dialog-wrap">
                 <DialogContent>
                   <Field
                     className="dialog-field"
@@ -137,12 +194,24 @@ class ApplicationsItem extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    account: state.user.account
-    // lecturesBTS: state.lectures.lecturesBTS
+    account: state.user.account,
+    currentLecture: state.lectures.currentLecture,
+    participants: state.lectures.participants,
+    applications: state.lectures.applications
   };
 }
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  onSetTeacherLectures(val) {
+    dispatch(setTeacherLectures(val));
+  },
+  onSetParticipants(val) {
+    dispatch(setParticipants(val));
+  },
+  onSetApplications(val) {
+    dispatch(setApplications(val));
+  }
+});
 
 const ApplicationsConnect = connect(mapStateToProps, mapDispatchToProps)(
   ApplicationsItem
