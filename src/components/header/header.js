@@ -77,6 +77,7 @@ class Header extends React.Component<Props, State> {
     event.target.value === 'Студент'
       ? this.props.onChangeTitle('Лекции')
       : this.props.onChangeTitle('Мои Лекции');
+    this.menuOpener();
   };
 
   onProfile = () => {
