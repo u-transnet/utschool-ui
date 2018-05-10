@@ -1,20 +1,14 @@
 // @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { SubmissionError } from 'redux-form';
 //
 import Card, { CardHeader, CardActions, CardContent } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
-} from 'material-ui/Dialog';
 //
-import renderPasswordField from '../login/passwordField';
+import LoginDialog from '../dialogs/loginDialog';
 import registrationLecture from '../api/registrationOnLecture';
 //
 import './lecture.css';
@@ -31,7 +25,7 @@ type Props = {
 };
 type State = {
   anchorEl: any,
-  open: boolean,
+  openDialog: boolean,
   confirmRegistration: boolean
 };
 class LectureCard extends React.Component<Props, State> {
@@ -39,7 +33,7 @@ class LectureCard extends React.Component<Props, State> {
     super(props);
     this.state = {
       anchorEl: null,
-      open: false,
+      openDialog: false,
       confirmRegistration: false
     };
   }
@@ -52,16 +46,20 @@ class LectureCard extends React.Component<Props, State> {
   };
 
   handleClickOpenDialog = () => {
-    this.setState({ open: true });
+    this.setState({ openDialog: true });
   };
 
   handleCloseDialog = () => {
-    this.setState({ open: false });
+    this.setState({ openDialog: false });
   };
 
-  registration(account, lecture, password) {
+  registration(password) {
     try {
-      registrationLecture(account, lecture, password)
+      registrationLecture(
+        this.props.account,
+        this.props.lecture.account,
+        password
+      )
         .then(resp => {
           this.setState({ confirmRegistration: true });
         })
@@ -75,14 +73,8 @@ class LectureCard extends React.Component<Props, State> {
   }
 
   render() {
-    const { lecture, state, account, handleSubmit } = this.props;
-    const { anchorEl, confirmRegistration } = this.state;
-    let loginSubmit = (values: any) => {
-      this.registration(account, lecture.account, values.password);
-      setTimeout(() => {
-        this.handleCloseDialog();
-      }, 5000);
-    };
+    const { lecture, state } = this.props;
+    const { anchorEl, confirmRegistration, openDialog } = this.state;
     return (
       <div className="lecture-card">
         <Card>
@@ -142,48 +134,14 @@ class LectureCard extends React.Component<Props, State> {
             </Button>
           </CardActions>
         </Card>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleCloseDialog}
-          aria-labelledby="form-dialog-title"
-        >
-          <form onSubmit={handleSubmit(loginSubmit)}>
-            <DialogTitle id="form-dialog-title">Логин</DialogTitle>
-            {confirmRegistration ? (
-              <div className="dialog-wrap">
-                <DialogContent>
-                  <DialogContentText>
-                    Регистрация прошла успешно и ожидает подтверждения
-                    преподавателя.
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleCloseDialog} color="primary">
-                    Закрыть
-                  </Button>
-                </DialogActions>
-              </div>
-            ) : (
-              <div className="dialog-wrap">
-                <DialogContent>
-                  <Field
-                    className="dialog-field"
-                    name="password"
-                    component={renderPasswordField}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleCloseDialog} color="primary">
-                    Отмена
-                  </Button>
-                  <Button type="submit" color="primary">
-                    Логин
-                  </Button>
-                </DialogActions>
-              </div>
-            )}
-          </form>
-        </Dialog>
+        <LoginDialog
+          dialogTitle="Логин"
+          confirmText="Регистрация прошла успешно и ожидает подтверждения преподавателя."
+          confirmAccept={confirmRegistration}
+          openDialog={openDialog}
+          closeDialog={this.handleCloseDialog}
+          pass={this.registration}
+        />
       </div>
     );
   }
@@ -196,12 +154,4 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({});
 
-const lectureCardConnect = connect(mapStateToProps, mapDispatchToProps)(
-  LectureCard
-);
-
-export default reduxForm({
-  form: 'login', // a unique identifier for this form
-  destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
-})(lectureCardConnect);
+export default connect(mapStateToProps, mapDispatchToProps)(LectureCard);

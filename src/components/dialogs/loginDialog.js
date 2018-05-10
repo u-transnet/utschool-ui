@@ -45,11 +45,15 @@ class LoginDialog extends React.Component<Props, State> {
       // end validation of password
     };
     return (
-      <Dialog open={this.props.openDialog} onClose={this.props.closeDialog}>
+      <Dialog
+        className="dialog-wrap"
+        open={this.props.openDialog}
+        onClose={this.props.closeDialog}
+      >
         <form onSubmit={this.props.handleSubmit(loginSubmit)}>
           <DialogTitle>{this.props.dialogTitle}</DialogTitle>
           {this.props.confirmAccept ? (
-            <div className="dialog-wrap">
+            <div className="dialog-content">
               <DialogContent>
                 <DialogContentText>{this.props.confirmText}</DialogContentText>
               </DialogContent>
@@ -60,7 +64,7 @@ class LoginDialog extends React.Component<Props, State> {
               </DialogActions>
             </div>
           ) : (
-            <div className="dialog-wrap">
+            <div className="dialog-content">
               <DialogContent>
                 <Field
                   className="dialog-field"

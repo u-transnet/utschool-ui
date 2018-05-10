@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { SubmissionError } from 'redux-form';
 //
 import Avatar from 'material-ui/Avatar';
 import {
@@ -11,19 +11,13 @@ import {
   ListItemSecondaryAction
 } from 'material-ui/List';
 import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
-} from 'material-ui/Dialog';
 //
+import LoginDialog from '../dialogs/loginDialog';
 import {
   setTeacherLectures,
   setParticipants,
   setApplications
 } from '../../actions/lecturesAction';
-import renderPasswordField from '../login/passwordField';
 import acceptApplication from '../api/acceptApplication';
 import getUserFaucetApi from '../api/getUserFaucetApi';
 //
@@ -42,7 +36,7 @@ type Props = {
   account: string
 };
 type State = {
-  open: boolean,
+  openDialog: boolean,
   confirmAccept: boolean
 };
 
@@ -50,22 +44,22 @@ class ApplicationsItem extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      open: false,
+      openDialog: false,
       confirmAccept: false
     };
   }
 
   handleClickOpenDialog = () => {
-    this.setState({ open: true });
+    this.setState({ openDialog: true });
   };
 
   handleCloseDialog = () => {
-    this.setState({ open: false });
+    this.setState({ openDialog: false });
   };
 
-  acceptApplication = val => {
+  onAcceptApplication = password => {
     try {
-      acceptApplication(this.props.account, this.props.studentId, val)
+      acceptApplication(this.props.account, this.props.studentId, password)
         .then(resp => {
           if (resp.expiration) {
             this.setState({ confirmAccept: true });
@@ -125,13 +119,9 @@ class ApplicationsItem extends React.Component<Props, State> {
     }
   };
   render() {
-    const { confirmAccept } = this.state;
-    const { userData, handleSubmit } = this.props;
+    const { confirmAccept, openDialog } = this.state;
+    const { userData } = this.props;
     let userName = userData.first_name + ' ' + userData.last_name;
-    let loginSubmit = (values: any) => {
-      this.acceptApplication(values.password);
-      this.handleCloseDialog();
-    };
     return (
       <div>
         <ListItem>
@@ -148,46 +138,14 @@ class ApplicationsItem extends React.Component<Props, State> {
             </Button>
           </ListItemSecondaryAction>
         </ListItem>
-        {/* TODO: нужно заменить на компонент */}
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleCloseDialog}
-          aria-labelledby="form-dialog-title"
-        >
-          <form onSubmit={handleSubmit(loginSubmit)}>
-            <DialogTitle id="form-dialog-title">Логин</DialogTitle>
-            {confirmAccept ? (
-              <div className="dialog-wrap">
-                <DialogContent>
-                  <DialogContentText>Заявка подтверждена</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleCloseDialog} color="primary">
-                    Закрыть
-                  </Button>
-                </DialogActions>
-              </div>
-            ) : (
-              <div className="dialog-wrap">
-                <DialogContent>
-                  <Field
-                    className="dialog-field"
-                    name="password"
-                    component={renderPasswordField}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleCloseDialog} color="primary">
-                    Отмена
-                  </Button>
-                  <Button type="submit" color="primary">
-                    Логин
-                  </Button>
-                </DialogActions>
-              </div>
-            )}
-          </form>
-        </Dialog>
+        <LoginDialog
+          dialogTitle="Логин"
+          confirmText="Заявка подтверждена"
+          confirmAccept={confirmAccept}
+          openDialog={openDialog}
+          closeDialog={this.handleCloseDialog}
+          pass={this.onAcceptApplication}
+        />
       </div>
     );
   }
@@ -214,12 +172,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const ApplicationsConnect = connect(mapStateToProps, mapDispatchToProps)(
-  ApplicationsItem
-);
-
-export default reduxForm({
-  form: 'login', // a unique identifier for this form
-  destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
-})(ApplicationsConnect);
+export default connect(mapStateToProps, mapDispatchToProps)(ApplicationsItem);
