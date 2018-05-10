@@ -25,9 +25,6 @@ type Props = {
 type State = {};
 
 class LoginDialog extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-  }
   render() {
     let loginSubmit = (values: any) => {
       // validation of password

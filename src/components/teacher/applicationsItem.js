@@ -130,7 +130,7 @@ class ApplicationsItem extends React.Component<Props, State> {
     let userName = userData.first_name + ' ' + userData.last_name;
     let loginSubmit = (values: any) => {
       this.acceptApplication(values.password);
-      this.handleCloseDialog;
+      this.handleCloseDialog();
     };
     return (
       <div>

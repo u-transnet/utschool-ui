@@ -112,7 +112,7 @@ class ClassDashboard extends React.Component<Props, State> {
 
   render() {
     const { value, loaderFlag, loaderParticipantsFlag } = this.state;
-    const { currentLecture, participants, applications } = this.props;
+    const { participants, applications } = this.props;
     const TabContainer = props => {
       return <div>{[props.children]}</div>;
     };
