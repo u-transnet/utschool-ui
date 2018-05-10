@@ -62,7 +62,10 @@ class ClassDashboard extends React.Component<Props, State> {
         for (let i of this.props.currentLecture.additionalInfo.participants) {
           getUserFaucetApi(i.name)
             .then(resp => {
-              usersData.push(resp);
+              usersData.push({
+                lectureAccount: this.props.currentLecture.lecture.account,
+                userData: resp
+              });
               n--;
               if (!n) {
                 this.props.onSetParticipants(usersData);

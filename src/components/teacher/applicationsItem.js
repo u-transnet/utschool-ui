@@ -148,6 +148,7 @@ class ApplicationsItem extends React.Component<Props, State> {
             </Button>
           </ListItemSecondaryAction>
         </ListItem>
+        {/* TODO: нужно заменить на компонент */}
         <Dialog
           open={this.state.open}
           onClose={this.handleCloseDialog}
