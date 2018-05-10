@@ -96,7 +96,7 @@ export default class StudentCard extends React.Component<Props, State> {
               {state.grade.accepted ? (
                 <li>
                   <i className="material-icons">check_circle</i>
-                  <span>Сдан</span>
+                  <span>Сдал</span>
                 </li>
               ) : (
                 ''

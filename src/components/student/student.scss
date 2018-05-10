@@ -44,7 +44,10 @@
       float: left;
       height: 24px;
       line-height: 24px;
-      padding-right: 24px;
+      padding-left: 18px;
+      &:first-child {
+        padding-left: 0;
+      }
       i {
         float: left;
         margin-right: 8px;
