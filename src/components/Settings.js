@@ -7,7 +7,7 @@ const Settings = ({ match: { params } }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <Header />
-      <p>Настройки</p>
+      <p className="empty-block">Настройки</p>
     </MuiThemeProvider>
   );
 };

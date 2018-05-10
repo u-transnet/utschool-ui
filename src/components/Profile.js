@@ -7,7 +7,7 @@ const Profile = ({ match: { params } }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <Header />
-      <p>Профиль</p>
+      <p className="empty-block">Профиль</p>
     </MuiThemeProvider>
   );
 };

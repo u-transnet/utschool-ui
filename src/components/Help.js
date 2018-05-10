@@ -7,7 +7,7 @@ const Help = ({ match: { params } }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <Header />
-      <p>Помощь</p>
+      <p className="empty-block">Помощь</p>
     </MuiThemeProvider>
   );
 };
