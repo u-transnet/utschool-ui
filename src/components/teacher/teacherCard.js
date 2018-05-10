@@ -9,7 +9,7 @@ import Button from 'material-ui/Button';
 import { Link } from 'react-router-dom';
 //
 import { setCurrentLecture } from '../../actions/lecturesAction';
-import { setTitle } from '../../actions';
+import { setTitle, setBackToTeacherDashboard } from '../../actions';
 //
 import './teacher.css';
 
@@ -19,6 +19,7 @@ const ITEM_HEIGHT = 48;
 type Props = {
   onSetTitle: Function,
   onSetCurrentLecture: Function,
+  onSetBackToTeacherDashboard: Function,
   lecture: any,
   additionalInfo: any
 };
@@ -47,6 +48,7 @@ class TeacherCard extends React.Component<Props, State> {
   };
 
   cardAction = () => {
+    this.props.onSetBackToTeacherDashboard(true);
     this.props.onSetTitle(this.state.currentData.lecture.title);
     this.props.onSetCurrentLecture(this.state.currentData);
   };
@@ -143,6 +145,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetTitle(val) {
     dispatch(setTitle(val));
+  },
+  onSetBackToTeacherDashboard(val) {
+    dispatch(setBackToTeacherDashboard(val));
   }
 });
 

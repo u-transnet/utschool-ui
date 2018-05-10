@@ -24,7 +24,7 @@ import {
   setApplications,
   setCurrentLecture
 } from '../../actions/lecturesAction';
-import { setTitle } from '../../actions';
+import { setTitle, setBackToTeacherDashboard } from '../../actions';
 //
 import './header.css';
 
@@ -37,7 +37,9 @@ type Props = {
   onSetParticipants: Function,
   onSetApplications: Function,
   onSetCurrentLecture: Function,
+  onSetBackToTeacherDashboard: Function,
   title: string,
+  backToTeacherDashboard: boolean,
   account: string,
   lastName: string,
   firstName: string,
@@ -111,23 +113,37 @@ class Header extends React.Component<Props, State> {
     this.props.onSetCurrentLecture([]);
     this.menuOpener();
   };
-
+  backFunction = () => {
+    this.props.onSetBackToTeacherDashboard(false);
+  };
   render() {
     const { anchorEl, name, openMenu } = this.state;
-    const { role, avatar } = this.props;
+    const { role, avatar, backToTeacherDashboard } = this.props;
     return (
       <div className="header">
         {/* top bar */}
         <AppBar position="fixed" className="white-bg" color="default">
           <Toolbar>
-            <IconButton
-              className="menu-button"
-              color="inherit"
-              aria-label="Menu"
-              onClick={this.menuOpener}
-            >
-              <i className="material-icons">menu</i>
-            </IconButton>
+            {backToTeacherDashboard ? (
+              <IconButton
+                className="menu-button"
+                color="inherit"
+                component={Link}
+                to="/dashboard"
+                onClick={this.backFunction}
+              >
+                <i className="material-icons">arrow_back</i>
+              </IconButton>
+            ) : (
+              <IconButton
+                className="menu-button"
+                color="inherit"
+                aria-label="Menu"
+                onClick={this.menuOpener}
+              >
+                <i className="material-icons">menu</i>
+              </IconButton>
+            )}
             <Typography variant="title" color="inherit" className="flex">
               {this.props.title}
             </Typography>
@@ -264,6 +280,7 @@ class Header extends React.Component<Props, State> {
 function mapStateToProps(state) {
   return {
     title: state.app.title,
+    backToTeacherDashboard: state.app.backToTeacherDashboard,
     account: state.user.account,
     avatar: state.user.avatar,
     firstName: state.user.firstName,
@@ -293,6 +310,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetCurrentLecture(val) {
     dispatch(setCurrentLecture(val));
+  },
+  onSetBackToTeacherDashboard(val) {
+    dispatch(setBackToTeacherDashboard(val));
   }
 });
 

@@ -1,13 +1,15 @@
 // @flow
 import { Action } from 'redux';
-import { SET_TITLE } from '../actions/index';
+import { SET_TITLE, BACK_TO_TEACHER_DASHBOARD } from '../actions/index';
 
 type State = {
-  title: string
+  title: string,
+  backToTeacherDashboard: boolean
 };
 
 const initialState: State = {
-  title: 'UT-SCHOOL'
+  title: 'UT-SCHOOL',
+  backToTeacherDashboard: false
 };
 
 export default function theApp(
@@ -18,6 +20,10 @@ export default function theApp(
     case SET_TITLE:
       return Object.assign({}, state, {
         title: action.title
+      });
+    case BACK_TO_TEACHER_DASHBOARD:
+      return Object.assign({}, state, {
+        backToTeacherDashboard: action.backToTeacherDashboard
       });
     default:
       return state;
