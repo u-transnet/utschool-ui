@@ -72,7 +72,8 @@ p {
   margin-left: -24px !important;
   margin-right: -12px !important;
 }
-.dialog-wrap {
-  min-width: 296px;
-  margin-top: -24px;
+.state-btns {
+  .active {
+    color: #00acc1 !important;
+  }
 }
