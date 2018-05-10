@@ -11,7 +11,9 @@ import {
 } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 //
+import getUserLectureData from '../api/getUserLectureData';
 import sendSession from '../api/sendSession';
+import sendGrade from '../api/sendGrade';
 import LoginDialog from '../dialogs/loginDialog';
 import './teacher.css';
 
@@ -25,7 +27,8 @@ type State = {
   sessionActive: boolean,
   gradeActive: boolean,
   confirmAccept: boolean,
-  openSessionDialog: boolean
+  openSessionDialog: boolean,
+  openGradeDialog: boolean
 };
 
 class ParticipantsItem extends React.Component<Props, State> {
@@ -35,7 +38,8 @@ class ParticipantsItem extends React.Component<Props, State> {
       sessionActive: false,
       gradeActive: false,
       confirmAccept: false,
-      openSessionDialog: false
+      openSessionDialog: false,
+      openGradeDialog: false
     };
   }
   getSessionPassword = (password: string) => {
@@ -47,8 +51,42 @@ class ParticipantsItem extends React.Component<Props, State> {
         password
       )
         .then(resp => {
-          this.setState({ sessionActive: true });
+          getUserLectureData(
+            this.props.userData.name,
+            this.props.lectureAccount
+          )
+            .then(resp => {
+              this.setState({ sessionActive: resp['1.3.3348'].accepted });
+            })
+            .catch(error => error);
           this.setState({ openSessionDialog: false });
+        })
+        .catch(error => error);
+    } catch (error) {
+      throw new SubmissionError({
+        password: 'Неправильный пароль',
+        _error: 'Login failed!'
+      });
+    }
+  };
+  getGradePassword = (password: string) => {
+    try {
+      sendGrade(
+        this.props.account,
+        this.props.userData.name,
+        this.props.lectureAccount,
+        password
+      )
+        .then(resp => {
+          getUserLectureData(
+            this.props.userData.name,
+            this.props.lectureAccount
+          )
+            .then(resp => {
+              this.setState({ gradeActive: resp['1.3.3349'].accepted });
+            })
+            .catch(error => error);
+          this.setState({ openGradeDialog: false });
         })
         .catch(error => error);
     } catch (error) {
@@ -61,18 +99,22 @@ class ParticipantsItem extends React.Component<Props, State> {
   closeSessionDialog = () => {
     this.setState({ openSessionDialog: false });
   };
+  closeGradeDialog = () => {
+    this.setState({ openGradeDialog: false });
+  };
   session = () => {
     this.setState({ openSessionDialog: true });
   };
   grade = () => {
-    this.setState({ gradeActive: true });
+    this.setState({ openGradeDialog: true });
   };
   render() {
     const {
       sessionActive,
       gradeActive,
       confirmAccept,
-      openSessionDialog
+      openSessionDialog,
+      openGradeDialog
     } = this.state;
     const { userData } = this.props;
     let userName = userData.first_name + ' ' + userData.last_name;
@@ -103,6 +145,14 @@ class ParticipantsItem extends React.Component<Props, State> {
           openDialog={openSessionDialog}
           closeDialog={this.closeSessionDialog}
           pass={this.getSessionPassword}
+        />
+        <LoginDialog
+          dialogTitle="Логин"
+          confirmText="Подтверждено"
+          confirmAccept={confirmAccept}
+          openDialog={openGradeDialog}
+          closeDialog={this.closeGradeDialog}
+          pass={this.getGradePassword}
         />
       </div>
     );
