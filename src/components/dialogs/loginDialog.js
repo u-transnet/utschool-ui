@@ -33,14 +33,13 @@ class LoginDialog extends React.Component<Props, State> {
       // validation of password
       let passValid = values.password
         ? values.password.match(
-            /(?=.*[0-9])(?=.*[!@#$%|^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{12,}/g
+            /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{12,}/g
           )
         : false;
 
       if (!passValid) {
         throw new SubmissionError({
-          password:
-            '12 символов минимум (цыфры, большие и маленькие буквы, символы).',
+          password: '12 символов минимум (цыфры, большие и маленькие буквы).',
           _error: 'SignUp failed!'
         });
       } else {

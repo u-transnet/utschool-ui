@@ -11,15 +11,12 @@ export default function putUserFaucetApi(
 ) {
   // validation of password
   let passValid = password
-    ? password.match(
-        /(?=.*[0-9])(?=.*[!@#$%|^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{12,}/g
-      )
+    ? password.match(/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{12,}/g)
     : false;
 
   if (!passValid) {
     throw new SubmissionError({
-      password:
-        '12 символов минимум (цыфры, большие и маленькие буквы, символы).',
+      password: '12 символов минимум (цыфры, большие и маленькие буквы).',
       _error: 'SignUp failed!'
     });
   }
