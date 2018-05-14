@@ -40,7 +40,6 @@ export default function putUserFaucetApi(
     .join('&');
 
   return fetch(
-    `https://cors-anywhere.herokuapp.com/` +
       `https://utschool.herokuapp.com/api/v1/accounts`,
     {
       headers: {

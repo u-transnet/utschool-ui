@@ -4,8 +4,7 @@ import fetch from 'isomorphic-fetch';
 
 export default function getLectureFaucetApi(account: string) {
   return fetch(
-    'https://cors-anywhere.herokuapp.com/' +
-      `https://utschool.herokuapp.com/api/v1/lectures?accounts=${account}`,
+    `https://utschool.herokuapp.com/api/v1/lectures?accounts=${account}`,
     {
       mode: 'cors'
     }

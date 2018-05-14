@@ -11,7 +11,7 @@ export default function getLectureDataApi(vkUrl: string, account: string) {
     '&topic_ids=' +
     topicId +
     '&preview=1&preview_length=0&extended=1&v=5.45';
-  return fetch('https://cors-anywhere.herokuapp.com/' + url, {
+  return fetch(url, {
     mode: 'cors'
   })
     .then(response => {
