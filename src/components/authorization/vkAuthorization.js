@@ -1,6 +1,7 @@
 // @flow
 
-const REDIRECT_URL = 'https://utschool.herokuapp.com/sign-up';
+//const REDIRECT_URL = 'https://utschool.herokuapp.com/sign-up';
+const REDIRECT_URL = 'http://localhost:3000/sign-up';
 const PERMISSION =
   'photos,audio,video,docs,notes,pages,status,offers,questions,wall,groups,email,notifications,stats,ads,offline,docs,pages,stats,notifications';
 
