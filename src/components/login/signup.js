@@ -96,77 +96,80 @@ class SignUp extends React.Component<Props, State> {
         'vk',
         vkToken
       );
-      return putUserData.then(resp => {
-        if (resp.error) {
-          switch (resp.error.code) {
-            case 103: {
-              throw new SubmissionError({
-                newaccount: 'Такая запись уже существует.',
-                _error: 'SignUp failed!'
-              });
-            }
-            case 104: {
-              throw new SubmissionError({
-                newaccount: 'Не валидная учетная запись.',
-                _error: 'SignUp failed!'
-              });
-            }
-            case 107: {
-              throw new SubmissionError({
-                newaccount: 'Не валидная учетная запись.',
-                _error: 'SignUp failed!'
-              });
-            }
-            case 110: {
-              throw new SubmissionError({
-                newaccount: 'Вы уже регистрировались из этой соцсети.',
-                _error: 'SignUp failed!'
-              });
-            }
-            default:
-              break;
-          }
-        } else {
-          onSetAvatar(resp.account.user_data.photo);
-          onSetFirstName(resp.account.user_data.first_name);
-          onSetLastName(resp.account.user_data.last_name);
-          this.setState({ loaderFlag: true });
-          // get lectures function
-          let lecturesData = [];
-          lecturesBTSApi(values.newaccount).then(resp => {
-            for (let i of resp) {
-              let lectureState = {
-                ticket: {
-                  accepted: i.stats['1.3.3347'].accepted,
-                  balance: i.stats['1.3.3347'].balance
-                },
-                settion: {
-                  accepted: i.stats['1.3.3348'].accepted,
-                  balance: i.stats['1.3.3348'].balance
-                },
-                grade: {
-                  accepted: i.stats['1.3.3349'].accepted,
-                  balance: i.stats['1.3.3349'].balance
-                }
-              };
-              getLectureFaucetApi(i.name).then(resp => {
-                getLectureDataApi(resp.topic_url, i.name).then(resp => {
-                  lecturesData.push({
-                    lecture: resp,
-                    state: lectureState
-                  });
-                  onSetLextures(lecturesData);
-                  //other data
-                  onSetTitle('Лекции');
-                  setAccount(values.newaccount);
-                  //end of other data
+      return putUserData
+        .then(resp => {
+          console.log(resp);
+          if (resp.error) {
+            switch (resp.error.code) {
+              case 103: {
+                throw new SubmissionError({
+                  newaccount: 'Такая запись уже существует.',
+                  _error: 'SignUp failed!'
                 });
-              });
+              }
+              case 104: {
+                throw new SubmissionError({
+                  newaccount: 'Не валидная учетная запись.',
+                  _error: 'SignUp failed!'
+                });
+              }
+              case 107: {
+                throw new SubmissionError({
+                  newaccount: 'Не валидная учетная запись.',
+                  _error: 'SignUp failed!'
+                });
+              }
+              case 110: {
+                throw new SubmissionError({
+                  newaccount: 'Вы уже регистрировались из этой соцсети.',
+                  _error: 'SignUp failed!'
+                });
+              }
+              default:
+                break;
             }
-          });
-          // end of get lectures function
-        }
-      });
+          } else {
+            onSetAvatar(resp.account.user_data.photo);
+            onSetFirstName(resp.account.user_data.first_name);
+            onSetLastName(resp.account.user_data.last_name);
+            this.setState({ loaderFlag: true });
+            // get lectures function
+            let lecturesData = [];
+            lecturesBTSApi(values.newaccount).then(resp => {
+              for (let i of resp) {
+                let lectureState = {
+                  ticket: {
+                    accepted: i.stats['1.3.3347'].accepted,
+                    balance: i.stats['1.3.3347'].balance
+                  },
+                  settion: {
+                    accepted: i.stats['1.3.3348'].accepted,
+                    balance: i.stats['1.3.3348'].balance
+                  },
+                  grade: {
+                    accepted: i.stats['1.3.3349'].accepted,
+                    balance: i.stats['1.3.3349'].balance
+                  }
+                };
+                getLectureFaucetApi(i.name).then(resp => {
+                  getLectureDataApi(resp.topic_url, i.name).then(resp => {
+                    lecturesData.push({
+                      lecture: resp,
+                      state: lectureState
+                    });
+                    onSetLextures(lecturesData);
+                    //other data
+                    onSetTitle('Лекции');
+                    setAccount(values.newaccount);
+                    //end of other data
+                  });
+                });
+              }
+            });
+            // end of get lectures function
+          }
+        })
+        .catch(error => console.log(error));
     };
 
     return (
