@@ -188,7 +188,9 @@ class Header extends React.Component<Props, State> {
           >
             <Card className="card">
               <CardContent>
-                <Avatar alt="Logo" src={avatar} className="card-avatar" />
+                {avatar ? (
+                  <Avatar alt="Logo" src={avatar} className="card-avatar" />
+                ) : null}
                 <div className="user-title">
                   <span>{name}</span>
                   <Select
