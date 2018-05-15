@@ -19,7 +19,7 @@ type State = {
 const initialState: State = {
   account: 'guest',
   role: 'Студент',
-  avatar: '/avatars/guest.png',
+  avatar: '',
   firstName: 'Guest',
   lastName: 'Guest'
 };

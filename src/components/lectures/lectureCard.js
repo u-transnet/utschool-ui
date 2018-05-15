@@ -53,28 +53,23 @@ class LectureCard extends React.Component<Props, State> {
     this.setState({ openDialog: false });
   };
 
-  registration(password) {
-    try {
-      registrationLecture(
-        this.props.account,
-        this.props.lecture.account,
-        password
-      )
-        .then(resp => {
-          this.setState({ confirmRegistration: true });
-        })
-        .catch(error => error);
-    } catch (error) {
-      throw new SubmissionError({
-        password: 'Неправильный пароль',
-        _error: 'Login failed!'
-      });
-    }
-  }
-
   render() {
-    const { lecture, state } = this.props;
+    const { lecture, state, account } = this.props;
     const { anchorEl, confirmRegistration, openDialog } = this.state;
+    let registration = password => {
+      try {
+        registrationLecture(account, lecture.account, password)
+          .then(resp => {
+            this.setState({ confirmRegistration: true });
+          })
+          .catch(error => error);
+      } catch (error) {
+        throw new SubmissionError({
+          password: 'Неправильный пароль',
+          _error: 'Login failed!'
+        });
+      }
+    };
     return (
       <div className="lecture-card">
         <Card>
@@ -140,7 +135,7 @@ class LectureCard extends React.Component<Props, State> {
           confirmAccept={confirmRegistration}
           openDialog={openDialog}
           closeDialog={this.handleCloseDialog}
-          pass={this.registration}
+          pass={registration}
         />
       </div>
     );
