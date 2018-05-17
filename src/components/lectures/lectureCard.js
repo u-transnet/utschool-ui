@@ -139,14 +139,16 @@ class LectureCard extends React.Component<Props, State> {
                 <em>Осталось мест {state.ticket.balance}</em>
               </li>
             </ul>
-            <Button
-              variant="raised"
-              color="primary"
-              className="action-btn"
-              onClick={this.handleClickOpenDialog}
-            >
-              Записаться
-            </Button>
+            {state.ticket.balance ? (
+              <Button
+                variant="raised"
+                color="primary"
+                className="action-btn"
+                onClick={this.handleClickOpenDialog}
+              >
+                Записаться
+              </Button>
+            ) : null}
           </CardActions>
         </Card>
         <LoginDialog
