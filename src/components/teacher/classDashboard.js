@@ -52,79 +52,79 @@ class ClassDashboard extends React.Component<Props, State> {
       default:
         break;
     }
-    this.getClassData();
   }
 
-  // get data
-  getClassData() {
-    setTimeout(() => {
-      // get data for showing participants
-      if (!this.props.participants.length) {
-        let usersData = [];
-        if (
-          this.props.currentLecture.additionalInfo &&
-          this.props.currentLecture.additionalInfo.participantscount
-        ) {
-          let n = this.props.currentLecture.additionalInfo.participantscount;
-          for (let i of this.props.currentLecture.additionalInfo.participants) {
-            getUserFaucetApi(i.name)
-              .then(resp => {
-                usersData.push({
-                  lectureAccount: this.props.currentLecture.lecture.account,
-                  userData: resp
-                });
-                n--;
-                if (!n) {
-                  this.props.onSetParticipants(usersData);
-                  usersData.length
-                    ? this.setState({ loaderParticipantsFlag: false })
-                    : this.setState({ loaderParticipantsFlag: true });
-                }
-              })
-              .catch(error => alert(error));
-          }
-        }
-        if (
-          this.props.currentLecture.additionalInfo &&
-          !this.props.currentLecture.additionalInfo.participantscount
-        ) {
-          this.setState({ loaderParticipantsFlag: false });
+  componentDidMount() {
+    // get data for showing participants
+    if (!this.props.participants.length) {
+      let usersData = [];
+      if (
+        this.props.currentLecture.additionalInfo &&
+        this.props.currentLecture.additionalInfo.participantscount
+      ) {
+        let n = this.props.currentLecture.additionalInfo.participantscount;
+        for (let i of this.props.currentLecture.additionalInfo.participants) {
+          getUserFaucetApi(i.name)
+            .then(resp => {
+              usersData.push({
+                lectureAccount: this.props.currentLecture.lecture.account,
+                userData: resp
+              });
+              n--;
+              if (!n) {
+                this.props.onSetParticipants(usersData);
+                usersData.length
+                  ? this.setState({ loaderParticipantsFlag: false })
+                  : this.setState({ loaderParticipantsFlag: true });
+              }
+            })
+            .catch(error => alert(error));
         }
       }
-      // get data for showing applications
-      if (!this.props.applications.length) {
-        let usersData = [];
-        if (
-          this.props.currentLecture.additionalInfo &&
-          this.props.currentLecture.additionalInfo.applicationscount
-        ) {
-          let n = this.props.currentLecture.additionalInfo.applicationscount;
-          for (let i of this.props.currentLecture.additionalInfo.applications) {
-            getUserFaucetApi(i.account.name)
-              .then(resp => {
-                usersData.push({
-                  userData: resp,
-                  studentId: i.id
-                });
-                n--;
-                if (!n) {
-                  this.props.onSetApplications(usersData);
-                  usersData.length
-                    ? this.setState({ loaderFlag: false })
-                    : this.setState({ loaderFlag: true });
-                }
-              })
-              .catch(error => alert(error));
-          }
-        }
-        if (
-          this.props.currentLecture.additionalInfo &&
-          !this.props.currentLecture.additionalInfo.applicationscount
-        ) {
-          this.setState({ loaderFlag: false });
+      if (
+        this.props.currentLecture.additionalInfo &&
+        !this.props.currentLecture.additionalInfo.participantscount
+      ) {
+        this.setState({ loaderParticipantsFlag: false });
+      }
+    } else {
+      this.setState({ loaderParticipantsFlag: false });
+    }
+    // get data for showing applications
+    if (!this.props.applications.length) {
+      let usersData = [];
+      if (
+        this.props.currentLecture.additionalInfo &&
+        this.props.currentLecture.additionalInfo.applicationscount
+      ) {
+        let n = this.props.currentLecture.additionalInfo.applicationscount;
+        for (let i of this.props.currentLecture.additionalInfo.applications) {
+          getUserFaucetApi(i.account.name)
+            .then(resp => {
+              usersData.push({
+                userData: resp,
+                studentId: i.id
+              });
+              n--;
+              if (!n) {
+                this.props.onSetApplications(usersData);
+                usersData.length
+                  ? this.setState({ loaderFlag: false })
+                  : this.setState({ loaderFlag: true });
+              }
+            })
+            .catch(error => alert(error));
         }
       }
-    }, 100);
+      if (
+        this.props.currentLecture.additionalInfo &&
+        !this.props.currentLecture.additionalInfo.applicationscount
+      ) {
+        this.setState({ loaderFlag: false });
+      }
+    } else {
+      this.setState({ loaderFlag: false });
+    }
   }
 
   // tabs function
