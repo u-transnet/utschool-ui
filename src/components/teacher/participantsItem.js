@@ -2,6 +2,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { SubmissionError } from 'redux-form';
+import { Login } from 'bitsharesjs';
+
 //
 import Avatar from 'material-ui/Avatar';
 import {
@@ -11,9 +13,6 @@ import {
 } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 //
-import getUserLectureData from '../api/getUserLectureData';
-import sendSession from '../api/sendSession';
-import sendGrade from '../api/sendGrade';
 import LoginDialog from '../dialogs/loginDialog';
 import './teacher.css';
 
@@ -21,6 +20,7 @@ type Props = {
   account: string,
   userData: any,
   lecturesBTS: any,
+  apiInit: any,
   lectureAccount: string
 };
 type State = {
@@ -42,26 +42,28 @@ class ParticipantsItem extends React.Component<Props, State> {
       openGradeDialog: false
     };
   }
+
+  componentDidMount() {
+    // indications
+    //console.log(this.props.userData.name);
+  }
+
+  // send Session Token
   getSessionPassword = (password: string) => {
     try {
-      sendSession(
-        this.props.account,
-        this.props.userData.name,
-        this.props.lectureAccount,
-        password
-      )
+      let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
+      let privateKey = keys.privKeys.active.toWif();
+      this.props.apiInit.setPrivateKey(privateKey);
+      this.props.apiInit.teacherApi
+        .sendSessionToken(this.props.lectureAccount, this.props.userData.name)
         .then(resp => {
-          getUserLectureData(
-            this.props.userData.name,
-            this.props.lectureAccount
-          )
+          this.props.apiInit.studentApi
+            .getLectureStats(this.props.lectureAccount)
             .then(resp => {
               this.setState({ sessionActive: resp['1.3.3348'].accepted });
-            })
-            .catch(error => error);
+            });
           this.setState({ openSessionDialog: false });
-        })
-        .catch(error => error);
+        });
     } catch (error) {
       throw new SubmissionError({
         password: 'Неправильный пароль',
@@ -69,26 +71,23 @@ class ParticipantsItem extends React.Component<Props, State> {
       });
     }
   };
+
+  // send Grade Token
   getGradePassword = (password: string) => {
     try {
-      sendGrade(
-        this.props.account,
-        this.props.userData.name,
-        this.props.lectureAccount,
-        password
-      )
+      let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
+      let privateKey = keys.privKeys.active.toWif();
+      this.props.apiInit.setPrivateKey(privateKey);
+      this.props.apiInit.teacherApi
+        .sendGradeToken(this.props.lectureAccount, this.props.userData.name)
         .then(resp => {
-          getUserLectureData(
-            this.props.userData.name,
-            this.props.lectureAccount
-          )
+          this.props.apiInit.studentApi
+            .getLectureStats(this.props.lectureAccount)
             .then(resp => {
               this.setState({ gradeActive: resp['1.3.3349'].accepted });
-            })
-            .catch(error => error);
+            });
           this.setState({ openGradeDialog: false });
-        })
-        .catch(error => error);
+        });
     } catch (error) {
       throw new SubmissionError({
         password: 'Неправильный пароль',
@@ -96,6 +95,8 @@ class ParticipantsItem extends React.Component<Props, State> {
       });
     }
   };
+
+  // dialog functions
   closeSessionDialog = () => {
     this.setState({ openSessionDialog: false });
   };
@@ -108,6 +109,7 @@ class ParticipantsItem extends React.Component<Props, State> {
   grade = () => {
     this.setState({ openGradeDialog: true });
   };
+
   render() {
     const {
       sessionActive,
@@ -117,8 +119,11 @@ class ParticipantsItem extends React.Component<Props, State> {
       openGradeDialog
     } = this.state;
     const { userData } = this.props;
-    let userName = userData.first_name + ' ' + userData.last_name;
-    return (
+    let userName;
+    userData
+      ? (userName = userData.first_name + ' ' + userData.last_name)
+      : null;
+    return userData ? (
       <div>
         <ListItem>
           <Avatar alt={userName} src={userData.photo} />
@@ -155,13 +160,14 @@ class ParticipantsItem extends React.Component<Props, State> {
           pass={this.getGradePassword}
         />
       </div>
-    );
+    ) : null;
   }
 }
 
 function mapStateToProps(state) {
   return {
-    account: state.user.account
+    account: state.user.account,
+    apiInit: state.app.apiInit
   };
 }
 

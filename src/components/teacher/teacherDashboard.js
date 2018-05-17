@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 //
 import { CircularProgress } from 'material-ui/Progress';
 //
-import getTeacherLecturesBTS from '../api/getTeacherLecturesBTS';
 import getLectureFaucetApi from '../api/getLectureFaucetApi';
 import getLectureDataApi from '../api/getLectureDataApi';
 //
@@ -17,7 +16,8 @@ import './teacher.css';
 type Props = {
   onSetTeacherLectures: Function,
   account: string,
-  teacherLectures: any
+  teacherLectures: any,
+  apiInit: any
 };
 type State = {
   loaderFlag: boolean,
@@ -35,35 +35,46 @@ class DashboardTeacherContent extends React.Component<Props, State> {
   componentDidMount() {
     if (!this.props.teacherLectures.length) {
       let lecturesData = [];
-      getTeacherLecturesBTS(this.props.account)
+      // get teacher lectures from bitshares
+      this.props.apiInit.teacherApi
+        .getLectures()
         .then(resp => {
           if (resp.length) {
             for (let i of resp) {
+              // info about applications & participants for current lection
               let additionalInfo = {
                 applications: i.applications,
                 applicationscount: i.applications.length,
                 participants: i.participants,
                 participantscount: i.participants.length
               };
-              getLectureFaucetApi(i.name).then(resp => {
-                getLectureDataApi(resp.topic_url, i.name).then(resp => {
-                  lecturesData.push({
-                    lecture: resp,
-                    additionalInfo: additionalInfo
-                  });
-                  lecturesData.length
-                    ? this.setState({ loaderFlag: false })
-                    : this.setState({ loaderFlag: true });
-                  this.props.onSetTeacherLectures(lecturesData);
-                });
-              });
+              // get data for current lecture from faucet
+              getLectureFaucetApi(i.name)
+                .then(resp => {
+                  // get data for current lecture from vk
+                  getLectureDataApi(resp.topic_url, i.name)
+                    .then(resp => {
+                      lecturesData.push({
+                        lecture: resp,
+                        additionalInfo: additionalInfo
+                      });
+                      // desable loader
+                      lecturesData.length
+                        ? this.setState({ loaderFlag: false })
+                        : this.setState({ loaderFlag: true });
+                      // save data about teacher lectures to store
+                      this.props.onSetTeacherLectures(lecturesData);
+                    })
+                    .catch(error => error);
+                })
+                .catch(error => error);
             }
           } else {
             this.setState({ loaderFlag: false });
             this.setState({ nodata: 'У вас нет лекций.' });
           }
         })
-        .catch(error => alert(error));
+        .catch(error => error);
     } else {
       this.setState({ loaderFlag: false });
     }
@@ -71,7 +82,6 @@ class DashboardTeacherContent extends React.Component<Props, State> {
   render() {
     const { teacherLectures } = this.props;
     const { loaderFlag, nodata } = this.state;
-
     return (
       <div>
         {loaderFlag ? (
@@ -92,6 +102,7 @@ class DashboardTeacherContent extends React.Component<Props, State> {
 function mapStateToProps(state) {
   return {
     account: state.user.account,
+    apiInit: state.app.apiInit,
     teacherLectures: state.lectures.teacherLectures
   };
 }

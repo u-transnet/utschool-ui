@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { SubmissionError } from 'redux-form';
+import { Login } from 'bitsharesjs';
 //
 import Card, { CardHeader, CardActions, CardContent } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
@@ -9,10 +10,10 @@ import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 //
 import LoginDialog from '../dialogs/loginDialog';
-import registrationLecture from '../api/registrationOnLecture';
 //
 import './lecture.css';
 
+// conts for settings dropdown
 const MENU_OPTIONS = ['Option 1', 'Option 2', 'Option 3'];
 const ITEM_HEIGHT = 48;
 
@@ -20,6 +21,7 @@ type Props = {
   registrationLecture: Function,
   handleSubmit: Function,
   account: string,
+  apiInit: Object,
   lecture: any,
   state: any
 };
@@ -37,39 +39,46 @@ class LectureCard extends React.Component<Props, State> {
       confirmRegistration: false
     };
   }
+
+  // functions for settings dropdown
   handleClick = (event: any) => {
     this.setState({ anchorEl: event.currentTarget });
   };
-
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
 
+  // dialog functions
   handleClickOpenDialog = () => {
     this.setState({ openDialog: true });
   };
-
   handleCloseDialog = () => {
     this.setState({ openDialog: false });
   };
 
+  // registration function
+  registration = (password: string) => {
+    let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
+    let privateKey = keys.privKeys.active.toWif();
+    this.props.apiInit.setPrivateKey(privateKey);
+    try {
+      this.props.apiInit.studentApi
+        .applyForLecture(this.props.lecture.account)
+        .then(resp => {
+          this.setState({ confirmRegistration: true });
+        })
+        .catch(error => error);
+    } catch (error) {
+      throw new SubmissionError({
+        password: 'Неправильный пароль',
+        _error: 'Login failed!'
+      });
+    }
+  };
+
   render() {
-    const { lecture, state, account } = this.props;
+    const { lecture, state } = this.props;
     const { anchorEl, confirmRegistration, openDialog } = this.state;
-    let registration = password => {
-      try {
-        registrationLecture(account, lecture.account, password)
-          .then(resp => {
-            this.setState({ confirmRegistration: true });
-          })
-          .catch(error => error);
-      } catch (error) {
-        throw new SubmissionError({
-          password: 'Неправильный пароль',
-          _error: 'Login failed!'
-        });
-      }
-    };
     return (
       <div className="lecture-card">
         <Card>
@@ -135,7 +144,7 @@ class LectureCard extends React.Component<Props, State> {
           confirmAccept={confirmRegistration}
           openDialog={openDialog}
           closeDialog={this.handleCloseDialog}
-          pass={registration}
+          pass={this.registration}
         />
       </div>
     );
@@ -143,6 +152,7 @@ class LectureCard extends React.Component<Props, State> {
 }
 function mapStateToProps(state) {
   return {
+    apiInit: state.app.apiInit,
     account: state.user.account
   };
 }

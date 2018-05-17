@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { SubmissionError } from 'redux-form';
+import { Login } from 'bitsharesjs';
 //
 import Avatar from 'material-ui/Avatar';
 import {
@@ -18,7 +19,6 @@ import {
   setParticipants,
   setApplications
 } from '../../actions/lecturesAction';
-import acceptApplication from '../api/acceptApplication';
 import getUserFaucetApi from '../api/getUserFaucetApi';
 //
 import './teacher.css';
@@ -31,6 +31,7 @@ type Props = {
   userData: any,
   participants: any,
   applications: any,
+  apiInit: any,
   currentLecture: any,
   studentId: string,
   account: string
@@ -48,61 +49,81 @@ class ApplicationsItem extends React.Component<Props, State> {
       confirmAccept: false
     };
   }
-
+  // dialog functions
   handleClickOpenDialog = () => {
     this.setState({ openDialog: true });
   };
-
   handleCloseDialog = () => {
     this.setState({ openDialog: false });
   };
 
+  // accept function
   onAcceptApplication = password => {
     try {
-      acceptApplication(this.props.account, this.props.studentId, password)
+      let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
+      let privateKey = keys.privKeys.active.toWif();
+      this.props.apiInit.setPrivateKey(privateKey);
+      this.props.apiInit.teacherApi
+        .acceptApplication(this.props.studentId)
         .then(resp => {
           if (resp.expiration) {
             this.setState({ confirmAccept: true });
+
+            // TODO: нужно создать функцию проверки в отдельном файле c изменением после подтверждения
             setTimeout(() => {
               this.props.onSetTeacherLectures([]);
               this.props.onSetApplications([]);
               this.props.onSetParticipants([]);
-              // TODO: нужно создать функцию проверки в отдельном файле c изменением после подтверждения
               if (!this.props.participants.length) {
                 let usersData = [];
-                let n = this.props.currentLecture.additionalInfo.participants
-                  .length;
-                for (let i of this.props.currentLecture.additionalInfo
-                  .participants) {
-                  getUserFaucetApi(i.name)
-                    .then(resp => {
-                      usersData.push(resp);
-                      n--;
-                      if (!n) {
-                        this.props.onSetParticipants(usersData);
-                      }
-                    })
-                    .catch(error => alert(error));
+                if (
+                  this.props.currentLecture.additionalInfo &&
+                  this.props.currentLecture.additionalInfo.participantscount
+                ) {
+                  let n = this.props.currentLecture.additionalInfo
+                    .participantscount;
+                  for (let i of this.props.currentLecture.additionalInfo
+                    .participants) {
+                    getUserFaucetApi(i.name)
+                      .then(resp => {
+                        usersData.push({
+                          lectureAccount: this.props.currentLecture.lecture
+                            .account,
+                          userData: resp
+                        });
+                        n--;
+                        if (!n) {
+                          this.props.onSetParticipants(usersData);
+                        }
+                      })
+                      .catch(error => alert(error));
+                  }
                 }
               }
+              // get data for showing applications
               if (!this.props.applications.length) {
                 let usersData = [];
-                let n = this.props.currentLecture.additionalInfo.applications
-                  .length;
-                for (let i of this.props.currentLecture.additionalInfo
-                  .applications) {
-                  getUserFaucetApi(i.account.name)
-                    .then(resp => {
-                      usersData.push({
-                        userData: resp,
-                        studentId: i.id
-                      });
-                      n--;
-                      if (!n) {
-                        this.props.onSetApplications(usersData);
-                      }
-                    })
-                    .catch(error => alert(error));
+                if (
+                  this.props.currentLecture.additionalInfo &&
+                  this.props.currentLecture.additionalInfo.applicationscount
+                ) {
+                  let n = this.props.currentLecture.additionalInfo
+                    .applicationscount;
+                  for (let i of this.props.currentLecture.additionalInfo
+                    .applications) {
+                    getUserFaucetApi(i.account.name)
+                      .then(resp => {
+                        usersData.push({
+                          userData: resp,
+                          studentId: i.id
+                        });
+                        n--;
+                        if (!n) {
+                          this.props.onSetApplications(usersData);
+                        }
+                      })
+                      .catch(error => alert(error));
+                  }
                 }
               }
             }, 5000);
@@ -121,8 +142,11 @@ class ApplicationsItem extends React.Component<Props, State> {
   render() {
     const { confirmAccept, openDialog } = this.state;
     const { userData } = this.props;
-    let userName = userData.first_name + ' ' + userData.last_name;
-    return (
+    let userName;
+    userData
+      ? (userName = userData.first_name + ' ' + userData.last_name)
+      : null;
+    return userData ? (
       <div>
         <ListItem>
           <Avatar alt={userName} src={userData.photo} />
@@ -147,12 +171,13 @@ class ApplicationsItem extends React.Component<Props, State> {
           pass={this.onAcceptApplication}
         />
       </div>
-    );
+    ) : null;
   }
 }
 
 function mapStateToProps(state) {
   return {
+    apiInit: state.app.apiInit,
     account: state.user.account,
     currentLecture: state.lectures.currentLecture,
     participants: state.lectures.participants,

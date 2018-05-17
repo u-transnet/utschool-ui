@@ -10,9 +10,8 @@ import DashboardTeacherContent from '../teacher/teacherDashboard';
 type Props = {
   role: string
 };
-type State = {};
 
-class Dashboard extends React.Component<Props, State> {
+class Dashboard extends React.Component<Props> {
   render() {
     const { role } = this.props;
     return (

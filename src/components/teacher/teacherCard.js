@@ -13,6 +13,7 @@ import { setTitle, setBackToTeacherDashboard } from '../../actions';
 //
 import './teacher.css';
 
+// conts for settings dropdown
 const MENU_OPTIONS = ['Option 1', 'Option 2', 'Option 3'];
 const ITEM_HEIGHT = 48;
 
@@ -39,14 +40,14 @@ class TeacherCard extends React.Component<Props, State> {
       }
     };
   }
+  // functions for settings dropdown
   handleClick = (event: any) => {
     this.setState({ anchorEl: event.currentTarget });
   };
-
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
-
+  // card functions
   cardAction = () => {
     this.props.onSetBackToTeacherDashboard(true);
     this.props.onSetTitle(this.state.currentData.lecture.title);

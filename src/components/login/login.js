@@ -3,18 +3,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Api from 'utschool-js';
 //
 import Grid from 'material-ui/Grid';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 import Button from 'material-ui/Button';
 import { CircularProgress } from 'material-ui/Progress';
-//get lectures
-import lecturesBTSApi from '../api/lecturesBTSApi';
+//
 import getLectureFaucetApi from '../api/getLectureFaucetApi';
 import getLectureDataApi from '../api/getLectureDataApi';
-//end of get lectures
 import getUserFaucetApi from '../api/getUserFaucetApi';
-//
 import renderAccountField from './accountField';
 import renderRememberCheckbox from './rememberCheckbox';
 import LoginHeader from './loginHeader';
@@ -25,13 +23,14 @@ import {
   setLastName
 } from '../../actions/actionsUser';
 import { setLectures } from '../../actions/lecturesAction';
-import { setTitle } from '../../actions';
+import { setTitle, setApiInit } from '../../actions';
 import validate from './validate';
 import history from '../../history';
 //
 import './login.css';
 
 type Props = {
+  onSetApiInit: Function,
   errorFlag: Function,
   handleSubmit: Function,
   setAccount: Function,
@@ -62,12 +61,15 @@ class Login extends React.Component<Props, State> {
       onSetAvatar,
       onSetFirstName,
       onSetLastName,
-      onSetLextures
+      onSetLextures,
+      onSetApiInit
     } = this.props; // No fields prop
     const { loaderFlag } = this.state;
     let loginSubmit = (values: any) => {
-      let userFausetData = getUserFaucetApi(values.account);
-      return userFausetData
+      // save current to store
+      setAccount(values.account);
+      // get user data from faucet
+      return getUserFaucetApi(values.account)
         .then(data => {
           if (!data) {
             throw new SubmissionError({
@@ -75,42 +77,56 @@ class Login extends React.Component<Props, State> {
               _error: 'Login failed!'
             });
           } else {
+            // added waiting loader
             this.setState({ loaderFlag: true });
-            // get lectures function
+            // connect to bitshares
+            let nodeUrl = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
+            let accountName = values.account;
+            let privateKey = null;
             let lecturesData = [];
-            lecturesBTSApi(values.account).then(resp => {
-              for (let i of resp) {
-                let lectureState = {
-                  ticket: {
-                    accepted: i.stats['1.3.3347'].accepted,
-                    balance: i.stats['1.3.3347'].balance
-                  },
-                  settion: {
-                    accepted: i.stats['1.3.3348'].accepted,
-                    balance: i.stats['1.3.3348'].balance
-                  },
-                  grade: {
-                    accepted: i.stats['1.3.3349'].accepted,
-                    balance: i.stats['1.3.3349'].balance
-                  }
-                };
-                getLectureFaucetApi(i.name).then(resp => {
-                  getLectureDataApi(resp.topic_url, i.name).then(resp => {
-                    lecturesData.push({
-                      lecture: resp,
-                      state: lectureState
+            Api.init(nodeUrl, accountName, privateKey).then(api => {
+              // save init api to store
+              onSetApiInit(api);
+              // get lectures data from bitfares
+              api.studentApi.getLectures().then(resp => {
+                for (let i of resp) {
+                  let lectureState = {
+                    ticket: {
+                      accepted: i.stats['1.3.3347'].accepted,
+                      balance: i.stats['1.3.3347'].balance
+                    },
+                    settion: {
+                      accepted: i.stats['1.3.3348'].accepted,
+                      balance: i.stats['1.3.3348'].balance
+                    },
+                    grade: {
+                      accepted: i.stats['1.3.3349'].accepted,
+                      balance: i.stats['1.3.3349'].balance
+                    }
+                  };
+                  // get lecture data from faucet
+                  getLectureFaucetApi(i.name).then(resp => {
+                    // get lecture data from vk
+                    getLectureDataApi(resp.topic_url, i.name).then(resp => {
+                      lecturesData.push({
+                        lecture: resp,
+                        state: lectureState
+                      });
+                      // save lectire data to store
+                      onSetLextures(lecturesData);
+                      // save other data
+                      onSetAvatar(data.photo);
+                      onSetFirstName(data.first_name);
+                      onSetLastName(data.last_name);
+                      onSetTitle('Лекции');
+                      // go to dashboard page
+                      setTimeout(() => {
+                        history.push('/dashboard');
+                      }, 500);
                     });
-                    onSetLextures(lecturesData);
-                    //other data
-                    onSetAvatar(data.photo);
-                    onSetFirstName(data.first_name);
-                    onSetLastName(data.last_name);
-                    onSetTitle('Лекции');
-                    setAccount(values.account);
-                    //end of other data
                   });
-                });
-              }
+                }
+              });
             });
             // end of get lectures function
           }
@@ -181,15 +197,14 @@ class Login extends React.Component<Props, State> {
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    account: state.user.account
+  };
 }
 
 const mapDispatchToProps = dispatch => ({
   setAccount(val) {
     dispatch(setAccountName(val));
-    setTimeout(() => {
-      history.push('/dashboard');
-    }, 500);
   },
   onSetTitle(val) {
     dispatch(setTitle(val));
@@ -205,6 +220,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLextures(val) {
     dispatch(setLectures(val));
+  },
+  onSetApiInit(val) {
+    dispatch(setApiInit(val));
   }
 });
 
