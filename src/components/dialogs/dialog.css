@@ -14,4 +14,9 @@
 .dialog-text-box {
   padding-bottom: 32px !important;
 }
+
+.dialog-loader {
+  display: block !important;
+  margin: 0 auto;
+}
 /*# sourceMappingURL=dialog.css.map */

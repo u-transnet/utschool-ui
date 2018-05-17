@@ -9,6 +9,7 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import { CircularProgress } from 'material-ui/Progress';
 //
 import renderPasswordField from '../login/passwordField';
 import './dialog.css';
@@ -20,11 +21,11 @@ type Props = {
   confirmAccept: boolean,
   openDialog: boolean,
   dialogTitle: string,
-  confirmText: string
+  confirmText: string,
+  dialogLoader: boolean
 };
-type State = {};
 
-class LoginDialog extends React.Component<Props, State> {
+class LoginDialog extends React.Component<Props> {
   render() {
     let loginSubmit = (values: any) => {
       // validation of password
@@ -66,11 +67,15 @@ class LoginDialog extends React.Component<Props, State> {
           ) : (
             <div className="dialog-content">
               <DialogContent>
-                <Field
-                  className="dialog-field"
-                  name="password"
-                  component={renderPasswordField}
-                />
+                {this.props.dialogLoader ? (
+                  <CircularProgress className="dialog-loader" size={40} />
+                ) : (
+                  <Field
+                    className="dialog-field"
+                    name="password"
+                    component={renderPasswordField}
+                  />
+                )}
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.props.closeDialog} color="primary">

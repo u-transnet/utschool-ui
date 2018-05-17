@@ -26,9 +26,12 @@ type Props = {
 type State = {
   sessionActive: boolean,
   gradeActive: boolean,
-  confirmAccept: boolean,
+  confirmAcceptGrade: boolean,
+  confirmAcceptSession: boolean,
   openSessionDialog: boolean,
-  openGradeDialog: boolean
+  openGradeDialog: boolean,
+  sessionDialogLoader: boolean,
+  gradeDialogLoader: boolean
 };
 
 class ParticipantsItem extends React.Component<Props, State> {
@@ -37,9 +40,12 @@ class ParticipantsItem extends React.Component<Props, State> {
     this.state = {
       sessionActive: false,
       gradeActive: false,
-      confirmAccept: false,
+      confirmAcceptGrade: false,
+      confirmAcceptSession: false,
       openSessionDialog: false,
-      openGradeDialog: false
+      openGradeDialog: false,
+      sessionDialogLoader: false,
+      gradeDialogLoader: false
     };
   }
 
@@ -51,6 +57,7 @@ class ParticipantsItem extends React.Component<Props, State> {
   // send Session Token
   getSessionPassword = (password: string) => {
     try {
+      this.setState({ sessionDialogLoader: true });
       let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
       let privateKey = keys.privKeys.active.toWif();
       this.props.apiInit.setPrivateKey(privateKey);
@@ -60,9 +67,10 @@ class ParticipantsItem extends React.Component<Props, State> {
           this.props.apiInit.studentApi
             .getLectureStats(this.props.lectureAccount)
             .then(resp => {
+              this.setState({ sessionDialogLoader: false });
+              this.setState({ confirmAcceptSession: true });
               this.setState({ sessionActive: resp['1.3.3348'].accepted });
             });
-          this.setState({ openSessionDialog: false });
         });
     } catch (error) {
       throw new SubmissionError({
@@ -75,6 +83,7 @@ class ParticipantsItem extends React.Component<Props, State> {
   // send Grade Token
   getGradePassword = (password: string) => {
     try {
+      this.setState({ gradeDialogLoader: true });
       let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
       let privateKey = keys.privKeys.active.toWif();
       this.props.apiInit.setPrivateKey(privateKey);
@@ -84,9 +93,10 @@ class ParticipantsItem extends React.Component<Props, State> {
           this.props.apiInit.studentApi
             .getLectureStats(this.props.lectureAccount)
             .then(resp => {
+              this.setState({ gradeDialogLoader: false });
+              this.setState({ confirmAcceptGrade: true });
               this.setState({ gradeActive: resp['1.3.3349'].accepted });
             });
-          this.setState({ openGradeDialog: false });
         });
     } catch (error) {
       throw new SubmissionError({
@@ -98,10 +108,14 @@ class ParticipantsItem extends React.Component<Props, State> {
 
   // dialog functions
   closeSessionDialog = () => {
+    this.setState({ sessionDialogLoader: false });
+    this.setState({ confirmAcceptSession: false });
     this.setState({ openSessionDialog: false });
   };
   closeGradeDialog = () => {
     this.setState({ openGradeDialog: false });
+    this.setState({ gradeDialogLoader: false });
+    this.setState({ confirmAcceptGrade: false });
   };
   session = () => {
     this.setState({ openSessionDialog: true });
@@ -114,9 +128,12 @@ class ParticipantsItem extends React.Component<Props, State> {
     const {
       sessionActive,
       gradeActive,
-      confirmAccept,
+      confirmAcceptGrade,
+      confirmAcceptSession,
       openSessionDialog,
-      openGradeDialog
+      openGradeDialog,
+      sessionDialogLoader,
+      gradeDialogLoader
     } = this.state;
     const { userData } = this.props;
     let userName;
@@ -144,17 +161,19 @@ class ParticipantsItem extends React.Component<Props, State> {
           </ListItemSecondaryAction>
         </ListItem>
         <LoginDialog
+          dialogLoader={sessionDialogLoader}
           dialogTitle="Логин"
           confirmText="Подтверждено"
-          confirmAccept={confirmAccept}
+          confirmAccept={confirmAcceptSession}
           openDialog={openSessionDialog}
           closeDialog={this.closeSessionDialog}
           pass={this.getSessionPassword}
         />
         <LoginDialog
+          dialogLoader={gradeDialogLoader}
           dialogTitle="Логин"
           confirmText="Подтверждено"
-          confirmAccept={confirmAccept}
+          confirmAccept={confirmAcceptGrade}
           openDialog={openGradeDialog}
           closeDialog={this.closeGradeDialog}
           pass={this.getGradePassword}

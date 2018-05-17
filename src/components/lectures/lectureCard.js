@@ -28,7 +28,8 @@ type Props = {
 type State = {
   anchorEl: any,
   openDialog: boolean,
-  confirmRegistration: boolean
+  confirmRegistration: boolean,
+  dialogLoader: boolean
 };
 class LectureCard extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -36,7 +37,8 @@ class LectureCard extends React.Component<Props, State> {
     this.state = {
       anchorEl: null,
       openDialog: false,
-      confirmRegistration: false
+      confirmRegistration: false,
+      dialogLoader: false
     };
   }
 
@@ -54,6 +56,8 @@ class LectureCard extends React.Component<Props, State> {
   };
   handleCloseDialog = () => {
     this.setState({ openDialog: false });
+    this.setState({ dialogLoader: false });
+    this.setState({ confirmRegistration: false });
   };
 
   // registration function
@@ -62,9 +66,11 @@ class LectureCard extends React.Component<Props, State> {
     let privateKey = keys.privKeys.active.toWif();
     this.props.apiInit.setPrivateKey(privateKey);
     try {
+      this.setState({ dialogLoader: true });
       this.props.apiInit.studentApi
         .applyForLecture(this.props.lecture.account)
         .then(resp => {
+          this.setState({ dialogLoader: false });
           this.setState({ confirmRegistration: true });
         })
         .catch(error => error);
@@ -78,7 +84,12 @@ class LectureCard extends React.Component<Props, State> {
 
   render() {
     const { lecture, state } = this.props;
-    const { anchorEl, confirmRegistration, openDialog } = this.state;
+    const {
+      anchorEl,
+      confirmRegistration,
+      openDialog,
+      dialogLoader
+    } = this.state;
     return (
       <div className="lecture-card">
         <Card>
@@ -139,6 +150,7 @@ class LectureCard extends React.Component<Props, State> {
           </CardActions>
         </Card>
         <LoginDialog
+          dialogLoader={dialogLoader}
           dialogTitle="Логин"
           confirmText="Регистрация прошла успешно и ожидает подтверждения преподавателя."
           confirmAccept={confirmRegistration}

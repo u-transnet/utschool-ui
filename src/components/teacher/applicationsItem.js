@@ -19,7 +19,7 @@ import {
   setParticipants,
   setApplications
 } from '../../actions/lecturesAction';
-import getUserFaucetApi from '../api/getUserFaucetApi';
+//import getUserFaucetApi from '../api/getUserFaucetApi';
 //
 import './teacher.css';
 
@@ -38,7 +38,8 @@ type Props = {
 };
 type State = {
   openDialog: boolean,
-  confirmAccept: boolean
+  confirmAccept: boolean,
+  dialogLoader: boolean
 };
 
 class ApplicationsItem extends React.Component<Props, State> {
@@ -46,7 +47,8 @@ class ApplicationsItem extends React.Component<Props, State> {
     super(props);
     this.state = {
       openDialog: false,
-      confirmAccept: false
+      confirmAccept: false,
+      dialogLoader: false
     };
   }
   // dialog functions
@@ -55,11 +57,14 @@ class ApplicationsItem extends React.Component<Props, State> {
   };
   handleCloseDialog = () => {
     this.setState({ openDialog: false });
+    this.setState({ dialogLoader: false });
+    this.setState({ confirmAccept: false });
   };
 
   // accept function
   onAcceptApplication = password => {
     try {
+      this.setState({ dialogLoader: true });
       let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
       let privateKey = keys.privKeys.active.toWif();
       this.props.apiInit.setPrivateKey(privateKey);
@@ -67,66 +72,67 @@ class ApplicationsItem extends React.Component<Props, State> {
         .acceptApplication(this.props.studentId)
         .then(resp => {
           if (resp.expiration) {
+            this.setState({ dialogLoader: false });
             this.setState({ confirmAccept: true });
 
-            // TODO: нужно создать функцию проверки в отдельном файле c изменением после подтверждения
-            setTimeout(() => {
-              this.props.onSetTeacherLectures([]);
-              this.props.onSetApplications([]);
-              this.props.onSetParticipants([]);
-              if (!this.props.participants.length) {
-                let usersData = [];
-                if (
-                  this.props.currentLecture.additionalInfo &&
-                  this.props.currentLecture.additionalInfo.participantscount
-                ) {
-                  let n = this.props.currentLecture.additionalInfo
-                    .participantscount;
-                  for (let i of this.props.currentLecture.additionalInfo
-                    .participants) {
-                    getUserFaucetApi(i.name)
-                      .then(resp => {
-                        usersData.push({
-                          lectureAccount: this.props.currentLecture.lecture
-                            .account,
-                          userData: resp
-                        });
-                        n--;
-                        if (!n) {
-                          this.props.onSetParticipants(usersData);
-                        }
-                      })
-                      .catch(error => alert(error));
-                  }
-                }
-              }
-              // get data for showing applications
-              if (!this.props.applications.length) {
-                let usersData = [];
-                if (
-                  this.props.currentLecture.additionalInfo &&
-                  this.props.currentLecture.additionalInfo.applicationscount
-                ) {
-                  let n = this.props.currentLecture.additionalInfo
-                    .applicationscount;
-                  for (let i of this.props.currentLecture.additionalInfo
-                    .applications) {
-                    getUserFaucetApi(i.account.name)
-                      .then(resp => {
-                        usersData.push({
-                          userData: resp,
-                          studentId: i.id
-                        });
-                        n--;
-                        if (!n) {
-                          this.props.onSetApplications(usersData);
-                        }
-                      })
-                      .catch(error => alert(error));
-                  }
-                }
-              }
-            }, 5000);
+            // TODO: нужно создать функцию проверки c изменением после подтверждения
+            // setTimeout(() => {
+            //   this.props.onSetTeacherLectures([]);
+            //   this.props.onSetApplications([]);
+            //   this.props.onSetParticipants([]);
+            //   if (!this.props.participants.length) {
+            //     let usersData = [];
+            //     if (
+            //       this.props.currentLecture.additionalInfo &&
+            //       this.props.currentLecture.additionalInfo.participantscount
+            //     ) {
+            //       let n = this.props.currentLecture.additionalInfo
+            //         .participantscount;
+            //       for (let i of this.props.currentLecture.additionalInfo
+            //         .participants) {
+            //         getUserFaucetApi(i.name)
+            //           .then(resp => {
+            //             usersData.push({
+            //               lectureAccount: this.props.currentLecture.lecture
+            //                 .account,
+            //               userData: resp
+            //             });
+            //             n--;
+            //             if (!n) {
+            //               this.props.onSetParticipants(usersData);
+            //             }
+            //           })
+            //           .catch(error => alert(error));
+            //       }
+            //     }
+            //   }
+            //   // get data for showing applications
+            //   if (!this.props.applications.length) {
+            //     let usersData = [];
+            //     if (
+            //       this.props.currentLecture.additionalInfo &&
+            //       this.props.currentLecture.additionalInfo.applicationscount
+            //     ) {
+            //       let n = this.props.currentLecture.additionalInfo
+            //         .applicationscount;
+            //       for (let i of this.props.currentLecture.additionalInfo
+            //         .applications) {
+            //         getUserFaucetApi(i.account.name)
+            //           .then(resp => {
+            //             usersData.push({
+            //               userData: resp,
+            //               studentId: i.id
+            //             });
+            //             n--;
+            //             if (!n) {
+            //               this.props.onSetApplications(usersData);
+            //             }
+            //           })
+            //           .catch(error => alert(error));
+            //       }
+            //     }
+            //   }
+            // }, 5000);
           } else {
             return resp;
           }
@@ -140,7 +146,7 @@ class ApplicationsItem extends React.Component<Props, State> {
     }
   };
   render() {
-    const { confirmAccept, openDialog } = this.state;
+    const { confirmAccept, openDialog, dialogLoader } = this.state;
     const { userData } = this.props;
     let userName;
     userData
@@ -163,6 +169,7 @@ class ApplicationsItem extends React.Component<Props, State> {
           </ListItemSecondaryAction>
         </ListItem>
         <LoginDialog
+          dialogLoader={dialogLoader}
           dialogTitle="Логин"
           confirmText="Заявка подтверждена"
           confirmAccept={confirmAccept}
