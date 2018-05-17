@@ -21,6 +21,7 @@
     "react-social-login": "^3.4.2",
     "redux": "^3.7.2",
     "redux-form": "^7.3.0",
+    "redux-localstorage": "^0.4.1",
     "redux-thunk": "^2.2.0",
     "utschool-js": "git+https://github.com/u-transnet/utschool-js.git"
   },
