@@ -112,6 +112,7 @@ class Header extends React.Component<Props, State> {
     this.props.onSetApplications([]);
     this.props.onSetCurrentLecture([]);
     this.menuOpener();
+    localStorage.clear();
   };
   backFunction = () => {
     this.props.onSetBackToTeacherDashboard(false);
