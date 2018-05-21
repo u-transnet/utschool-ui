@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-//
 import Tabs, { Tab } from 'material-ui/Tabs';
 import { CircularProgress } from 'material-ui/Progress';
 import List from 'material-ui/List';
@@ -10,14 +9,13 @@ import List from 'material-ui/List';
 import Header from '../header/header';
 import ApplicationsItem from './applicationsItem';
 import ParticipantsItem from './participantsItem';
-//
 import getUserFaucetApi from '../api/getUserFaucetApi';
 import { setParticipants, setApplications } from '../../actions/lecturesAction';
 //
 import './teacher.css';
 
 type Props = {
-  getUserFaucetApi: Function,
+  apiInit: Object,
   onSetParticipants: Function,
   onSetApplications: Function,
   currentLecture: any,
@@ -27,105 +25,147 @@ type Props = {
 type State = {
   value: number,
   loaderFlag: boolean,
-  loaderParticipantsFlag: boolean
+  loaderParticipantsFlag: boolean,
+  dataParticipants: any,
+  dataApplications: any
 };
 
 class ClassDashboard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.state = {
+      value: 0,
+      loaderFlag: true,
+      loaderParticipantsFlag: true,
+      dataParticipants: this.props.participants,
+      dataApplications: this.props.applications
+    };
+  }
+
+  componentDidMount() {
     let url = window.location.href.split('/')[3];
     switch (url) {
       case 'class':
-        this.state = {
-          value: 0,
-          loaderFlag: true,
-          loaderParticipantsFlag: true
-        };
+        this.setState({ value: 0 });
         break;
       case 'class#1':
-        this.state = {
-          value: 1,
-          loaderFlag: true,
-          loaderParticipantsFlag: true
-        };
+        this.setState({ value: 1 });
         break;
       default:
         break;
     }
-  }
-
-  componentDidMount() {
     // get data for showing participants
-    if (!this.props.participants.length) {
-      let usersData = [];
-      if (
-        this.props.currentLecture.additionalInfo &&
-        this.props.currentLecture.additionalInfo.participantscount
-      ) {
-        let n = this.props.currentLecture.additionalInfo.participantscount;
-        for (let i of this.props.currentLecture.additionalInfo.participants) {
-          getUserFaucetApi(i.name)
-            .then(resp => {
-              usersData.push({
-                lectureAccount: this.props.currentLecture.lecture.account,
-                userData: resp
-              });
-              n--;
-              if (!n) {
-                this.props.onSetParticipants(usersData);
-                usersData.length
-                  ? this.setState({ loaderParticipantsFlag: false })
-                  : this.setState({ loaderParticipantsFlag: true });
-              }
-            })
-            .catch(error => alert(error));
-        }
-      }
-      if (
-        this.props.currentLecture.additionalInfo &&
-        !this.props.currentLecture.additionalInfo.participantscount
-      ) {
-        this.setState({ loaderParticipantsFlag: false });
-      }
+    if (!this.state.dataParticipants.length) {
+      this.getLectureParticipants();
     } else {
       this.setState({ loaderParticipantsFlag: false });
     }
-    // get data for showing applications
-    if (!this.props.applications.length) {
-      let usersData = [];
-      if (
-        this.props.currentLecture.additionalInfo &&
-        this.props.currentLecture.additionalInfo.applicationscount
-      ) {
-        let n = this.props.currentLecture.additionalInfo.applicationscount;
-        for (let i of this.props.currentLecture.additionalInfo.applications) {
-          getUserFaucetApi(i.account.name)
-            .then(resp => {
-              usersData.push({
-                userData: resp,
-                studentId: i.id
-              });
-              n--;
-              if (!n) {
-                this.props.onSetApplications(usersData);
-                usersData.length
-                  ? this.setState({ loaderFlag: false })
-                  : this.setState({ loaderFlag: true });
-              }
-            })
-            .catch(error => alert(error));
-        }
-      }
-      if (
-        this.props.currentLecture.additionalInfo &&
-        !this.props.currentLecture.additionalInfo.applicationscount
-      ) {
-        this.setState({ loaderFlag: false });
-      }
+    // // get data for showing applications
+    if (!this.state.dataApplications.length) {
+      this.getLectureApplications();
     } else {
       this.setState({ loaderFlag: false });
     }
   }
+  // get lecture applications from bitshares & faucet
+  getLectureApplications = () => {
+    this.props.apiInit.teacherApi.getLectureApplications
+      ? this.props.apiInit.teacherApi
+          .getLectureApplications(this.props.currentLecture.lecture.account)
+          .then(resp => {
+            let array = this.reformatLectureApplicationsUsersData(resp);
+            let accounts = this.stringAccoutns(array);
+            accounts
+              ? getUserFaucetApi(accounts).then(resp => {
+                  let dataArray = [];
+                  for (let i of resp) {
+                    for (let j of array) {
+                      if (i.name === j.account) {
+                        dataArray.unshift({
+                          userData: {
+                            name: i.name,
+                            first_name: i.first_name,
+                            last_name: i.last_name,
+                            photo: i.photo
+                          },
+                          studentId: j.studentId
+                        });
+                      }
+                    }
+                  }
+                  this.props.onSetApplications(dataArray);
+                  this.setState({ dataApplications: dataArray });
+                  this.setState({ loaderFlag: false });
+                })
+              : this.setState({ loaderFlag: false });
+          })
+      : this.setState({ loaderFlag: false });
+  };
+  // get lecture participants from bitshares & faucet
+  getLectureParticipants = () => {
+    this.props.apiInit.teacherApi.getLectureParticipants
+      ? this.props.apiInit.teacherApi
+          .getLectureParticipants(this.props.currentLecture.lecture.account)
+          .then(resp => {
+            let array = this.reformatLectureUsersData(resp);
+            let accounts = this.stringAccoutns(array);
+            accounts
+              ? getUserFaucetApi(accounts).then(resp => {
+                  let dataArray = [];
+                  for (let i of resp) {
+                    for (let j of array) {
+                      if (i.name === j.account) {
+                        dataArray.unshift({
+                          name: i.name,
+                          first_name: i.first_name,
+                          last_name: i.last_name,
+                          photo: i.photo,
+                          session: j.session,
+                          grade: j.grade
+                        });
+                      }
+                    }
+                  }
+                  this.props.onSetParticipants(dataArray);
+                  this.setState({ dataParticipants: dataArray });
+                  this.setState({ loaderParticipantsFlag: false });
+                })
+              : this.setState({ loaderParticipantsFlag: false });
+          })
+      : this.setState({ loaderParticipantsFlag: false });
+  };
+  // reformat lecture users data
+  reformatLectureUsersData = data => {
+    let array = [];
+    for (let i of data) {
+      array.push({
+        account: i.name,
+        session: i.stats['1.3.3348'].accepted,
+        grade: i.stats['1.3.3349'].accepted
+      });
+    }
+    return array;
+  };
+  // reformat lecture applications users data
+  reformatLectureApplicationsUsersData = data => {
+    let array = [];
+    for (let i of data) {
+      array.push({
+        studentId: i.id,
+        account: i.account.name
+      });
+    }
+    return array;
+  };
+  //string accounts
+  stringAccoutns = array => {
+    let accounts = '';
+    for (let i of array) {
+      accounts = accounts + i.account + ',';
+    }
+    accounts = accounts.slice(0, -1);
+    return accounts;
+  };
 
   // tabs function
   handleTabChange = (event: any, value: number) => {
@@ -133,8 +173,13 @@ class ClassDashboard extends React.Component<Props, State> {
   };
 
   render() {
-    const { value, loaderFlag, loaderParticipantsFlag } = this.state;
-    const { participants, applications } = this.props;
+    const {
+      value,
+      loaderFlag,
+      loaderParticipantsFlag,
+      dataParticipants,
+      dataApplications
+    } = this.state;
     const TabContainer = props => {
       return <div>{[props.children]}</div>;
     };
@@ -157,9 +202,9 @@ class ClassDashboard extends React.Component<Props, State> {
               <TabContainer>
                 {loaderFlag ? (
                   <CircularProgress className="centered-loader" size={50} />
-                ) : applications.length ? (
+                ) : dataApplications.length ? (
                   <List className="list-wrap">
-                    {applications.map((application, index) => (
+                    {dataApplications.map((application, index) => (
                       <ApplicationsItem {...application} key={index} />
                     ))}
                   </List>
@@ -174,9 +219,9 @@ class ClassDashboard extends React.Component<Props, State> {
               <TabContainer>
                 {loaderParticipantsFlag ? (
                   <CircularProgress className="centered-loader" size={50} />
-                ) : participants.length ? (
+                ) : dataParticipants.length ? (
                   <List className="list-wrap">
-                    {participants.map((participant, index) => (
+                    {dataParticipants.map((participant, index) => (
                       <ParticipantsItem {...participant} key={index} />
                     ))}
                   </List>
@@ -196,6 +241,7 @@ class ClassDashboard extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
+    apiInit: state.app.apiInit,
     currentLecture: state.lectures.currentLecture,
     participants: state.lectures.participants,
     applications: state.lectures.applications

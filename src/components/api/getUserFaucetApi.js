@@ -20,7 +20,7 @@ export default function getUserFaucetApi(account: string) {
       return response.json();
     })
     .then(data => {
-      return data[0];
+      return data;
     })
     .catch(function(error) {
       return error;

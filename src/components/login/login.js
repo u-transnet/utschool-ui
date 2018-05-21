@@ -115,9 +115,9 @@ class Login extends React.Component<Props, State> {
                       // save lectire data to store
                       onSetLextures(lecturesData);
                       // save other data
-                      onSetAvatar(data.photo);
-                      onSetFirstName(data.first_name);
-                      onSetLastName(data.last_name);
+                      onSetAvatar(data[0].photo);
+                      onSetFirstName(data[0].first_name);
+                      onSetLastName(data[0].last_name);
                       onSetTitle('Лекции');
                       // go to dashboard page
                       setTimeout(() => {

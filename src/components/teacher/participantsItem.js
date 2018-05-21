@@ -18,10 +18,15 @@ import './teacher.css';
 
 type Props = {
   account: string,
-  userData: any,
   lecturesBTS: any,
   apiInit: any,
-  lectureAccount: string
+  lectureAccount: string,
+  name: string,
+  first_name: string,
+  last_name: string,
+  photo: string,
+  session: boolean,
+  grade: boolean
 };
 type State = {
   sessionActive: boolean,
@@ -49,11 +54,6 @@ class ParticipantsItem extends React.Component<Props, State> {
     };
   }
 
-  componentDidMount() {
-    // indications
-    //console.log(this.props.userData.name);
-  }
-
   // send Session Token
   getSessionPassword = (password: string) => {
     try {
@@ -62,7 +62,7 @@ class ParticipantsItem extends React.Component<Props, State> {
       let privateKey = keys.privKeys.active.toWif();
       this.props.apiInit.setPrivateKey(privateKey);
       this.props.apiInit.teacherApi
-        .sendSessionToken(this.props.lectureAccount, this.props.userData.name)
+        .sendSessionToken(this.props.lectureAccount, this.props.name)
         .then(resp => {
           this.props.apiInit.studentApi
             .getLectureStats(this.props.lectureAccount)
@@ -88,7 +88,7 @@ class ParticipantsItem extends React.Component<Props, State> {
       let privateKey = keys.privKeys.active.toWif();
       this.props.apiInit.setPrivateKey(privateKey);
       this.props.apiInit.teacherApi
-        .sendGradeToken(this.props.lectureAccount, this.props.userData.name)
+        .sendGradeToken(this.props.lectureAccount, this.props.name)
         .then(resp => {
           this.props.apiInit.studentApi
             .getLectureStats(this.props.lectureAccount)
@@ -135,27 +135,22 @@ class ParticipantsItem extends React.Component<Props, State> {
       sessionDialogLoader,
       gradeDialogLoader
     } = this.state;
-    const { userData } = this.props;
+    const { first_name, last_name, photo, session, grade } = this.props;
     let userName;
-    userData
-      ? (userName = userData.first_name + ' ' + userData.last_name)
-      : null;
-    return userData ? (
+    first_name ? (userName = first_name + ' ' + last_name) : null;
+    return userName ? (
       <div>
         <ListItem>
-          <Avatar alt={userName} src={userData.photo} />
+          <Avatar alt={userName} src={photo} />
           <ListItemText primary={userName} secondary="Студент" />
           <ListItemSecondaryAction className="state-btns">
             <IconButton
-              className={sessionActive ? 'active' : ''}
+              className={session ? 'active' : ''}
               onClick={this.session}
             >
               <i className="material-icons">assignment_ind</i>
             </IconButton>
-            <IconButton
-              className={gradeActive ? 'active' : ''}
-              onClick={this.grade}
-            >
+            <IconButton className={grade ? 'active' : ''} onClick={this.grade}>
               <i className="material-icons">assignment_turned_in</i>
             </IconButton>
           </ListItemSecondaryAction>

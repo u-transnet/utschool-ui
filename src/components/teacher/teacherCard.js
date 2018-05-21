@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 //
 import { setCurrentLecture } from '../../actions/lecturesAction';
 import { setTitle, setBackToTeacherDashboard } from '../../actions';
+
 //
 import './teacher.css';
 
@@ -22,7 +23,8 @@ type Props = {
   onSetCurrentLecture: Function,
   onSetBackToTeacherDashboard: Function,
   lecture: any,
-  additionalInfo: any
+  additionalInfo: any,
+  currentLecture: any
 };
 type State = {
   anchorEl: any,
@@ -47,6 +49,7 @@ class TeacherCard extends React.Component<Props, State> {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
+
   // card functions
   cardAction = () => {
     this.props.onSetBackToTeacherDashboard(true);
@@ -135,8 +138,7 @@ class TeacherCard extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    currentLecture: state.lectures.currentLecture,
-    participants: state.lectures.participants
+    currentLecture: state.lectures.currentLecture
   };
 }
 
