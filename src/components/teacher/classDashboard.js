@@ -116,6 +116,8 @@ class ClassDashboard extends React.Component<Props, State> {
                     for (let j of array) {
                       if (i.name === j.account) {
                         dataArray.unshift({
+                          lectureAccount: this.props.currentLecture.lecture
+                            .account,
                           name: i.name,
                           first_name: i.first_name,
                           last_name: i.last_name,

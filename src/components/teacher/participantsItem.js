@@ -43,8 +43,8 @@ class ParticipantsItem extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      sessionActive: false,
-      gradeActive: false,
+      sessionActive: this.props.session,
+      gradeActive: this.props.grade,
       confirmAcceptGrade: false,
       confirmAcceptSession: false,
       openSessionDialog: false,
@@ -69,7 +69,7 @@ class ParticipantsItem extends React.Component<Props, State> {
             .then(resp => {
               this.setState({ sessionDialogLoader: false });
               this.setState({ confirmAcceptSession: true });
-              this.setState({ sessionActive: resp['1.3.3348'].accepted });
+              this.setState({ sessionActive: true });
             });
         });
     } catch (error) {
@@ -95,7 +95,7 @@ class ParticipantsItem extends React.Component<Props, State> {
             .then(resp => {
               this.setState({ gradeDialogLoader: false });
               this.setState({ confirmAcceptGrade: true });
-              this.setState({ gradeActive: resp['1.3.3349'].accepted });
+              this.setState({ gradeActive: true });
             });
         });
     } catch (error) {
@@ -135,7 +135,7 @@ class ParticipantsItem extends React.Component<Props, State> {
       sessionDialogLoader,
       gradeDialogLoader
     } = this.state;
-    const { first_name, last_name, photo, session, grade } = this.props;
+    const { first_name, last_name, photo } = this.props;
     let userName;
     first_name ? (userName = first_name + ' ' + last_name) : null;
     return userName ? (
@@ -144,15 +144,28 @@ class ParticipantsItem extends React.Component<Props, State> {
           <Avatar alt={userName} src={photo} />
           <ListItemText primary={userName} secondary="Студент" />
           <ListItemSecondaryAction className="state-btns">
-            <IconButton
-              className={session ? 'active' : ''}
-              onClick={this.session}
-            >
-              <i className="material-icons">assignment_ind</i>
-            </IconButton>
-            <IconButton className={grade ? 'active' : ''} onClick={this.grade}>
-              <i className="material-icons">assignment_turned_in</i>
-            </IconButton>
+            {sessionActive ? (
+              <div className="icon-btn">
+                <span>
+                  <i className="active material-icons">assignment_ind</i>
+                </span>
+              </div>
+            ) : (
+              <IconButton onClick={this.session}>
+                <i className="material-icons">assignment_ind</i>
+              </IconButton>
+            )}
+            {gradeActive ? (
+              <div className="icon-btn">
+                <span>
+                  <i className="active material-icons">assignment_turned_in</i>
+                </span>
+              </div>
+            ) : (
+              <IconButton onClick={this.grade}>
+                <i className="material-icons">assignment_turned_in</i>
+              </IconButton>
+            )}
           </ListItemSecondaryAction>
         </ListItem>
         <LoginDialog

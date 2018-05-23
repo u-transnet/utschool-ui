@@ -90,4 +90,30 @@ p.empty-block {
 .state-btns .active {
   color: #00acc1 !important;
 }
+
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  line-height: 48px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  user-select: none;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.icon-btn span {
+  width: 100%;
+  display: block;
+  height: 48px;
+  position: relative;
+}
+
+.icon-btn span i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -12px 0 0 -12px;
+}
 /*# sourceMappingURL=teacher.css.map */
