@@ -71,7 +71,7 @@ class Login extends React.Component<Props, State> {
       // get user data from faucet
       return getUserFaucetApi(values.account)
         .then(data => {
-          if (!data) {
+          if (!data.length) {
             throw new SubmissionError({
               account: 'Такой учетной записи не существует.',
               _error: 'Login failed!'
