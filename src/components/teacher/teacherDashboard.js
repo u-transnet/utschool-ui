@@ -34,29 +34,48 @@ class DashboardTeacherContent extends React.Component<Props, State> {
   }
   componentDidMount() {
     if (!this.props.teacherLectures.length) {
-      let lecturesData = [];
-      // get teacher lectures from bitshares
-      this.props.apiInit.teacherApi
-        .getLectures()
-        .then(resp => {
-          if (resp.length) {
-            for (let i of resp) {
-              // info about applications & participants for current lection
-              let additionalInfo = {
-                applications: i.applications,
-                applicationscount: i.applications.length,
-                participants: i.participants,
-                participantscount: i.participants.length
-              };
-              // get data for current lecture from faucet
-              getLectureFaucetApi(i.name)
-                .then(resp => {
-                  // get data for current lecture from vk
-                  getLectureDataApi(resp.topic_url, i.name)
+      this.getTeacherLections();
+    } else {
+      this.setState({ loaderFlag: false });
+    }
+  }
+
+  // get teacher lections
+  getTeacherLections() {
+    // get teacher lectures from bitshares
+    this.props.apiInit.teacherApi
+      .getLectures()
+      .then(resp => {
+        if (resp.length) {
+          let dataArray = this.reformatLecturesData(resp);
+          let lectureAccounts = this.stringAccoutns(dataArray);
+          lectureAccounts
+            ? getLectureFaucetApi(lectureAccounts).then(resp => {
+                let lecturesData = [];
+                if (resp.length) {
+                  for (let i of resp) {
+                    // get data for current lecture from vk
+                    getLectureDataApi(i.topic_url, i.name)
+                      .then(resp => {
+                        lecturesData.push({
+                          lecture: resp,
+                          additionalInfo: dataArray[i]
+                        });
+                        // desable loader
+                        lecturesData.length
+                          ? this.setState({ loaderFlag: false })
+                          : this.setState({ loaderFlag: true });
+                        // save data about teacher lectures to store
+                        this.props.onSetTeacherLectures(lecturesData);
+                      })
+                      .catch(error => error);
+                  }
+                } else {
+                  getLectureDataApi(resp.topic_url, resp.name)
                     .then(resp => {
                       lecturesData.push({
                         lecture: resp,
-                        additionalInfo: additionalInfo
+                        additionalInfo: dataArray[0]
                       });
                       // desable loader
                       lecturesData.length
@@ -66,24 +85,55 @@ class DashboardTeacherContent extends React.Component<Props, State> {
                       this.props.onSetTeacherLectures(lecturesData);
                     })
                     .catch(error => error);
-                })
-                .catch(error => error);
-            }
-          } else {
-            this.setState({ loaderFlag: false });
-            this.setState({ nodata: 'У вас нет лекций.' });
-          }
-        })
-        .catch(error => error);
-    } else {
-      this.setState({ loaderFlag: false });
-    }
+                }
+              })
+            : null;
+        } else {
+          this.setState({ loaderFlag: false });
+          this.setState({ nodata: 'У вас нет лекций.' });
+        }
+      })
+      .catch(error => error);
   }
+  // reformat data for teacher lectures
+  reformatLecturesData = data => {
+    let array = [];
+    if (data.length) {
+      for (let i of data) {
+        array.push({
+          account: i.name,
+          applications: i.applications,
+          applicationscount: i.applications.length,
+          participants: i.participants,
+          participantscount: i.participants.length
+        });
+      }
+    } else {
+      array.push({
+        account: data.name,
+        applications: data.applications,
+        applicationscount: data.applications.length,
+        participants: data.participants,
+        participantscount: data.participants.length
+      });
+    }
+    return array;
+  };
+  //string accounts
+  stringAccoutns = array => {
+    let accounts = '';
+    for (let i of array) {
+      accounts = accounts + i.account + ',';
+    }
+    accounts = accounts.slice(0, -1);
+    return accounts;
+  };
+
   render() {
     const { teacherLectures } = this.props;
     const { loaderFlag, nodata } = this.state;
     return (
-      <div>
+      <div className="content-wrap">
         {loaderFlag ? (
           <CircularProgress className="centered-loader" size={50} />
         ) : (

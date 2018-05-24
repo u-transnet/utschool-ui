@@ -71,7 +71,9 @@ class ClassDashboard extends React.Component<Props, State> {
   getLectureApplications = () => {
     this.props.apiInit.teacherApi.getLectureApplications
       ? this.props.apiInit.teacherApi
-          .getLectureApplications(this.props.currentLecture.lecture.account)
+          .getLectureApplications(
+            this.props.currentLecture.additionalInfo.account
+          )
           .then(resp => {
             let array = this.reformatLectureApplicationsUsersData(resp);
             let accounts = this.stringAccoutns(array);
@@ -105,7 +107,9 @@ class ClassDashboard extends React.Component<Props, State> {
   getLectureParticipants = () => {
     this.props.apiInit.teacherApi.getLectureParticipants
       ? this.props.apiInit.teacherApi
-          .getLectureParticipants(this.props.currentLecture.lecture.account)
+          .getLectureParticipants(
+            this.props.currentLecture.additionalInfo.account
+          )
           .then(resp => {
             let array = this.reformatLectureUsersData(resp);
             let accounts = this.stringAccoutns(array);
@@ -116,8 +120,8 @@ class ClassDashboard extends React.Component<Props, State> {
                     for (let j of array) {
                       if (i.name === j.account) {
                         dataArray.unshift({
-                          lectureAccount: this.props.currentLecture.lecture
-                            .account,
+                          lectureAccount: this.props.currentLecture
+                            .additionalInfo.account,
                           name: i.name,
                           first_name: i.first_name,
                           last_name: i.last_name,

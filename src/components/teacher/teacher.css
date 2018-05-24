@@ -2,8 +2,12 @@
   margin-top: 64px;
 }
 
-.teacher-card {
+.content-wrap {
   padding: 24px 24px 0;
+}
+
+.teacher-card {
+  padding: 0 0 24px;
 }
 
 .teacher-card p {

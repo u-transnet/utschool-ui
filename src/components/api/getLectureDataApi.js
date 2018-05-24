@@ -25,7 +25,6 @@ export default function getLectureDataApi(vkUrl: string, account: string) {
     })
     .then(data => {
       let lectureData = {
-        account: account,
         title: data.response.items[0].title,
         text: data.response.items[0].first_comment,
         closed: data.response.items[0].is_closed,
