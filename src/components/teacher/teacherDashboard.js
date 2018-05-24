@@ -52,14 +52,16 @@ class DashboardTeacherContent extends React.Component<Props, State> {
           lectureAccounts
             ? getLectureFaucetApi(lectureAccounts).then(resp => {
                 let lecturesData = [];
+                // TODO need clean after change fauset
                 if (resp.length) {
+                  let n = 0;
                   for (let i of resp) {
                     // get data for current lecture from vk
                     getLectureDataApi(i.topic_url, i.name)
                       .then(resp => {
                         lecturesData.push({
                           lecture: resp,
-                          additionalInfo: dataArray[i]
+                          additionalInfo: dataArray[n]
                         });
                         // desable loader
                         lecturesData.length
@@ -67,24 +69,10 @@ class DashboardTeacherContent extends React.Component<Props, State> {
                           : this.setState({ loaderFlag: true });
                         // save data about teacher lectures to store
                         this.props.onSetTeacherLectures(lecturesData);
+                        n++;
                       })
                       .catch(error => error);
                   }
-                } else {
-                  getLectureDataApi(resp.topic_url, resp.name)
-                    .then(resp => {
-                      lecturesData.push({
-                        lecture: resp,
-                        additionalInfo: dataArray[0]
-                      });
-                      // desable loader
-                      lecturesData.length
-                        ? this.setState({ loaderFlag: false })
-                        : this.setState({ loaderFlag: true });
-                      // save data about teacher lectures to store
-                      this.props.onSetTeacherLectures(lecturesData);
-                    })
-                    .catch(error => error);
                 }
               })
             : null;
@@ -108,14 +96,6 @@ class DashboardTeacherContent extends React.Component<Props, State> {
           participantscount: i.participants.length
         });
       }
-    } else {
-      array.push({
-        account: data.name,
-        applications: data.applications,
-        applicationscount: data.applications.length,
-        participants: data.participants,
-        participantscount: data.participants.length
-      });
     }
     return array;
   };
