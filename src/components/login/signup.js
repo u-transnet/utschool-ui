@@ -42,7 +42,7 @@ type Props = {
   onSetAvatar: Function,
   onSetFirstName: Function,
   onSetLastName: Function,
-  onSetLextures: Function,
+  onSetLectures: Function,
   vkToken: string
 };
 type State = {
@@ -84,7 +84,7 @@ class SignUp extends React.Component<Props, State> {
       onSetAvatar,
       onSetFirstName,
       onSetLastName,
-      onSetLextures
+      onSetLectures
     } = this.props; // No fields prop
     const { loaderFlag } = this.state;
     let signupSubmit = (values: any) => {
@@ -141,8 +141,10 @@ class SignUp extends React.Component<Props, State> {
             // save init api to store
             onSetApiInit(api);
             api.studentApi.getLectures().then(resp => {
+              let lectureBTSData = [];
+              let accounts = '';
               for (let i of resp) {
-                let lectureState = {
+                lectureBTSData.unshift({
                   ticket: {
                     accepted: i.stats['1.3.3347'].accepted,
                     balance: i.stats['1.3.3347'].balance
@@ -155,25 +157,29 @@ class SignUp extends React.Component<Props, State> {
                     accepted: i.stats['1.3.3349'].accepted,
                     balance: i.stats['1.3.3349'].balance
                   }
-                };
-                // get lecture data from faucet
-                getLectureFaucetApi(i.name).then(resp => {
-                  // get lecture data from vk
-                  getLectureDataApi(resp.topic_url, i.name).then(resp => {
+                });
+                accounts = accounts + i.name + ',';
+              }
+              accounts = accounts.slice(0, -1);
+              getLectureFaucetApi(accounts).then(resp => {
+                let n = 0;
+                for (let i of resp) {
+                  //get lecture data from vk
+                  getLectureDataApi(i.topic_url, i.name).then(resp => {
                     lecturesData.push({
                       lecture: resp,
-                      state: lectureState
+                      state: lectureBTSData[n]
                     });
-                    // save data to store
-                    onSetLextures(lecturesData);
-                    onSetTitle('Лекции');
-                    // go to dashboard
+                    // save lectire data to store
+                    onSetLectures(lecturesData);
+                    // go to dashboard page
                     setTimeout(() => {
                       history.push('/dashboard');
                     }, 500);
+                    n++;
                   });
-                });
-              }
+                }
+              });
             });
           });
         }
@@ -280,7 +286,7 @@ const mapDispatchToProps = dispatch => ({
   onSetLastName(val) {
     dispatch(setLastName(val));
   },
-  onSetLextures(val) {
+  onSetLectures(val) {
     dispatch(setLectures(val));
   },
   onSetApiInit(val) {
