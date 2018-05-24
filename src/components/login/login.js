@@ -20,9 +20,16 @@ import {
   setAccountName,
   setAvatar,
   setFirstName,
-  setLastName
+  setLastName,
+  setUserRole
 } from '../../actions/actionsUser';
-import { setLectures } from '../../actions/lecturesAction';
+import {
+  setLectures,
+  setTeacherLectures,
+  setParticipants,
+  setApplications,
+  setCurrentLecture
+} from '../../actions/lecturesAction';
 import { setTitle, setApiInit } from '../../actions';
 import validate from './validate';
 import history from '../../history';
@@ -30,6 +37,12 @@ import history from '../../history';
 import './login.css';
 
 type Props = {
+  onChangeRole: Function,
+  onSetLectures: Function,
+  onSetTeacherLectures: Function,
+  onSetParticipants: Function,
+  onSetApplications: Function,
+  onSetCurrentLecture: Function,
   onSetApiInit: Function,
   errorFlag: Function,
   handleSubmit: Function,
@@ -38,7 +51,6 @@ type Props = {
   onSetAvatar: Function,
   onSetFirstName: Function,
   onSetLastName: Function,
-  onSetLextures: Function,
   account: string
 };
 type State = {
@@ -53,6 +65,16 @@ class Login extends React.Component<Props, State> {
       loaderFlag: false
     };
   }
+  clearData() {
+    this.props.onSetTitle('Лекции');
+    this.props.onChangeRole('Студент');
+    this.props.onSetLectures([]);
+    this.props.onSetTeacherLectures([]);
+    this.props.onSetParticipants([]);
+    this.props.onSetApplications([]);
+    this.props.onSetCurrentLecture([]);
+    localStorage.clear();
+  }
   render() {
     const {
       handleSubmit,
@@ -61,11 +83,13 @@ class Login extends React.Component<Props, State> {
       onSetAvatar,
       onSetFirstName,
       onSetLastName,
-      onSetLextures,
+      onSetLectures,
       onSetApiInit
     } = this.props; // No fields prop
     const { loaderFlag } = this.state;
     let loginSubmit = (values: any) => {
+      // clear data
+      this.clearData();
       // save current to store
       setAccount(values.account);
       // get user data from faucet
@@ -89,8 +113,10 @@ class Login extends React.Component<Props, State> {
               onSetApiInit(api);
               // get lectures data from bitfares
               api.studentApi.getLectures().then(resp => {
+                let lectureBTSData = [];
+                let accounts = '';
                 for (let i of resp) {
-                  let lectureState = {
+                  lectureBTSData.unshift({
                     ticket: {
                       accepted: i.stats['1.3.3347'].accepted,
                       balance: i.stats['1.3.3347'].balance
@@ -103,29 +129,35 @@ class Login extends React.Component<Props, State> {
                       accepted: i.stats['1.3.3349'].accepted,
                       balance: i.stats['1.3.3349'].balance
                     }
-                  };
-                  // get lecture data from faucet
-                  getLectureFaucetApi(i.name).then(resp => {
-                    // get lecture data from vk
-                    getLectureDataApi(resp.topic_url, i.name).then(resp => {
+                  });
+                  accounts = accounts + i.name + ',';
+                }
+                accounts = accounts.slice(0, -1);
+                // get lecture data from faucet
+                getLectureFaucetApi(accounts).then(resp => {
+                  let n = 0;
+                  for (let i of resp) {
+                    //get lecture data from vk
+                    getLectureDataApi(i.topic_url, i.name).then(resp => {
                       lecturesData.push({
                         lecture: resp,
-                        state: lectureState
+                        state: lectureBTSData[n]
                       });
                       // save lectire data to store
-                      onSetLextures(lecturesData);
-                      // save other data
-                      onSetAvatar(data[0].photo);
-                      onSetFirstName(data[0].first_name);
-                      onSetLastName(data[0].last_name);
-                      onSetTitle('Лекции');
+                      onSetLectures(lecturesData);
                       // go to dashboard page
                       setTimeout(() => {
                         history.push('/dashboard');
                       }, 500);
+                      n++;
                     });
-                  });
-                }
+                  }
+                  // save other data
+                  onSetAvatar(data[0].photo);
+                  onSetFirstName(data[0].first_name);
+                  onSetLastName(data[0].last_name);
+                  onSetTitle('Лекции');
+                });
               });
             });
             // end of get lectures function
@@ -218,11 +250,26 @@ const mapDispatchToProps = dispatch => ({
   onSetLastName(val) {
     dispatch(setLastName(val));
   },
-  onSetLextures(val) {
+  onSetLectures(val) {
     dispatch(setLectures(val));
   },
   onSetApiInit(val) {
     dispatch(setApiInit(val));
+  },
+  onChangeRole(val) {
+    dispatch(setUserRole(val));
+  },
+  onSetTeacherLectures(val) {
+    dispatch(setTeacherLectures(val));
+  },
+  onSetParticipants(val) {
+    dispatch(setParticipants(val));
+  },
+  onSetApplications(val) {
+    dispatch(setApplications(val));
+  },
+  onSetCurrentLecture(val) {
+    dispatch(setCurrentLecture(val));
   }
 });
 
