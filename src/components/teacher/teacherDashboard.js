@@ -52,7 +52,6 @@ class DashboardTeacherContent extends React.Component<Props, State> {
           lectureAccounts
             ? getLectureFaucetApi(lectureAccounts).then(resp => {
                 let lecturesData = [];
-                // TODO need clean after change fauset
                 if (resp.length) {
                   let n = 0;
                   for (let i of resp) {
