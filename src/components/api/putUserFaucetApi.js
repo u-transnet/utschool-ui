@@ -32,24 +32,20 @@ export default function putUserFaucetApi(
     memo_key: keys.pubKeys.owner,
     referrer: 'ut-school'
   };
-  // TODO: проверить формат отправки даты с помощью fetch
   let postData = Object.keys(data)
     .map(key => {
       return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
     })
     .join('&');
 
-  return fetch(
-      `https://utschool.herokuapp.com/api/v1/accounts`,
-    {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/json; charset=utf-8'
-      },
-      method: 'post',
-      body: postData
-    }
-  )
+  return fetch(`https://utschool.herokuapp.com/api/v1/accounts`, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json; charset=utf-8'
+    },
+    method: 'post',
+    body: postData
+  })
     .then(res => res.json())
     .then(data => data)
     .catch(error => error);

@@ -178,6 +178,9 @@ class ClassDashboard extends React.Component<Props, State> {
     this.setState({ value });
   };
 
+  // TODO: need reload data function after change status
+  reloadData() {}
+
   render() {
     const {
       value,
