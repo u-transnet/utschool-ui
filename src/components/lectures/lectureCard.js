@@ -29,7 +29,8 @@ type State = {
   anchorEl: any,
   openDialog: boolean,
   confirmRegistration: boolean,
-  dialogLoader: boolean
+  dialogLoader: boolean,
+  showBtn: boolean
 };
 class LectureCard extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -38,7 +39,8 @@ class LectureCard extends React.Component<Props, State> {
       anchorEl: null,
       openDialog: false,
       confirmRegistration: false,
-      dialogLoader: false
+      dialogLoader: false,
+      showBtn: true
     };
   }
 
@@ -62,16 +64,18 @@ class LectureCard extends React.Component<Props, State> {
 
   // registration function
   registration = (password: string) => {
-    let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
-    let privateKey = keys.privKeys.active.toWif();
-    this.props.apiInit.setPrivateKey(privateKey);
     try {
+      let keys = Login.generateKeys(this.props.account, password, '', 'BTS');
+      let privateKey = keys.privKeys.active.toWif();
+      this.props.apiInit.setPrivateKey(privateKey);
       this.setState({ dialogLoader: true });
+
       this.props.apiInit.studentApi
         .applyForLecture(this.props.lecture.account)
         .then(resp => {
           this.setState({ dialogLoader: false });
           this.setState({ confirmRegistration: true });
+          this.setState({ showBtn: false });
         })
         .catch(error => error);
     } catch (error) {
@@ -88,7 +92,8 @@ class LectureCard extends React.Component<Props, State> {
       anchorEl,
       confirmRegistration,
       openDialog,
-      dialogLoader
+      dialogLoader,
+      showBtn
     } = this.state;
     return (
       <div className="lecture-card">
@@ -139,7 +144,7 @@ class LectureCard extends React.Component<Props, State> {
                 <em>Осталось мест {state.ticket.balance}</em>
               </li>
             </ul>
-            {state.ticket.balance ? (
+            {state.ticket.balance && showBtn ? (
               <Button
                 variant="raised"
                 color="primary"

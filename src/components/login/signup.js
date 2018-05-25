@@ -163,20 +163,21 @@ class SignUp extends React.Component<Props, State> {
               accounts = accounts.slice(0, -1);
               getLectureFaucetApi(accounts).then(resp => {
                 let n = 0;
+                let j = resp.length;
                 for (let i of resp) {
                   //get lecture data from vk
-                  getLectureDataApi(i.topic_url, i.name).then(resp => {
+                  getLectureDataApi(i.topic_url, i.account_name).then(resp => {
                     lecturesData.push({
                       lecture: resp,
                       state: lectureBTSData[n]
                     });
-                    // save lectire data to store
-                    onSetLectures(lecturesData);
-                    // go to dashboard page
-                    setTimeout(() => {
-                      history.push('/dashboard');
-                    }, 500);
                     n++;
+                    if (n === j) {
+                      // save lectire data to store
+                      onSetLectures(lecturesData);
+                      // go to dashboard page
+                      history.push('/dashboard');
+                    }
                   });
                 }
               });

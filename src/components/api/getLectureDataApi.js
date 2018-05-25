@@ -15,10 +15,12 @@ export default function getLectureDataApi(vkUrl: string, account: string) {
     '&topic_ids=' +
     topicId +
     '&preview=1&preview_length=0&extended=1&v=5.45';
+
   return axios
     .jsonp(url)
     .then(data => {
       let lectureData = {
+        account: account,
         title: data.response.items[0].title,
         text: data.response.items[0].first_comment,
         closed: data.response.items[0].is_closed,

@@ -55,14 +55,16 @@ type Props = {
 };
 type State = {
   lecturesData: Array<any>,
-  loaderFlag: boolean
+  loaderFlag: boolean,
+  vkData: Array<any>
 };
 class Login extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
       lecturesData: [],
-      loaderFlag: false
+      loaderFlag: false,
+      vkData: []
     };
   }
   clearData() {
@@ -136,21 +138,24 @@ class Login extends React.Component<Props, State> {
                 // get lecture data from faucet
                 getLectureFaucetApi(accounts).then(resp => {
                   let n = 0;
+                  let j = resp.length;
                   for (let i of resp) {
                     //get lecture data from vk
-                    getLectureDataApi(i.topic_url, i.name).then(resp => {
-                      lecturesData.push({
-                        lecture: resp,
-                        state: lectureBTSData[n]
-                      });
-                      // save lectire data to store
-                      onSetLectures(lecturesData);
-                      // go to dashboard page
-                      setTimeout(() => {
-                        history.push('/dashboard');
-                      }, 500);
-                      n++;
-                    });
+                    getLectureDataApi(i.topic_url, i.account_name).then(
+                      resp => {
+                        lecturesData.push({
+                          lecture: resp,
+                          state: lectureBTSData[n]
+                        });
+                        n++;
+                        if (n === j) {
+                          // save lectire data to store
+                          onSetLectures(lecturesData);
+                          // go to dashboard page
+                          history.push('/dashboard');
+                        }
+                      }
+                    );
                   }
                   // save other data
                   onSetAvatar(data[0].photo);
