@@ -1,29 +1,22 @@
 // @flow
-import fetch from 'isomorphic-fetch';
+import axios from 'axios-jsonp-pro';
 
 export default function getLectureDataApi(vkUrl: string, account: string) {
   let urlData = vkUrl.split('-')[1];
   let groupId = urlData.split('_')[0];
   let topicId = urlData.split('_')[1];
+  let token =
+    'f42d4ac8f42d4ac8f42d4ac851f44f2772ff42df42d4ac8aef9b8406849f91f1a8b1f86';
   let url =
-    'https://api.vk.com/method/board.getTopics?access_token=f42d4ac8f42d4ac8f42d4ac851f44f2772ff42df42d4ac8aef9b8406849f91f1a8b1f86&group_id=' +
+    'https://api.vk.com/method/board.getTopics?access_token=' +
+    token +
+    '&group_id=' +
     groupId +
     '&topic_ids=' +
     topicId +
     '&preview=1&preview_length=0&extended=1&v=5.45';
-  //   return fetch('https://cors-anywhere.herokuapp.com/' + url, {
-  //   mode: 'cors'
-  // })
-  return fetch(url)
-    .then(response => {
-      if (response.status !== 200) {
-        alert(
-          'Looks like there was a problem. Status Code: ' + response.status
-        );
-        return;
-      }
-      return response.json();
-    })
+  return axios
+    .jsonp(url)
     .then(data => {
       let lectureData = {
         title: data.response.items[0].title,
