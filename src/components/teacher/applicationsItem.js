@@ -24,6 +24,7 @@ import {
 import './teacher.css';
 
 type Props = {
+  refresh: Function,
   handleSubmit: Function,
   onSetTeacherLectures: Function,
   onSetParticipants: Function,
@@ -74,6 +75,7 @@ class ApplicationsItem extends React.Component<Props, State> {
           if (resp.expiration) {
             this.setState({ dialogLoader: false });
             this.setState({ confirmAccept: true });
+            this.props.refresh();
           } else {
             return resp;
           }

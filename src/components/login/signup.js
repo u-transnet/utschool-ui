@@ -80,7 +80,6 @@ class SignUp extends React.Component<Props, State> {
       handleSubmit,
       setAccount,
       vkToken,
-      onSetTitle,
       onSetAvatar,
       onSetFirstName,
       onSetLastName,

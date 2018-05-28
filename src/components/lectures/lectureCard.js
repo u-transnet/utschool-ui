@@ -18,6 +18,7 @@ const MENU_OPTIONS = ['Option 1', 'Option 2', 'Option 3'];
 const ITEM_HEIGHT = 48;
 
 type Props = {
+  refresh: Function,
   registrationLecture: Function,
   handleSubmit: Function,
   account: string,
@@ -76,6 +77,7 @@ class LectureCard extends React.Component<Props, State> {
           this.setState({ dialogLoader: false });
           this.setState({ confirmRegistration: true });
           this.setState({ showBtn: false });
+          this.props.refresh();
         })
         .catch(error => error);
     } catch (error) {

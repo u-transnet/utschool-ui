@@ -40,6 +40,11 @@ class DashboardTeacherContent extends React.Component<Props, State> {
     }
   }
 
+  reloadData() {
+    this.setState({ loaderFlag: true });
+    this.getTeacherLections();
+  }
+
   // get teacher lections
   getTeacherLections() {
     // get teacher lectures from bitshares
@@ -119,7 +124,11 @@ class DashboardTeacherContent extends React.Component<Props, State> {
           <div>
             {nodata ? <p className="empty-block">{nodata}</p> : null}
             {teacherLectures.map((lectures, index) => (
-              <TeacherCard {...lectures} key={index} />
+              <TeacherCard
+                {...lectures}
+                key={index}
+                refresh={this.reloadData}
+              />
             ))}
           </div>
         )}

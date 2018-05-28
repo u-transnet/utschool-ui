@@ -178,8 +178,13 @@ class ClassDashboard extends React.Component<Props, State> {
     this.setState({ value });
   };
 
-  // TODO: need reload data function after change status
-  reloadData() {}
+  // Reload data function after change status
+  reloadData = () => {
+    this.getLectureParticipants;
+    this.getLectureApplications;
+    this.setState({ loaderParticipantsFlag: false });
+    this.setState({ loaderFlag: false });
+  };
 
   render() {
     const {
@@ -214,7 +219,11 @@ class ClassDashboard extends React.Component<Props, State> {
                 ) : dataApplications.length ? (
                   <List className="list-wrap">
                     {dataApplications.map((application, index) => (
-                      <ApplicationsItem {...application} key={index} />
+                      <ApplicationsItem
+                        {...application}
+                        key={index}
+                        refresh={this.reloadData}
+                      />
                     ))}
                   </List>
                 ) : (
@@ -231,7 +240,11 @@ class ClassDashboard extends React.Component<Props, State> {
                 ) : dataParticipants.length ? (
                   <List className="list-wrap">
                     {dataParticipants.map((participant, index) => (
-                      <ParticipantsItem {...participant} key={index} />
+                      <ParticipantsItem
+                        {...participant}
+                        key={index}
+                        refresh={this.reloadData}
+                      />
                     ))}
                   </List>
                 ) : (

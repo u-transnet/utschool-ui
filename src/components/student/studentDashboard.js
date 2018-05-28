@@ -28,9 +28,6 @@ class DashboardStudentContent extends React.Component<Props, State> {
     this.setState({ value });
   };
 
-  // TODO: need reload data function after registration on lecture
-  reloadData() {}
-
   render() {
     const { value } = this.state;
     const { lecturesBTS } = this.props;

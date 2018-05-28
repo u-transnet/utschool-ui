@@ -17,6 +17,7 @@ import LoginDialog from '../dialogs/loginDialog';
 import './teacher.css';
 
 type Props = {
+  refresh: Function,
   account: string,
   lecturesBTS: any,
   apiInit: any,
@@ -70,6 +71,7 @@ class ParticipantsItem extends React.Component<Props, State> {
               this.setState({ sessionDialogLoader: false });
               this.setState({ confirmAcceptSession: true });
               this.setState({ sessionActive: true });
+              this.props.refresh();
             });
         });
     } catch (error) {
