@@ -4,7 +4,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
-import Api from 'utschool-js';
 //
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
@@ -26,7 +25,7 @@ import {
   setLastName
 } from '../../actions/actionsUser';
 import { setLectures } from '../../actions/lecturesAction';
-import { setTitle, setApiInit } from '../../actions';
+import { setTitle } from '../../actions';
 import validate from './validate';
 import LoginHeader from './loginHeader';
 import history from '../../history';
@@ -34,7 +33,7 @@ import history from '../../history';
 import './login.css';
 
 type Props = {
-  onSetApiInit: Function,
+  apiInit: Object,
   handleSubmit: Function,
   setAccount: Function,
   onSetVkToken: Function,
@@ -76,7 +75,6 @@ class SignUp extends React.Component<Props, State> {
 
   render() {
     const {
-      onSetApiInit,
       handleSubmit,
       setAccount,
       vkToken,
@@ -132,54 +130,48 @@ class SignUp extends React.Component<Props, State> {
           // added waiting loader
           this.setState({ loaderFlag: true });
           // get lectures data from bitsares
-          let nodeUrl = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
-          let accountName = values.newaccount;
-          let privateKey = null;
+
           let lecturesData = [];
-          Api.init(nodeUrl, accountName, privateKey).then(api => {
-            // save init api to store
-            onSetApiInit(api);
-            api.studentApi.getLectures().then(resp => {
-              let lectureBTSData = [];
-              let accounts = '';
-              for (let i of resp) {
-                lectureBTSData.unshift({
-                  ticket: {
-                    accepted: i.stats['1.3.3347'].accepted,
-                    balance: i.stats['1.3.3347'].balance
-                  },
-                  settion: {
-                    accepted: i.stats['1.3.3348'].accepted,
-                    balance: i.stats['1.3.3348'].balance
-                  },
-                  grade: {
-                    accepted: i.stats['1.3.3349'].accepted,
-                    balance: i.stats['1.3.3349'].balance
-                  }
-                });
-                accounts = accounts + i.name + ',';
-              }
-              accounts = accounts.slice(0, -1);
-              getLectureFaucetApi(accounts).then(resp => {
-                let n = 0;
-                let j = resp.length;
-                for (let i of resp) {
-                  //get lecture data from vk
-                  getLectureDataApi(i.topic_url, i.account_name).then(resp => {
-                    lecturesData.push({
-                      lecture: resp,
-                      state: lectureBTSData[n]
-                    });
-                    n++;
-                    if (n === j) {
-                      // save lectire data to store
-                      onSetLectures(lecturesData);
-                      // go to dashboard page
-                      history.push('/dashboard');
-                    }
-                  });
+          this.props.apiInit.studentApi.getLectures().then(resp => {
+            let lectureBTSData = [];
+            let accounts = '';
+            for (let i of resp) {
+              lectureBTSData.unshift({
+                ticket: {
+                  accepted: i.stats['1.3.3347'].accepted,
+                  balance: i.stats['1.3.3347'].balance
+                },
+                settion: {
+                  accepted: i.stats['1.3.3348'].accepted,
+                  balance: i.stats['1.3.3348'].balance
+                },
+                grade: {
+                  accepted: i.stats['1.3.3349'].accepted,
+                  balance: i.stats['1.3.3349'].balance
                 }
               });
+              accounts = accounts + i.name + ',';
+            }
+            accounts = accounts.slice(0, -1);
+            getLectureFaucetApi(accounts).then(resp => {
+              let n = 0;
+              let j = resp.length;
+              for (let i of resp) {
+                //get lecture data from vk
+                getLectureDataApi(i.topic_url, i.account_name).then(resp => {
+                  lecturesData.push({
+                    lecture: resp,
+                    state: lectureBTSData[n]
+                  });
+                  n++;
+                  if (n === j) {
+                    // save lectire data to store
+                    onSetLectures(lecturesData);
+                    // go to dashboard page
+                    history.push('/dashboard');
+                  }
+                });
+              }
             });
           });
         }
@@ -263,7 +255,8 @@ class SignUp extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    vkToken: state.login.vkToken
+    vkToken: state.login.vkToken,
+    apiInit: state.app.apiInit
   };
 }
 
@@ -288,9 +281,6 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLectures(val) {
     dispatch(setLectures(val));
-  },
-  onSetApiInit(val) {
-    dispatch(setApiInit(val));
   }
 });
 

@@ -17,6 +17,9 @@ import Settings from './Settings';
 import Help from './Help';
 import theme from '../stores/theme';
 import { setApiInit } from '../actions';
+import changedNode from './api/changedNode';
+
+const NODE = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
 
 type Props = {
   store: any,
@@ -24,19 +27,43 @@ type Props = {
   onSetApiInit: Function
 };
 
-class Root extends React.Component<Props> {
+type State = {
+  nodeUrl: string,
+  reloadNumber: number
+};
+
+class Root extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.state = {
+      nodeUrl: NODE,
+      reloadNumber: 0
+    };
     if (document.readyState) {
-      let nodeUrl = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
-      let accountName = this.props.account;
-      let privateKey = null;
-      Api.init(nodeUrl, accountName, privateKey).then(api => {
-        // save init api to store
-        this.props.onSetApiInit(api);
-      });
+      this.btsConnect();
     }
   }
+
+  btsConnect() {
+    let node = this.state.nodeUrl;
+    let accountName = this.props.account;
+    let privateKey = null;
+    Api.init(node, accountName, privateKey)
+      .then(api => {
+        // save init api to store
+        this.props.onSetApiInit(api);
+      })
+      .catch(error => {
+        if (this.state.reloadNumber < 10) {
+          this.setState({ nodeUrl: changedNode(this.state.nodeUrl) });
+          this.btsConnect();
+          this.setState({ reloadNumber: this.state.reloadNumber++ });
+        } else {
+          return error;
+        }
+      });
+  }
+
   render() {
     return (
       <Provider store={this.props.store}>
