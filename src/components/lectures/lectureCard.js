@@ -136,9 +136,9 @@ class LectureCard extends React.Component<Props, State> {
           />
           <CardContent>
             <p>{lecture.text}</p>
-            <p>
+            <div className="lector-name">
               <strong>Лектор:</strong> {lecture.teachername}
-            </p>
+            </div>
           </CardContent>
           <CardActions className="card-actions">
             <ul className="lecture-status">
