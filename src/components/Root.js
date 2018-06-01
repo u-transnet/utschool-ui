@@ -48,6 +48,8 @@ class Root extends React.Component<Props, State> {
     let node = this.state.nodeUrl;
     let accountName = this.props.account;
     let privateKey = null;
+    let n = this.state.reloadNumber;
+
     Api.init(node, accountName, privateKey)
       .then(api => {
         // save init api to store
@@ -57,7 +59,7 @@ class Root extends React.Component<Props, State> {
         if (this.state.reloadNumber < 10) {
           this.setState({ nodeUrl: changedNode(this.state.nodeUrl) });
           this.btsConnect();
-          this.setState({ reloadNumber: this.state.reloadNumber++ });
+          this.setState({ reloadNumber: n++ });
         } else {
           return error;
         }
