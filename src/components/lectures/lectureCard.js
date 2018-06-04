@@ -41,7 +41,7 @@ class LectureCard extends React.Component<Props, State> {
       openDialog: false,
       confirmRegistration: false,
       dialogLoader: false,
-      showBtn: true
+      showBtn: this.props.state.ticket.requested
     };
   }
 
@@ -146,12 +146,13 @@ class LectureCard extends React.Component<Props, State> {
                 <em>Осталось мест {state.ticket.balance}</em>
               </li>
             </ul>
-            {state.ticket.balance && showBtn ? (
+            {state.ticket.balance ? (
               <Button
                 variant="raised"
                 color="primary"
                 className="action-btn"
                 onClick={this.handleClickOpenDialog}
+                disabled={showBtn}
               >
                 Записаться
               </Button>

@@ -113,10 +113,12 @@ class Login extends React.Component<Props, State> {
                 lectureBTSData.unshift({
                   ticket: {
                     accepted: i.stats['1.3.3347'].accepted,
+                    requested: i.stats['1.3.3347'].requested,
                     balance: i.stats['1.3.3347'].balance
                   },
                   settion: {
                     accepted: i.stats['1.3.3348'].accepted,
+                    requested: i.stats['1.3.3348'].requested,
                     balance: i.stats['1.3.3348'].balance
                   },
                   grade: {
