@@ -7,10 +7,7 @@ import { Link } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
 import Button from 'material-ui/Button';
-import { CircularProgress } from 'material-ui/Progress';
 //
-import getLectureFaucetApi from '../api/getLectureFaucetApi';
-import getLectureDataApi from '../api/getLectureDataApi';
 import getUserFaucetApi from '../api/getUserFaucetApi';
 import renderAccountField from './accountField';
 import renderRememberCheckbox from './rememberCheckbox';
@@ -53,17 +50,13 @@ type Props = {
   account: string
 };
 type State = {
-  lecturesData: Array<any>,
-  loaderFlag: boolean,
-  vkData: Array<any>
+  lecturesData: Array<any>
 };
 class Login extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      lecturesData: [],
-      loaderFlag: false,
-      vkData: []
+      lecturesData: []
     };
   }
   clearData() {
@@ -83,15 +76,11 @@ class Login extends React.Component<Props, State> {
       onSetTitle,
       onSetAvatar,
       onSetFirstName,
-      onSetLastName,
-      onSetLectures
+      onSetLastName
     } = this.props; // No fields prop
-    const { loaderFlag } = this.state;
     let loginSubmit = (values: any) => {
       // clear data
       this.clearData();
-      // save current to store
-      setAccount(values.account);
       // get user data from faucet
       return getUserFaucetApi(values.account)
         .then(data => {
@@ -101,62 +90,14 @@ class Login extends React.Component<Props, State> {
               _error: 'Login failed!'
             });
           } else {
-            // added waiting loader
-            this.setState({ loaderFlag: true });
-
-            let lecturesData = [];
-            // get lectures data from bitfares
-            this.props.apiInit.studentApi.getLectures().then(resp => {
-              let lectureBTSData = [];
-              let accounts = '';
-              for (let i of resp) {
-                lectureBTSData.unshift({
-                  ticket: {
-                    accepted: i.stats['1.3.3347'].accepted,
-                    requested: i.stats['1.3.3347'].requested,
-                    balance: i.stats['1.3.3347'].balance
-                  },
-                  settion: {
-                    accepted: i.stats['1.3.3348'].accepted,
-                    requested: i.stats['1.3.3348'].requested,
-                    balance: i.stats['1.3.3348'].balance
-                  },
-                  grade: {
-                    accepted: i.stats['1.3.3349'].accepted,
-                    balance: i.stats['1.3.3349'].balance
-                  }
-                });
-                accounts = accounts + i.name + ',';
-              }
-              accounts = accounts.slice(0, -1);
-              // get lecture data from faucet
-              getLectureFaucetApi(accounts).then(resp => {
-                let n = 0;
-                let j = resp.length;
-                for (let i of resp) {
-                  //get lecture data from vk
-                  getLectureDataApi(i.topic_url, i.account_name).then(resp => {
-                    lecturesData.push({
-                      lecture: resp,
-                      state: lectureBTSData[n]
-                    });
-                    n++;
-                    if (n === j) {
-                      // save lectire data to store
-                      onSetLectures(lecturesData);
-                      // go to dashboard page
-                      history.push('/dashboard');
-                    }
-                  });
-                }
-                // save other data
-                onSetAvatar(data[0].photo);
-                onSetFirstName(data[0].first_name);
-                onSetLastName(data[0].last_name);
-                onSetTitle('Лекции');
-              });
-            });
-            // end of get lectures function
+            // save other data
+            onSetAvatar(data[0].photo);
+            onSetFirstName(data[0].first_name);
+            onSetLastName(data[0].last_name);
+            onSetTitle('Лекции');
+            setAccount(values.account);
+            // go to dashboard page
+            history.push('/dashboard');
           }
         })
         .catch(error => {
@@ -172,50 +113,41 @@ class Login extends React.Component<Props, State> {
           <Grid container spacing={0}>
             <LoginHeader />
             <form onSubmit={handleSubmit(loginSubmit)}>
-              {loaderFlag ? (
-                <CircularProgress className="centered-loader" size={50} />
-              ) : (
-                <div>
-                  <Grid item xs={12}>
-                    <Field
-                      name="account"
-                      className="login-field"
-                      component={renderAccountField}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="check-el">
-                      <Field
-                        name="rememberMe"
-                        component={renderRememberCheckbox}
-                      />
-                    </div>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      type="submit"
-                      variant="raised"
-                      size="medium"
-                      color="primary"
-                      className="login-button"
-                    >
-                      Логин
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="raised"
-                      size="medium"
-                      color="primary"
-                      className="login-button"
-                      component={Link}
-                      to="/sign-up"
-                    >
-                      Создать акаунт
-                    </Button>
-                  </Grid>
+              <Grid item xs={12}>
+                <Field
+                  name="account"
+                  className="login-field"
+                  component={renderAccountField}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <div className="check-el">
+                  <Field name="rememberMe" component={renderRememberCheckbox} />
                 </div>
-              )}
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="raised"
+                  size="medium"
+                  color="primary"
+                  className="login-button"
+                >
+                  Логин
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="raised"
+                  size="medium"
+                  color="primary"
+                  className="login-button"
+                  component={Link}
+                  to="/sign-up"
+                >
+                  Создать акаунт
+                </Button>
+              </Grid>
             </form>
           </Grid>
         </div>
@@ -226,8 +158,7 @@ class Login extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    account: state.user.account,
-    apiInit: state.app.apiInit
+    account: state.user.account
   };
 }
 

@@ -13,8 +13,6 @@ import { CircularProgress } from 'material-ui/Progress';
 import renderAccountField from './accountField';
 import renderPasswordField from './passwordField';
 import renderRememberCheckbox from './rememberCheckbox';
-import getLectureFaucetApi from '../api/getLectureFaucetApi';
-import getLectureDataApi from '../api/getLectureDataApi';
 import putUserFaucetApi from '../api/putUserFaucetApi';
 import vkAuthorization from '../authorization/vkAuthorization';
 import { setVkToken } from '../../actions/loginAction';
@@ -24,7 +22,6 @@ import {
   setFirstName,
   setLastName
 } from '../../actions/actionsUser';
-import { setLectures } from '../../actions/lecturesAction';
 import { setTitle } from '../../actions';
 import validate from './validate';
 import LoginHeader from './loginHeader';
@@ -41,20 +38,17 @@ type Props = {
   onSetAvatar: Function,
   onSetFirstName: Function,
   onSetLastName: Function,
-  onSetLectures: Function,
   vkToken: string
 };
 type State = {
-  tokenFlag: boolean,
-  loaderFlag: boolean
+  tokenFlag: boolean
 };
 
 class SignUp extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      tokenFlag: false,
-      loaderFlag: false
+      tokenFlag: false
     };
   }
   componentDidMount() {
@@ -81,9 +75,8 @@ class SignUp extends React.Component<Props, State> {
       onSetAvatar,
       onSetFirstName,
       onSetLastName,
-      onSetLectures
+      onSetTitle
     } = this.props; // No fields prop
-    const { loaderFlag } = this.state;
     let signupSubmit = (values: any) => {
       // put new user data to faucet
       return putUserFaucetApi(
@@ -127,56 +120,9 @@ class SignUp extends React.Component<Props, State> {
           onSetAvatar(resp.account.user_data.photo);
           onSetFirstName(resp.account.user_data.first_name);
           onSetLastName(resp.account.user_data.last_name);
-          // added waiting loader
-          this.setState({ loaderFlag: true });
-          // get lectures data from bitsares
-
-          let lecturesData = [];
-          this.props.apiInit.studentApi.getLectures().then(resp => {
-            let lectureBTSData = [];
-            let accounts = '';
-            for (let i of resp) {
-              lectureBTSData.unshift({
-                ticket: {
-                  accepted: i.stats['1.3.3347'].accepted,
-                  requested: i.stats['1.3.3347'].requested,
-                  balance: i.stats['1.3.3347'].balance
-                },
-                settion: {
-                  accepted: i.stats['1.3.3348'].accepted,
-                  requested: i.stats['1.3.3347'].requested,
-                  balance: i.stats['1.3.3348'].balance
-                },
-                grade: {
-                  accepted: i.stats['1.3.3349'].accepted,
-                  requested: i.stats['1.3.3347'].requested,
-                  balance: i.stats['1.3.3349'].balance
-                }
-              });
-              accounts = accounts + i.name + ',';
-            }
-            accounts = accounts.slice(0, -1);
-            getLectureFaucetApi(accounts).then(resp => {
-              let n = 0;
-              let j = resp.length;
-              for (let i of resp) {
-                //get lecture data from vk
-                getLectureDataApi(i.topic_url, i.account_name).then(resp => {
-                  lecturesData.push({
-                    lecture: resp,
-                    state: lectureBTSData[n]
-                  });
-                  n++;
-                  if (n === j) {
-                    // save lectire data to store
-                    onSetLectures(lecturesData);
-                    // go to dashboard page
-                    history.push('/dashboard');
-                  }
-                });
-              }
-            });
-          });
+          onSetTitle('Лекции');
+          // go to dashboard page
+          history.push('/dashboard');
         }
       });
     };
@@ -208,45 +154,39 @@ class SignUp extends React.Component<Props, State> {
               </Grid>
             ) : (
               <form onSubmit={handleSubmit(signupSubmit)}>
-                {loaderFlag ? (
-                  <CircularProgress className="centered-loader" size={50} />
-                ) : (
-                  <div>
-                    <Grid item xs={12}>
-                      <Field
-                        name="newaccount"
-                        className="login-field"
-                        component={renderAccountField}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Field
-                        name="password"
-                        className="login-field"
-                        component={renderPasswordField}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <div className="check-el">
-                        <Field
-                          name="rememberMe"
-                          component={renderRememberCheckbox}
-                        />
-                      </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Button
-                        type="submit"
-                        variant="raised"
-                        size="medium"
-                        color="primary"
-                        className="login-button"
-                      >
-                        Создать акаунт
-                      </Button>
-                    </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    name="newaccount"
+                    className="login-field"
+                    component={renderAccountField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    name="password"
+                    className="login-field"
+                    component={renderPasswordField}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <div className="check-el">
+                    <Field
+                      name="rememberMe"
+                      component={renderRememberCheckbox}
+                    />
                   </div>
-                )}
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="raised"
+                    size="medium"
+                    color="primary"
+                    className="login-button"
+                  >
+                    Создать акаунт
+                  </Button>
+                </Grid>
               </form>
             )}
           </Grid>
@@ -281,9 +221,6 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLastName(val) {
     dispatch(setLastName(val));
-  },
-  onSetLectures(val) {
-    dispatch(setLectures(val));
   }
 });
 

@@ -49,7 +49,6 @@ class Root extends React.Component<Props, State> {
     let accountName = this.props.account;
     let privateKey = null;
     let n = this.state.reloadNumber;
-
     Api.init(node, accountName, privateKey)
       .then(api => {
         // save init api to store
