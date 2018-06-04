@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Api from 'utschool-js';
 //
 import history from '../history';
 import Login from './login/login';
@@ -17,9 +16,7 @@ import Settings from './Settings';
 import Help from './Help';
 import theme from '../stores/theme';
 import { setApiInit } from '../actions';
-import changedNode from './api/changedNode';
-
-const NODE = 'wss://bitshares.openledger.info/ws'; // Url ноды Bitshares
+import btsConnect from './api/btsConnect';
 
 type Props = {
   store: any,
@@ -27,44 +24,13 @@ type Props = {
   onSetApiInit: Function
 };
 
-type State = {
-  nodeUrl: string,
-  reloadNumber: number
-};
-
-class Root extends React.Component<Props, State> {
+class Root extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      nodeUrl: NODE,
-      reloadNumber: 0
-    };
     if (document.readyState) {
-      this.btsConnect();
+      btsConnect(this.props.account);
     }
   }
-
-  btsConnect() {
-    let node = this.state.nodeUrl;
-    let accountName = this.props.account;
-    let privateKey = null;
-    let n = this.state.reloadNumber;
-    Api.init(node, accountName, privateKey)
-      .then(api => {
-        // save init api to store
-        this.props.onSetApiInit(api);
-      })
-      .catch(error => {
-        if (this.state.reloadNumber < 10) {
-          this.setState({ nodeUrl: changedNode(this.state.nodeUrl) });
-          this.btsConnect();
-          this.setState({ reloadNumber: n++ });
-        } else {
-          return error;
-        }
-      });
-  }
-
   render() {
     return (
       <Provider store={this.props.store}>

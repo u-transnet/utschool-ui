@@ -26,14 +26,14 @@ import {
   setApplications,
   setCurrentLecture
 } from '../../actions/lecturesAction';
-import { setTitle } from '../../actions';
+import { setTitle, setApiInit } from '../../actions';
 import validate from './validate';
 import history from '../../history';
+import btsConnect from '../api/btsConnect';
 //
 import './login.css';
 
 type Props = {
-  apiInit: Object,
   onChangeRole: Function,
   onSetLectures: Function,
   onSetTeacherLectures: Function,
@@ -47,6 +47,7 @@ type Props = {
   onSetAvatar: Function,
   onSetFirstName: Function,
   onSetLastName: Function,
+  onSetApiInit: Function,
   account: string
 };
 type State = {
@@ -58,6 +59,8 @@ class Login extends React.Component<Props, State> {
     this.state = {
       lecturesData: []
     };
+    // let api = btsConnect(this.props.account);
+    // this.props.onSetApiInit(api);
   }
   clearData() {
     this.props.onSetTitle('Лекции');
@@ -76,7 +79,8 @@ class Login extends React.Component<Props, State> {
       onSetTitle,
       onSetAvatar,
       onSetFirstName,
-      onSetLastName
+      onSetLastName,
+      onSetApiInit
     } = this.props; // No fields prop
     let loginSubmit = (values: any) => {
       // clear data
@@ -84,20 +88,23 @@ class Login extends React.Component<Props, State> {
       // get user data from faucet
       return getUserFaucetApi(values.account)
         .then(data => {
-          if (!data.length) {
-            throw new SubmissionError({
-              account: 'Такой учетной записи не существует.',
-              _error: 'Login failed!'
-            });
-          } else {
+          if (data.length) {
+            let api = btsConnect(values.account);
             // save other data
             onSetAvatar(data[0].photo);
             onSetFirstName(data[0].first_name);
             onSetLastName(data[0].last_name);
             onSetTitle('Лекции');
             setAccount(values.account);
-            // go to dashboard page
-            history.push('/dashboard');
+            api.then(resp => {
+              onSetApiInit(resp);
+              history.push('/dashboard');
+            });
+          } else {
+            throw new SubmissionError({
+              account: 'Такой учетной записи не существует.',
+              _error: 'Login failed!'
+            });
           }
         })
         .catch(error => {
@@ -195,6 +202,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetCurrentLecture(val) {
     dispatch(setCurrentLecture(val));
+  },
+  onSetApiInit(val) {
+    dispatch(setApiInit(val));
   }
 });
 

@@ -9,7 +9,7 @@ const NODES = [
   'wss://bitshares.openledger.info/ws'
 ];
 
-export default function changedNode(brokenNode: string) {
+export default function changedNode(brokenNode: string | void) {
   let n = NODES.length;
   let random = Math.floor(Math.random() * n);
   let newNode = NODES[random];

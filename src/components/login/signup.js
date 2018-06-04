@@ -8,7 +8,6 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 import Grid from 'material-ui/Grid';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
-import { CircularProgress } from 'material-ui/Progress';
 //
 import renderAccountField from './accountField';
 import renderPasswordField from './passwordField';
@@ -22,15 +21,16 @@ import {
   setFirstName,
   setLastName
 } from '../../actions/actionsUser';
-import { setTitle } from '../../actions';
+import { setTitle, setApiInit } from '../../actions';
 import validate from './validate';
 import LoginHeader from './loginHeader';
 import history from '../../history';
+import btsConnect from '../api/btsConnect';
 //
 import './login.css';
 
 type Props = {
-  apiInit: Object,
+  onSetApiInit: Function,
   handleSubmit: Function,
   setAccount: Function,
   onSetVkToken: Function,
@@ -75,7 +75,8 @@ class SignUp extends React.Component<Props, State> {
       onSetAvatar,
       onSetFirstName,
       onSetLastName,
-      onSetTitle
+      onSetTitle,
+      onSetApiInit
     } = this.props; // No fields prop
     let signupSubmit = (values: any) => {
       // put new user data to faucet
@@ -115,14 +116,17 @@ class SignUp extends React.Component<Props, State> {
               break;
           }
         } else {
+          let api = btsConnect(values.account);
           // save data to stores
           setAccount(values.newaccount);
           onSetAvatar(resp.account.user_data.photo);
           onSetFirstName(resp.account.user_data.first_name);
           onSetLastName(resp.account.user_data.last_name);
           onSetTitle('Лекции');
-          // go to dashboard page
-          history.push('/dashboard');
+          api.then(resp => {
+            onSetApiInit(resp);
+            history.push('/dashboard');
+          });
         }
       });
     };
@@ -198,8 +202,7 @@ class SignUp extends React.Component<Props, State> {
 
 function mapStateToProps(state) {
   return {
-    vkToken: state.login.vkToken,
-    apiInit: state.app.apiInit
+    vkToken: state.login.vkToken
   };
 }
 
@@ -221,6 +224,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onSetLastName(val) {
     dispatch(setLastName(val));
+  },
+  onSetApiInit(val) {
+    dispatch(setApiInit(val));
   }
 });
 

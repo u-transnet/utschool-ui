@@ -12,7 +12,6 @@ import LectureCard from '../lectures/lectureCard';
 import StudentCard from './studentCard';
 import { setLectures } from '../../actions/lecturesAction';
 import './student.css';
-import { stat } from 'fs';
 //
 
 type Props = {
@@ -39,7 +38,6 @@ class DashboardStudentContent extends React.Component<Props, State> {
       if (!this.state.lecturesArray.length) {
         // get lectures data from bitfares
         let lecturesData = [];
-
         this.props.apiInit.studentApi.getLectures().then(resp => {
           let lectureBTSData = [];
           let accounts = '';
